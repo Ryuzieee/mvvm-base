@@ -34,8 +34,6 @@ abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(private va
     ): View {
         binding(inflater, container!!)
         initialize()
-        // 不要な気がする...
-//        super.onCreateView(inflater, container, savedInstanceState)
         return binding.root
     }
 

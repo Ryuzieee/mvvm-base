@@ -7,14 +7,16 @@
 
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_height="match_parent" android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
             android:padding="20dp">
 
         <EditText
                 android:id="@+id/edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@={viewModel.fetchText()}"
+                android:text="@{viewModel.mainState.data.text}"
+                android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
@@ -24,8 +26,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="@{`文字数：` + Integer.toString(viewModel.fetchText().length())}"
+                android:text="@{`文字数：` + Integer.toString(viewModel.mainState.data.text.length())}"
                 app:layout_constraintTop_toBottomOf="@+id/edit_text"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+        <Button
+                android:id="@+id/fetch_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="FETCH"
+                app:layout_constraintTop_toBottomOf="@id/count_text"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+        <Button
+                android:id="@+id/next_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="NEXT"
+                app:layout_constraintTop_toBottomOf="@id/fetch_button"
                 app:layout_constraintStart_toStartOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

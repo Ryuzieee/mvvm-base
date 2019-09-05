@@ -36,6 +36,7 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(private va
                 .add(R.id.container, firstFragment())
                 .commit()
         }
+        initialize()
     }
 
     // endregion
@@ -48,6 +49,13 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(private va
     abstract fun firstFragment(): Fragment
 
     abstract fun initializeViewModel(viewModel: VM)
+
+    // endregion
+
+    // region option
+
+    // 初期化したい処理があれば使用する
+    open fun initialize() {}
 
     // endregion
 }
