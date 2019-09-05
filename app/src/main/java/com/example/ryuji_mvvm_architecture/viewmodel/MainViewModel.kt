@@ -62,6 +62,7 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
         mainState.value = mainState.value?.copy(
             screenState = MainScreenState.FINISH
         )
+        // TODO: 上手く機能してない!!
         mainTransitionState.value = MainTransitionState.SECOND
     }
 
