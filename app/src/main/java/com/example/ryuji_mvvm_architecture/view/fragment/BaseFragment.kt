@@ -13,7 +13,7 @@ import com.example.ryuji_mvvm_architecture.viewmodel.BaseViewModel
 
 abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(private val VMClass: Class<VM>) : Fragment() {
 
-    // region property
+    // region Property
 
     lateinit var viewModel: VM
 
@@ -21,7 +21,7 @@ abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(private va
 
     // endregion
 
-    // region life cycle
+    // region Life Cycle
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +39,7 @@ abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(private va
 
     // endregion
 
-    // region private function
+    // region Private Function
 
     private fun binding(inflater: LayoutInflater, container: ViewGroup) {
         binding = DataBindingUtil.inflate(inflater, layoutResource(), container, false)
@@ -53,14 +53,14 @@ abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(private va
 
     // endregion
 
-    // region must implement for initialize
+    // region Must Implement For Initialize
 
     @LayoutRes
     abstract fun layoutResource(): Int
 
     // endregion
 
-    // region option
+    // region Option
 
     // 初期化したい処理があれば使用する
     open fun initialize() {}

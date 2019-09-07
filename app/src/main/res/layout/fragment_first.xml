@@ -15,7 +15,7 @@
                 android:id="@+id/edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{viewModel.mainState.data.text}"
+                android:text="@{viewModel.firstState.data.text}"
                 android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -26,7 +26,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="@{`文字数：` + Integer.toString(viewModel.mainState.data.text.length())}"
+                android:text="@{`文字数：` + Integer.toString(viewModel.firstState.data.text.length())}"
                 app:layout_constraintTop_toBottomOf="@+id/edit_text"
                 app:layout_constraintStart_toStartOf="parent"/>
 

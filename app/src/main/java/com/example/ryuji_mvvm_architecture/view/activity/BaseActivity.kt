@@ -13,7 +13,7 @@ import com.example.ryuji_mvvm_architecture.viewmodel.BaseViewModel
 abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(private val VMClass: Class<VM>) :
     AppCompatActivity() {
 
-    // region property
+    // region Property
 
     val binding by lazy {
         DataBindingUtil.setContentView(this, layoutResource()) as DB
@@ -25,23 +25,24 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(private va
 
     // endregion
 
-    // region life cycle
+    // region Life Cycle
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initializeViewModel(viewModel)
+        initialize()
         if (savedInstanceState == null) {
             supportFragmentManager
                 .beginTransaction()
-                .add(R.id.container, firstFragment())
+                .replace(R.id.container, firstFragment())
+                .addToBackStack(null)
                 .commit()
         }
-        initialize()
     }
 
     // endregion
 
-    // region must implement for initialize
+    // region Must Implement For Initialize
 
     @LayoutRes
     abstract fun layoutResource(): Int
@@ -52,7 +53,23 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(private va
 
     // endregion
 
-    // region option
+    // region Fragment Control
+
+    // TODO: ここの在り方は考える
+
+    open fun next(fragment: Fragment) {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.container, fragment)
+            .addToBackStack(null)
+            .commit()
+    }
+
+    open fun prev() = supportFragmentManager.popBackStack()
+
+    // endregion
+
+    // region Option
 
     // 初期化したい処理があれば使用する
     open fun initialize() {}
