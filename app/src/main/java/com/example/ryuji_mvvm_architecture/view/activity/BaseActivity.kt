@@ -34,7 +34,7 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(private va
         if (savedInstanceState == null) {
             supportFragmentManager
                 .beginTransaction()
-                .replace(R.id.container, firstFragment())
+                .add(R.id.container, firstFragment())
                 .addToBackStack(null)
                 .commit()
         }
