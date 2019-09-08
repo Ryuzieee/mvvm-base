@@ -17,8 +17,9 @@ enum class MainTransitionState(val fragment: Fragment?) {
 // region First
 enum class FirstScreenState : ScreenState {
     INITIALIZE,
+    INITIALIZED,
     FETCH,
-    LOADING,
+    FETCHED,
     NEXT
 }
 
@@ -28,9 +29,6 @@ data class FirstState(val screenState: FirstScreenState, val data: FirstData)
 
 // region Second
 enum class SecondScreenState : ScreenState {
-    INITIALIZE,
-    FETCH,
-    LOADING,
     NEXT
 }
 
@@ -40,9 +38,6 @@ data class SecondState(val screenState: SecondScreenState, val data: SecondData)
 
 // region Third
 enum class ThirdScreenState : ScreenState {
-    INITIALIZE,
-    FETCH,
-    LOADING,
     FINISH
 }
 

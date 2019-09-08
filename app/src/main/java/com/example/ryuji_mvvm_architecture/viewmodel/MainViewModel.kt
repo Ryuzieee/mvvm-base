@@ -35,16 +35,21 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
     private fun firstDispatch(state: FirstScreenState, dispatchData: Any?) {
         when (state) {
             FirstScreenState.INITIALIZE -> {
-                firstState.value = FirstState(
-                    screenState = FirstScreenState.INITIALIZE,
-                    data = FirstData(
-                        text = "INITIALIZE"
-                    )
-                )
+                when (firstState.value?.screenState) {
+                    FirstScreenState.INITIALIZED, FirstScreenState.FETCHED -> {}
+                    else -> {
+                        firstState.value = FirstState(
+                            screenState = FirstScreenState.INITIALIZED,
+                            data = FirstData(
+                                text = "INITIALIZE"
+                            )
+                        )
+                    }
+                }
             }
             FirstScreenState.FETCH -> {
                 firstState.value = FirstState(
-                    screenState = FirstScreenState.FETCH,
+                    screenState = FirstScreenState.FETCHED,
                     // TODO: 強制アンラップしちゃってるから考える
                     data = firstState.value!!.data.copy(
                         text = "FETCH"
@@ -52,10 +57,6 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
                 )
             }
             FirstScreenState.NEXT -> {
-                firstState.value = firstState.value?.copy(
-                    screenState = FirstScreenState.NEXT
-                )
-                // TODO: 画面遷移の場合はいいタイミングで各Stateを初期化する
                 mainTransitionState.value = MainTransitionState.SECOND
             }
             else -> {
@@ -70,13 +71,7 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
     private fun secondDispatch(state: SecondScreenState, dispatchData: Any?) {
         when (state) {
             SecondScreenState.NEXT -> {
-                secondState.value = secondState.value?.copy(
-                    screenState = SecondScreenState.NEXT
-                )
-                // TODO: 画面遷移の場合はいいタイミングで各Stateを初期化する
                 mainTransitionState.value = MainTransitionState.THIRD
-            }
-            else -> {
             }
         }
     }
@@ -88,13 +83,7 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
     private fun thirdDispatch(state: ThirdScreenState, dispatchData: Any?) {
         when (state) {
             ThirdScreenState.FINISH -> {
-                thirdState.value = thirdState.value?.copy(
-                    screenState = ThirdScreenState.FINISH
-                )
-                // TODO: 画面遷移の場合はいいタイミングで各Stateを初期化する
                 mainTransitionState.value = MainTransitionState.BACK
-            }
-            else -> {
             }
         }
     }
