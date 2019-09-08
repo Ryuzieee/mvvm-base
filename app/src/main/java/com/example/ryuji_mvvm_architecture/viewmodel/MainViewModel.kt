@@ -1,9 +1,6 @@
 package com.example.ryuji_mvvm_architecture.viewmodel
 
-import android.animation.ObjectAnimator
 import android.app.Application
-import android.view.animation.DecelerateInterpolator
-import android.widget.ProgressBar
 import androidx.lifecycle.MutableLiveData
 import com.example.ryuji_mvvm_architecture.state.*
 
@@ -11,9 +8,9 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
 
     // region LiveData
 
-    var mainTransitionState: MutableLiveData<MainTransitionState> = MutableLiveData()
+    var parentScreenState: MutableLiveData<ParentScreenState> = MutableLiveData()
 
-    var progressState: MutableLiveData<MainTransitionState> = MutableLiveData()
+    var progressState: MutableLiveData<ParentScreenState> = MutableLiveData()
 
     var firstState: MutableLiveData<FirstState> = MutableLiveData()
 
@@ -30,15 +27,11 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
             is FirstScreenState -> firstDispatch(state, dispatchData)
             is SecondScreenState -> secondDispatch(state, dispatchData)
             is ThirdScreenState -> thirdDispatch(state, dispatchData)
+            is ParentScreenState -> parentDispatch(state, dispatchData)
         }
     }
 
     // endregion
-
-    // TODO: dispatchにまとめたい
-    fun transition(state: MainTransitionState) {
-        progressState.value = state
-    }
 
     // region First Dispatch
 
@@ -67,7 +60,7 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
                 )
             }
             FirstScreenState.NEXT -> {
-                mainTransitionState.value = MainTransitionState.SECOND
+                parentScreenState.value = ParentScreenState.SECOND
             }
             else -> {
             }
@@ -81,7 +74,7 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
     private fun secondDispatch(state: SecondScreenState, dispatchData: Any?) {
         when (state) {
             SecondScreenState.NEXT -> {
-                mainTransitionState.value = MainTransitionState.THIRD
+                parentScreenState.value = ParentScreenState.THIRD
             }
         }
     }
@@ -93,9 +86,17 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
     private fun thirdDispatch(state: ThirdScreenState, dispatchData: Any?) {
         when (state) {
             ThirdScreenState.FINISH -> {
-                mainTransitionState.value = MainTransitionState.SECOND
+                parentScreenState.value = ParentScreenState.SECOND
             }
         }
+    }
+
+    // endregion
+
+    // region Parent Dispatch
+
+    private fun parentDispatch(state: ParentScreenState, dispatchData: Any?) {
+        progressState.value = state
     }
 
     // endregion
