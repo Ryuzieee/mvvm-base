@@ -1,6 +1,9 @@
 package com.example.ryuji_mvvm_architecture.viewmodel
 
+import android.animation.ObjectAnimator
 import android.app.Application
+import android.view.animation.DecelerateInterpolator
+import android.widget.ProgressBar
 import androidx.lifecycle.MutableLiveData
 import com.example.ryuji_mvvm_architecture.state.*
 
@@ -9,6 +12,8 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
     // region LiveData
 
     var mainTransitionState: MutableLiveData<MainTransitionState> = MutableLiveData()
+
+    var progressState: MutableLiveData<MainTransitionState> = MutableLiveData()
 
     var firstState: MutableLiveData<FirstState> = MutableLiveData()
 
@@ -29,6 +34,11 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
     }
 
     // endregion
+
+    // TODO: dispatchにまとめたい
+    fun transition(state: MainTransitionState) {
+        progressState.value = state
+    }
 
     // region First Dispatch
 
@@ -83,7 +93,7 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
     private fun thirdDispatch(state: ThirdScreenState, dispatchData: Any?) {
         when (state) {
             ThirdScreenState.FINISH -> {
-                mainTransitionState.value = MainTransitionState.BACK
+                mainTransitionState.value = MainTransitionState.SECOND
             }
         }
     }

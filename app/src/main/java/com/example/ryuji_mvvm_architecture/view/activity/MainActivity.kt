@@ -1,6 +1,8 @@
 package com.example.ryuji_mvvm_architecture.view.activity
 
-import androidx.appcompat.widget.Toolbar
+import android.animation.ObjectAnimator
+import android.view.animation.DecelerateInterpolator
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.example.ryuji_mvvm_architecture.R
 import com.example.ryuji_mvvm_architecture.databinding.ActivityMainBinding
@@ -11,21 +13,42 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(MainViewMo
 
     override fun layoutResource() = R.layout.activity_main
 
-    override fun firstFragment() = MainTransitionState.FIRST.fragment!!
+    override fun firstFragment() = MainTransitionState.FIRST.fragment
 
     override fun initializeViewModel(viewModel: MainViewModel) {
         binding.viewModel = viewModel
     }
 
-    override fun toolBar(): Toolbar? = binding.toolbar
-
     override fun transitionAnimation() = true
 
     override fun initialize() {
-        viewModel.mainTransitionState.observe(this, Observer<MainTransitionState> {
-            when (it) {
-                MainTransitionState.BACK -> back()
-                else -> transition(it.fragment!!)
+
+        binding.apply {
+            setSupportActionBar(toolbar)
+            backButton.setOnClickListener { back() }
+        }
+
+        viewModel.mainTransitionState.observe(this, Observer<MainTransitionState> { mainTransitionState ->
+            val new = MainTransitionState.values().indexOf(mainTransitionState)
+            val old = MainTransitionState.values().indexOfFirst {
+                it.fragment == supportFragmentManager.fragments.first()
+            }
+            if (old > new) {
+                back()
+            } else {
+                transition(mainTransitionState.fragment)
+            }
+        })
+
+        viewModel.progressState.observe(this, Observer<MainTransitionState> { mainTransitionState ->
+            binding.apply {
+                backButton.isVisible = mainTransitionState.fragment != firstFragment()
+                pageTitle.text = mainTransitionState.title
+                ObjectAnimator.ofInt(pageProgress, "progress", mainTransitionState.progress).run {
+                    duration = 500
+                    interpolator = DecelerateInterpolator()
+                    start()
+                }
             }
         })
     }

@@ -1,10 +1,8 @@
 package com.example.ryuji_mvvm_architecture.view.activity
 
 import android.os.Bundle
-import android.view.MenuItem
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
@@ -32,9 +30,7 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(private va
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setSupportActionBar(toolBar())
         supportActionBar?.title = null
-        showToolbarItem(true)
         initializeViewModel(viewModel)
         initialize()
         if (savedInstanceState == null) transition(firstFragment())
@@ -48,13 +44,6 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(private va
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
-            android.R.id.home -> back()
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
     // endregion
 
     // region Must Implement For Initialize
@@ -65,9 +54,6 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(private va
     abstract fun firstFragment(): Fragment
 
     abstract fun initializeViewModel(viewModel: VM)
-
-    // Toolbarを使用しないActivityではnullを設定する
-    abstract fun toolBar(): Toolbar?
 
     abstract fun transitionAnimation(): Boolean
 
@@ -107,13 +93,5 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(private va
     open fun initialize() {}
 
     // endregion
-
-    // TODO: 使用方法は要検討!!
-    private fun showToolbarItem(visibility: Boolean) {
-        supportActionBar?.let {
-            it.setDisplayHomeAsUpEnabled(visibility)
-            it.setDisplayShowHomeEnabled(visibility)
-        }
-    }
 
 }

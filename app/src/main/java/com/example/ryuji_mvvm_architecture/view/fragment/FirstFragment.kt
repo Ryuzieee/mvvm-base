@@ -3,6 +3,7 @@ package com.example.ryuji_mvvm_architecture.view.fragment
 import com.example.ryuji_mvvm_architecture.R
 import com.example.ryuji_mvvm_architecture.databinding.FragmentFirstBinding
 import com.example.ryuji_mvvm_architecture.state.FirstScreenState
+import com.example.ryuji_mvvm_architecture.state.MainTransitionState
 import com.example.ryuji_mvvm_architecture.viewmodel.MainViewModel
 
 class FirstFragment : BaseFragment<MainViewModel, FragmentFirstBinding>(MainViewModel::class.java) {
@@ -14,6 +15,7 @@ class FirstFragment : BaseFragment<MainViewModel, FragmentFirstBinding>(MainView
     }
 
     override fun initialize() {
+        viewModel.transition(MainTransitionState.FIRST)
         viewModel.dispatch(FirstScreenState.INITIALIZE)
         binding.apply {
             fetchButton.setOnClickListener {

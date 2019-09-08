@@ -6,11 +6,10 @@ import com.example.ryuji_mvvm_architecture.view.fragment.SecondFragment
 import com.example.ryuji_mvvm_architecture.view.fragment.ThirdFragment
 
 // region MainTransitionState
-enum class MainTransitionState(val fragment: Fragment?) {
-    FIRST(FirstFragment()),
-    SECOND(SecondFragment()),
-    THIRD(ThirdFragment()),
-    BACK(null)
+enum class MainTransitionState(val fragment: Fragment, val title: String, val progress: Int) {
+    FIRST(FirstFragment(), "①", 33),
+    SECOND(SecondFragment(), "②", 66),
+    THIRD(ThirdFragment(), "③", 100);
 }
 // endregion
 
