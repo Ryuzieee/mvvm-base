@@ -19,7 +19,7 @@ enum class FirstScreenState : ScreenState {
     INITIALIZE,
     FETCH,
     LOADING,
-    FINISH
+    NEXT
 }
 
 data class FirstData(val text: String)
@@ -31,7 +31,7 @@ enum class SecondScreenState : ScreenState {
     INITIALIZE,
     FETCH,
     LOADING,
-    FINISH
+    NEXT
 }
 
 data class SecondData(val text: String)

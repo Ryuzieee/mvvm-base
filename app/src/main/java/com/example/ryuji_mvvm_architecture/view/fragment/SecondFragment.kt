@@ -14,6 +14,10 @@ class SecondFragment : BaseFragment<MainViewModel, FragmentSecondBinding>(MainVi
     }
 
     override fun initialize() {
-        viewModel.dispatch(SecondScreenState.INITIALIZE)
+        binding.apply {
+            nextButton.setOnClickListener {
+                viewModel?.dispatch(SecondScreenState.NEXT)
+            }
+        }
     }
 }

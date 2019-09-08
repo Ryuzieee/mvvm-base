@@ -15,14 +15,12 @@ class FirstFragment : BaseFragment<MainViewModel, FragmentFirstBinding>(MainView
 
     override fun initialize() {
         viewModel.dispatch(FirstScreenState.INITIALIZE)
-
-        // TODO: Test
         binding.apply {
             fetchButton.setOnClickListener {
                 viewModel?.dispatch(FirstScreenState.FETCH)
             }
             nextButton.setOnClickListener {
-                viewModel?.dispatch(FirstScreenState.FINISH)
+                viewModel?.dispatch(FirstScreenState.NEXT)
             }
         }
     }

@@ -14,6 +14,10 @@ class ThirdFragment : BaseFragment<MainViewModel, FragmentThirdBinding>(MainView
     }
 
     override fun initialize() {
-        viewModel.dispatch(ThirdScreenState.INITIALIZE)
+        binding.apply {
+            finishButton.setOnClickListener {
+                viewModel?.dispatch(ThirdScreenState.FINISH)
+            }
+        }
     }
 }

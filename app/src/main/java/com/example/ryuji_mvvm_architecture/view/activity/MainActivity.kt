@@ -1,5 +1,6 @@
 package com.example.ryuji_mvvm_architecture.view.activity
 
+import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
 import com.example.ryuji_mvvm_architecture.R
 import com.example.ryuji_mvvm_architecture.databinding.ActivityMainBinding
@@ -15,6 +16,8 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(MainViewMo
     override fun initializeViewModel(viewModel: MainViewModel) {
         binding.viewModel = viewModel
     }
+
+    override fun toolBar(): Toolbar? = binding.toolbar
 
     override fun initialize() {
         viewModel.mainTransitionState.observe(this, Observer<MainTransitionState> {

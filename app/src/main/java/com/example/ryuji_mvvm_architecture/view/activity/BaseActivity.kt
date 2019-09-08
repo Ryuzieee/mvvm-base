@@ -1,8 +1,11 @@
 package com.example.ryuji_mvvm_architecture.view.activity
 
+import android.app.ActionBar
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
@@ -30,9 +33,20 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(private va
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setSupportActionBar(toolBar())
+        supportActionBar?.title = null
+        showToolbarItem(false)
         initializeViewModel(viewModel)
         initialize()
         if (savedInstanceState == null) transition(firstFragment())
+    }
+
+    override fun onBackPressed() {
+        if (supportFragmentManager.backStackEntryCount < 1) {
+            super.onBackPressed()
+        } else {
+            back()
+        }
     }
 
     // endregion
@@ -45,6 +59,8 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(private va
     abstract fun firstFragment(): Fragment
 
     abstract fun initializeViewModel(viewModel: VM)
+
+    abstract fun toolBar(): Toolbar?
 
     // endregion
 
@@ -80,4 +96,13 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(private va
     open fun initialize() {}
 
     // endregion
+
+    // TODO: 使用方法は要検討!!
+    private fun showToolbarItem(visibility: Boolean) {
+        supportActionBar?.let {
+            it.setDisplayHomeAsUpEnabled(visibility)
+            it.setDisplayShowHomeEnabled(visibility)
+        }
+    }
+
 }

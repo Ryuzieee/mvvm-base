@@ -51,9 +51,9 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
                     )
                 )
             }
-            FirstScreenState.FINISH -> {
+            FirstScreenState.NEXT -> {
                 firstState.value = firstState.value?.copy(
-                    screenState = FirstScreenState.FINISH
+                    screenState = FirstScreenState.NEXT
                 )
                 // TODO: 画面遷移の場合はいいタイミングで各Stateを初期化する
                 mainTransitionState.value = MainTransitionState.SECOND
@@ -69,13 +69,12 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
 
     private fun secondDispatch(state: SecondScreenState, dispatchData: Any?) {
         when (state) {
-            SecondScreenState.INITIALIZE -> {
-                secondState.value = SecondState(
-                    screenState = SecondScreenState.INITIALIZE,
-                    data = SecondData(
-                        text = "INITIALIZE"
-                    )
+            SecondScreenState.NEXT -> {
+                secondState.value = secondState.value?.copy(
+                    screenState = SecondScreenState.NEXT
                 )
+                // TODO: 画面遷移の場合はいいタイミングで各Stateを初期化する
+                mainTransitionState.value = MainTransitionState.THIRD
             }
             else -> {
             }
@@ -88,13 +87,12 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
 
     private fun thirdDispatch(state: ThirdScreenState, dispatchData: Any?) {
         when (state) {
-            ThirdScreenState.INITIALIZE -> {
-                thirdState.value = ThirdState(
-                    screenState = ThirdScreenState.INITIALIZE,
-                    data = ThirdData(
-                        text = "INITIALIZE"
-                    )
+            ThirdScreenState.FINISH -> {
+                thirdState.value = thirdState.value?.copy(
+                    screenState = ThirdScreenState.FINISH
                 )
+                // TODO: 画面遷移の場合はいいタイミングで各Stateを初期化する
+                mainTransitionState.value = MainTransitionState.BACK
             }
             else -> {
             }
