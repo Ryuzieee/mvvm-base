@@ -32,13 +32,7 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(private va
         super.onCreate(savedInstanceState)
         initializeViewModel(viewModel)
         initialize()
-        if (savedInstanceState == null) {
-            supportFragmentManager
-                .beginTransaction()
-                .add(R.id.container, firstFragment())
-                .addToBackStack(null)
-                .commit()
-        }
+        if (savedInstanceState == null) transition(firstFragment())
     }
 
     // endregion
@@ -58,15 +52,25 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(private va
 
     // TODO: ここの在り方は考える
 
-    open fun next(fragment: Fragment) {
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.container, fragment)
-            .addToBackStack(null)
-            .commit()
+    open fun transition(fragment: Fragment) {
+        // 初期表示の場合はAnimationとBackStackを無効にする
+        val isFirstFragment = fragment == firstFragment()
+        supportFragmentManager.beginTransaction().run {
+            if (!isFirstFragment) {
+                setCustomAnimations(
+                    R.anim.slide_in_right,
+                    R.anim.slide_out_left,
+                    R.anim.slide_in_left,
+                    R.anim.slide_out_right
+                )
+            }
+            replace(R.id.container, fragment)
+            if (!isFirstFragment) addToBackStack(null)
+            commit()
+        }
     }
 
-    open fun prev() = supportFragmentManager.popBackStack()
+    open fun back() = supportFragmentManager.popBackStack()
 
     // endregion
 

@@ -55,7 +55,7 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
                 firstState.value = firstState.value?.copy(
                     screenState = FirstScreenState.FINISH
                 )
-                // TODO: 上手く機能してない!! + 画面遷移の場合はいいタイミングで各Stateを初期化する
+                // TODO: 画面遷移の場合はいいタイミングで各Stateを初期化する
                 mainTransitionState.value = MainTransitionState.SECOND
             }
             else -> {

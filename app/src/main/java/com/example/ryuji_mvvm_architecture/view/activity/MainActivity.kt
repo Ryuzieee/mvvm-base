@@ -17,11 +17,10 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(MainViewMo
     }
 
     override fun initialize() {
-        // TODO: 上手く機能してない...
         viewModel.mainTransitionState.observe(this, Observer<MainTransitionState> {
             when (it) {
-                MainTransitionState.BACK -> prev()
-                else -> next(it.fragment!!)
+                MainTransitionState.BACK -> back()
+                else -> transition(it.fragment!!)
             }
         })
     }
