@@ -69,6 +69,8 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(private va
     // Toolbarを使用しないActivityではnullを設定する
     abstract fun toolBar(): Toolbar?
 
+    abstract fun transitionAnimation(): Boolean
+
     // endregion
 
     // region Fragment Control
@@ -76,10 +78,11 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(private va
     // TODO: ここの在り方は考える
 
     open fun transition(fragment: Fragment) {
-        // 初期表示の場合はAnimationとBackStackを無効にする
+
         val isFirstFragment = fragment == firstFragment()
         supportFragmentManager.beginTransaction().run {
-            if (!isFirstFragment) {
+            // 初期表示かつアニメーション不使用の場合はAnimationを無効にする
+            if (!isFirstFragment && transitionAnimation()) {
                 setCustomAnimations(
                     R.anim.slide_in_right,
                     R.anim.slide_out_left,
@@ -88,6 +91,7 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(private va
                 )
             }
             replace(R.id.container, fragment)
+            // 初期表示の場合はBackStackを無効にする
             if (!isFirstFragment) addToBackStack(null)
             commit()
         }

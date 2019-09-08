@@ -19,6 +19,8 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(MainViewMo
 
     override fun toolBar(): Toolbar? = binding.toolbar
 
+    override fun transitionAnimation() = true
+
     override fun initialize() {
         viewModel.mainTransitionState.observe(this, Observer<MainTransitionState> {
             when (it) {
