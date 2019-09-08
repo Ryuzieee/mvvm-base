@@ -17,7 +17,6 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(MainViewMo
     }
 
     override fun initialize() {
-
         // TODO: 上手く機能してない...
         viewModel.mainTransitionState.observe(this, Observer<MainTransitionState> {
             when (it) {

@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.example.ryuji_mvvm_architecture.R
 import com.example.ryuji_mvvm_architecture.viewmodel.BaseViewModel
 
@@ -20,7 +20,8 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(private va
     }
 
     val viewModel by lazy {
-        ViewModelProviders.of(this).get(VMClass)
+        // TODO: ViewModelFactory使ってもいいかも
+        ViewModelProvider(this).get(VMClass)
     }
 
     // endregion

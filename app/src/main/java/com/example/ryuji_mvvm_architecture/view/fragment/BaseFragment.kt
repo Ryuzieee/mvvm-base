@@ -8,7 +8,7 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.example.ryuji_mvvm_architecture.viewmodel.BaseViewModel
 
 abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(private val VMClass: Class<VM>) : Fragment() {
@@ -49,7 +49,8 @@ abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(private va
 
     abstract fun initializeViewModel(viewModel: VM)
 
-    private fun getVM(): VM = ViewModelProviders.of(this).get(VMClass)
+    // TODO: ViewModelFactory使ってもいいかも
+    private fun getVM(): VM = ViewModelProvider(this).get(VMClass)
 
     // endregion
 
