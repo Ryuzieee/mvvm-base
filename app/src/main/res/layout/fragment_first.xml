@@ -21,21 +21,12 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
 
-        <TextView
-                android:id="@+id/count_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="@{`文字数：` + Integer.toString(viewModel.firstState.data.text.length())}"
-                app:layout_constraintTop_toBottomOf="@+id/edit_text"
-                app:layout_constraintStart_toStartOf="parent"/>
-
         <Button
                 android:id="@+id/fetch_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="FETCH"
-                app:layout_constraintTop_toBottomOf="@id/count_text"
+                app:layout_constraintTop_toBottomOf="@id/edit_text"
                 app:layout_constraintStart_toStartOf="parent"/>
 
         <Button
