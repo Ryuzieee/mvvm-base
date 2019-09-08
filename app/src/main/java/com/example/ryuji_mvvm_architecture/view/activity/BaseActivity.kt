@@ -1,6 +1,7 @@
 package com.example.ryuji_mvvm_architecture.view.activity
 
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -45,6 +46,13 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(private va
         } else {
             back()
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            android.R.id.home -> back()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     // endregion
