@@ -1,8 +1,6 @@
 package com.example.ryuji_mvvm_architecture.view.activity
 
-import android.app.ActionBar
 import android.os.Bundle
-import android.view.MenuItem
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -35,7 +33,7 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(private va
         super.onCreate(savedInstanceState)
         setSupportActionBar(toolBar())
         supportActionBar?.title = null
-        showToolbarItem(false)
+        showToolbarItem(true)
         initializeViewModel(viewModel)
         initialize()
         if (savedInstanceState == null) transition(firstFragment())
@@ -60,6 +58,7 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(private va
 
     abstract fun initializeViewModel(viewModel: VM)
 
+    // Toolbarを使用しないActivityではnullを設定する
     abstract fun toolBar(): Toolbar?
 
     // endregion

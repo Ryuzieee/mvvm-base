@@ -1,5 +1,6 @@
 package com.example.ryuji_mvvm_architecture.view.activity
 
+import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
 import com.example.ryuji_mvvm_architecture.R
@@ -26,5 +27,12 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(MainViewMo
                 else -> transition(it.fragment!!)
             }
         })
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            android.R.id.home -> back()
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
