@@ -50,7 +50,7 @@ abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(private va
     abstract fun initializeViewModel(viewModel: VM)
 
     // TODO: ViewModelFactory使ってもいいかも
-    private fun getVM(): VM = ViewModelProvider(this).get(VMClass)
+    private fun getVM(): VM = ViewModelProvider(activity!!).get(VMClass)
 
     // endregion
 
