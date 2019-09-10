@@ -53,10 +53,9 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
             FirstScreenState.FETCH -> {
                 firstState.value = FirstState(
                     screenState = FirstScreenState.FETCHED,
-                    // TODO: 強制アンラップしちゃってるから考える
-                    data = firstState.value!!.data.copy(
+                    data = firstState.value?.data?.copy(
                         text = "FETCH"
-                    )
+                    ) ?: FirstData(text = "INITIALIZE")
                 )
             }
             FirstScreenState.NEXT -> {

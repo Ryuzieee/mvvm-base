@@ -28,15 +28,16 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(MainViewMo
             backButton.setOnClickListener { back() }
         }
 
-        viewModel.parentScreenState.observe(this, Observer<ParentScreenState> { mainTransitionState ->
-            val new = ParentScreenState.values().indexOf(mainTransitionState)
+        viewModel.parentScreenState.observe(this, Observer<ParentScreenState> { parentTransitionState ->
+            // parentTransitionStateのindexが現在のStateよりも小さい場合は画面を戻ると判断しback
+            val new = ParentScreenState.values().indexOf(parentTransitionState)
             val old = ParentScreenState.values().indexOfFirst {
                 it.fragment == supportFragmentManager.fragments.first()
             }
             if (old > new) {
                 back()
             } else {
-                transition(mainTransitionState.fragment)
+                transition(parentTransitionState.fragment)
             }
         })
 

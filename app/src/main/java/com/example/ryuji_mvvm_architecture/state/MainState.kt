@@ -22,7 +22,7 @@ enum class FirstScreenState : ScreenState {
     NEXT
 }
 
-data class FirstData(val text: String)
+data class FirstData(val text: String = "DEFAULT")
 data class FirstState(val screenState: FirstScreenState, val data: FirstData)
 // endregion
 
@@ -31,7 +31,7 @@ enum class SecondScreenState : ScreenState {
     NEXT
 }
 
-data class SecondData(val text: String)
+data class SecondData(val text: String = "DEFAULT")
 data class SecondState(val screenState: SecondScreenState, val data: SecondData)
 // endregion
 
@@ -40,6 +40,6 @@ enum class ThirdScreenState : ScreenState {
     FINISH
 }
 
-data class ThirdData(val text: String)
+data class ThirdData(val text: String = "DEFAULT")
 data class ThirdState(val screenState: ThirdScreenState, val data: ThirdData)
 // endregion
