@@ -2,6 +2,7 @@ package com.example.ryuji_mvvm_architecture.view.fragment
 
 import com.example.ryuji_mvvm_architecture.R
 import com.example.ryuji_mvvm_architecture.databinding.FragmentThirdBinding
+import com.example.ryuji_mvvm_architecture.state.ParentScreenState
 import com.example.ryuji_mvvm_architecture.state.ThirdScreenState
 import com.example.ryuji_mvvm_architecture.viewmodel.MainViewModel
 
@@ -14,6 +15,7 @@ class ThirdFragment : BaseFragment<MainViewModel, FragmentThirdBinding>(MainView
     }
 
     override fun initialize() {
+        viewModel.dispatch(ParentScreenState.THIRD)
         binding.apply {
             finishButton.setOnClickListener {
                 viewModel?.dispatch(ThirdScreenState.FINISH)
