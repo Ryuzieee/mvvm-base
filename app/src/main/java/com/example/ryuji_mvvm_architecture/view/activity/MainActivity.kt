@@ -25,7 +25,7 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(MainViewMo
 
         binding.apply {
             setSupportActionBar(toolbar)
-            backButton.setOnClickListener { back() }
+            contentHeaderPagerMain.backButton.setOnClickListener { back() }
         }
 
         viewModel.parentScreenState.observe(this, Observer<ParentScreenState> { parentTransitionState ->
@@ -42,7 +42,7 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(MainViewMo
         })
 
         viewModel.progressState.observe(this, Observer<ParentScreenState> { mainTransitionState ->
-            binding.apply {
+            binding.contentHeaderPagerMain.apply {
                 backButton.isVisible = mainTransitionState.fragment != firstFragment()
                 pageTitle.text = mainTransitionState.title
                 ObjectAnimator.ofInt(pageProgress, "progress", mainTransitionState.progress).run {
