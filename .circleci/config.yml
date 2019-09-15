@@ -77,11 +77,6 @@ jobs:
       TERM: dumb
     steps:
       - checkout
-
-      # Download and cache dependencies
-      - restore_cache:
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "ryujimvvmarchitecture/build.gradle" }}
-
       - run:
           name: update android sdk
           command: |
@@ -90,19 +85,6 @@ jobs:
       - run:
           name: gradle dependencies
           command: ./gradlew androidDependencies
-      - save_cache:
-          paths: ~/.gradle
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "ryujimvvmarchitecture/build.gradle" }}
-
-            # run unit tests!
-            - run:
-                name: unit test
-                command: |
-                  ./gradlew test
-                  ./gradlew lint test
-            - run:
-                name: Show list of system-images
-                command: sdkmanager --list --verbose | grep system-images
 workflows:
   version: 2
   one_and_two:
