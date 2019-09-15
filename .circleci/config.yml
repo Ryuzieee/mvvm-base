@@ -51,7 +51,7 @@ jobs:
 
       # 詳細については、circleci.com/docs/ja/2.0/artifacts/ を参照してください
       - store_artifacts:
-          path: /tmp/artifact-1
+          path: /my_workspace/echo-output
           destination: artifact-file
 workflows:
   version: 2
