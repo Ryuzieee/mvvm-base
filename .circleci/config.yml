@@ -63,7 +63,7 @@ jobs:
           else
             echo "Nope!"; exit 1
           fi
-  forAndroid:
+  test:
     branches:
       only:
         - master
@@ -90,6 +90,6 @@ workflows:
           # two実行の前提条件としてoneが必須
           requires:
             - one
-      - forAndroid:
+      - test:
           requires:
             - one
