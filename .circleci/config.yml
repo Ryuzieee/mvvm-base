@@ -1,21 +1,27 @@
+# TODO: キャッシュ導入
+
 version: 2
 jobs:
+  # ジョブ名
+  # ジョブはステップの集まりです
+  # 各ジョブでは、docker、machine、macos のいずれかの Executor を宣言する必要があります
   one:
-    # プロジェクトをビルドする際にどの Docker イメージを使うか指定
-    # CircleCI は、イメージを使用して「コンテナ」を立ち上げます。
+    # プロジェクトをビルドする際にどの Docker イメージを使うか指定します
+    # CircleCI は、イメージを使用して「コンテナ」を立ち上げます
+    # ここでは「circleci/ruby:2.4.1」イメージ
     docker:
       - image: circleci/ruby:2.4.1
     steps:
+      # プロジェクトのディレクトリにあるコードをチェックアウトします
       - checkout
-      # 実行内容
-      # Print "A first hello"
-      - run: echo "A first hello"
-      # ディレクトリ作成
+      # "A first hello"と出力
+      - run: sh "A first hello"
+      # ディレクトリを作成
       - run: mkdir -p my_workspace
-      # 実行内容
-      # 上記で作成したディレクトリに「echo-output」ファイルを作成、"Trying out workspaces"と書き込み
+      # 上記で作成したディレクトリ内に「echo-output」を作成し、"Trying out workspaces"と書き込み
       - run: echo "Trying out workspaces" > my_workspace/echo-output
-      # Circle CI 2.0ではjobごとに異なるDockerコンテナが起動するので、別のjobにファイルを受け渡すにはpersist_to_workspaceを使います。
+      # Circle CI 2.0ではjobごとに異なるDockerコンテナが起動するので、
+      # 別のjobにファイルを受け渡すにはpersist_to_workspaceを使います
       - persist_to_workspace:
           # 絶対パス、または working_directory からの相対パスにする必要があります
           root: my_workspace
@@ -27,13 +33,10 @@ jobs:
       - image: circleci/ruby:2.4.1
     steps:
       - checkout
-      # 実行内容
-      # Print "A first hello"
       - run: echo "A more familiar hi"
-      # ファイルを参照するjobではattach_workspaceを使います。
+      # ファイルを参照するjobではattach_workspaceを使います
       # 「my_workspace」の受け取り
       - attach_workspace:
-          # 絶対パス、または working_directory からの相対パスにする必要があります
           at: my_workspace
 
       # 上記で作成した「echo-output」の内容をcatでチェック
@@ -45,12 +48,18 @@ jobs:
           else
             echo "Nope!"; exit 1
           fi
+
+      # 詳細については、circleci.com/docs/ja/2.0/artifacts/ を参照してください
+      - store_artifacts:
+          path: /tmp/artifact-1
+          destination: artifact-file
 workflows:
   version: 2
   one_and_two:
     jobs:
       - one
       - two:
+          # job実行の前提条件
           # two実行の前提条件としてoneが必須
           requires:
             - one
