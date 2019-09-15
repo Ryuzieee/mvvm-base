@@ -15,7 +15,7 @@ jobs:
       # プロジェクトのディレクトリにあるコードをチェックアウトします
       - checkout
       # "A first hello"と出力
-      - run: sh "A first hello"
+      - run: echo "A first hello"
       # ディレクトリを作成
       - run: mkdir -p my_workspace
       # 上記で作成したディレクトリ内に「echo-output」を作成し、"Trying out workspaces"と書き込み
