@@ -70,7 +70,9 @@ jobs:
           - master
           - develop
     docker:
-      - image: circleci/ruby:2.4.1
+      - image: circleci/android:api-26-alpha
+    environment:
+      JVM_OPTS: -Xmx3200m
     steps:
       - checkout
       - run:
