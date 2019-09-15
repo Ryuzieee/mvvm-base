@@ -79,8 +79,10 @@ jobs:
               echo "Version update was skipped."
             fi
       - store_test_results:
-          path: example/build/test-results
+          # テスト項目の結果を保存
+          path: app/build/test-results
 
       - store_artifacts:
-          path: example/build/reports
+          # テスト項目の結果を保存
+          path: app/build/reports
           destination: reports

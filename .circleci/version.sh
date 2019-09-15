@@ -4,8 +4,6 @@ VERSION=`cat version.properties | cut -d'=' -f2`
 
 sed -i "/compile/s/[0-9]*\.[0-9]*\.[0-9]*/$VERSION/" ./README.md
 
-# 続き
-
 REPOSITORY="git@github.com:${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}.git"
 
 git config --global user.name "CircleCI"
