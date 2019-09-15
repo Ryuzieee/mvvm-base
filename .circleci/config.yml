@@ -64,12 +64,16 @@ jobs:
             echo "Nope!"; exit 1
           fi
   test:
-    branches:
-      only:
-        - master
-        - develop
+    filters:
+      branches:
+        only:
+          - master
+          - develop
     docker:
-      - image: circleci/ruby:2.4.1
+      - image: circleci/android:api-26-alpha
+    environment:
+      JVM_OPTS: -Xmx3200m
+      TERM: dumb
     steps:
       - checkout
       - run:
