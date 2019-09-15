@@ -63,6 +63,46 @@ jobs:
           else
             echo "Nope!"; exit 1
           fi
+  forAndroid:
+    branches:
+      only:
+        - master
+        - develop
+    docker:
+      # specify the version you desire here
+      - image: circleci/android:api-26-alpha
+    environment:
+      # Customize the JVM maximum heap limit
+      JVM_OPTS: -Xmx3200m
+      TERM: dumb
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "ryujimvvmarchitecture/build.gradle" }}
+
+      - run:
+          name: update android sdk
+          command: |
+            echo y | android update sdk --no-ui --all --filter tool,extra-android-m2repository,extra-google-google_play_services,extra-google-m2repository,android-26
+            echo y | android update sdk --no-ui --all --filter build-tools-26.0.0
+      - run:
+          name: gradle dependencies
+          command: ./gradlew androidDependencies
+      - save_cache:
+          paths: ~/.gradle
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "ryujimvvmarchitecture/build.gradle" }}
+
+            # run unit tests!
+            - run:
+                name: unit test
+                command: |
+                  ./gradlew test
+                  ./gradlew lint test
+            - run:
+                name: Show list of system-images
+                command: sdkmanager --list --verbose | grep system-images
 workflows:
   version: 2
   one_and_two:
@@ -71,5 +111,8 @@ workflows:
       - two:
           # job実行の前提条件
           # two実行の前提条件としてoneが必須
+          requires:
+            - one
+      - forAndroid:
           requires:
             - one
