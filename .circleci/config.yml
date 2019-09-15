@@ -1,22 +1,56 @@
 version: 2
 jobs:
   one:
+    # プロジェクトをビルドする際にどの Docker イメージを使うか指定
+    # CircleCI は、イメージを使用して「コンテナ」を立ち上げます。
     docker:
       - image: circleci/ruby:2.4.1
     steps:
       - checkout
+      # 実行内容
+      # Print "A first hello"
       - run: echo "A first hello"
-      - run: sleep 25
+      # ディレクトリ作成
+      - run: mkdir -p my_workspace
+      # 実行内容
+      # 上記で作成したディレクトリに「echo-output」ファイルを作成、"Trying out workspaces"と書き込み
+      - run: echo "Trying out workspaces" > my_workspace/echo-output
+      # Circle CI 2.0ではjobごとに異なるDockerコンテナが起動するので、別のjobにファイルを受け渡すにはpersist_to_workspaceを使います。
+      - persist_to_workspace:
+          # 絶対パス、または working_directory からの相対パスにする必要があります
+          root: my_workspace
+          # root からの相対パスにする必要があります
+          paths:
+            - echo-output
   two:
     docker:
       - image: circleci/ruby:2.4.1
     steps:
       - checkout
+      # 実行内容
+      # Print "A first hello"
       - run: echo "A more familiar hi"
-      - run: sleep 15
+      # ファイルを参照するjobではattach_workspaceを使います。
+      # 「my_workspace」の受け取り
+      - attach_workspace:
+          # 絶対パス、または working_directory からの相対パスにする必要があります
+          at: my_workspace
+
+      # 上記で作成した「echo-output」の内容をcatでチェック
+      # "Trying out workspaces"と書き込みがある -> Print "It worked!"
+      # "Trying out workspaces"と書き込みがない -> Print "Nope!" & error
+      - run: |
+          if [[ $(cat my_workspace/echo-output) == "Trying out workspaces" ]]; then
+            echo "It worked!";
+          else
+            echo "Nope!"; exit 1
+          fi
 workflows:
   version: 2
   one_and_two:
     jobs:
       - one
-      - two
+      - two:
+          # two実行の前提条件としてoneが必須
+          requires:
+            - one
