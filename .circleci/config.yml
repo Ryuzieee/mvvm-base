@@ -1,0 +1,65 @@
+# TODO: キャッシュ導入
+
+version: 2
+jobs:
+  # ジョブ名
+  # ジョブはステップの集まりです
+  # 各ジョブでは、docker、machine、macos のいずれかの Executor を宣言する必要があります
+  one:
+    # プロジェクトをビルドする際にどの Docker イメージを使うか指定します
+    # CircleCI は、イメージを使用して「コンテナ」を立ち上げます
+    # ここでは「circleci/ruby:2.4.1」イメージ
+    docker:
+      - image: circleci/ruby:2.4.1
+    steps:
+      # プロジェクトのディレクトリにあるコードをチェックアウトします
+      - checkout
+      # "A first hello"と出力
+      - run: echo "A first hello"
+      # ディレクトリを作成
+      - run: mkdir -p my_workspace
+      # 上記で作成したディレクトリ内に「echo-output」を作成し、"Trying out workspaces"と書き込み
+      - run: echo "Trying out workspaces" > my_workspace/echo-output
+      # Circle CI 2.0ではjobごとに異なるDockerコンテナが起動するので、
+      # 別のjobにファイルを受け渡すにはpersist_to_workspaceを使います
+      - persist_to_workspace:
+          # 絶対パス、または working_directory からの相対パスにする必要があります
+          root: my_workspace
+          # root からの相対パスにする必要があります
+          paths:
+            - echo-output
+  two:
+    docker:
+      - image: circleci/ruby:2.4.1
+    steps:
+      - checkout
+      - run: echo "A more familiar hi"
+      # ファイルを参照するjobではattach_workspaceを使います
+      # 「my_workspace」の受け取り
+      - attach_workspace:
+          at: my_workspace
+
+      # 詳細については、circleci.com/docs/ja/2.0/artifacts/ を参照してください
+      - store_artifacts:
+          path: /my_workspace/echo-output
+          destination: artifact-file
+
+      # 上記で作成した「echo-output」の内容をcatでチェック
+      # "Trying out workspaces"と書き込みがある -> Print "It worked!"
+      # "Trying out workspaces"と書き込みがない -> Print "Nope!" & error
+      - run: |
+          if [[ $(cat my_workspace/echo-output) == "Trying out workspaces" ]]; then
+            echo "It worked!";
+          else
+            echo "Nope!"; exit 1
+          fi
+workflows:
+  version: 2
+  one_and_two:
+    jobs:
+      - one
+      - two:
+          # job実行の前提条件
+          # two実行の前提条件としてoneが必須
+          requires:
+            - one
