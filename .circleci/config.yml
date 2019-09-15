@@ -70,7 +70,7 @@ jobs:
           - master
           - develop
     docker:
-      - image: circleci/android:api-26-alpha
+      - image: circleci/ruby:2.4.1
     environment:
       JVM_OPTS: -Xmx3200m
       TERM: dumb
