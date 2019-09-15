@@ -39,10 +39,16 @@ jobs:
       - attach_workspace:
           at: my_workspace
 
-      # 詳細については、circleci.com/docs/ja/2.0/artifacts/ を参照してください
-      - store_artifacts:
-          path: /my_workspace/echo-output
-          destination: artifact-file
+      # ダミーアーティファクトの作成
+      - run:
+          name: ダミーアーティファクトの作成
+          command: |
+            echo "my artifact file" > /tmp/artifact-1;
+            mkdir /tmp/artifacts;
+            echo "my artifact files in a dir" > /tmp/artifacts/artifact-2;
+            - store_artifacts:
+                path: /tmp/artifact-1
+                destination: artifact-file
 
       # 上記で作成した「echo-output」の内容をcatでチェック
       # "Trying out workspaces"と書き込みがある -> Print "It worked!"
