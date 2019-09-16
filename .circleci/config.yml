@@ -87,6 +87,9 @@ jobs:
           paths:
             - ~/.gradle
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+      - run:
+          name: Run Lint Test
+          command: ./gradlew lint
 workflows:
   version: 2
   one_and_two:
