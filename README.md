@@ -11,3 +11,7 @@ dependencies {
 - https://qiita.com/zoe302/items/261fe8e781fe52a653d8
 - https://qiita.com/kurkuru/items/127fa99ef5b2f0288b81
 - https://proandroiddev.com/circleci-with-android-continuous-integration-3ecd98f92bd4
+
+#### Java8にした
+
+ProjectStructure -> SDK Location -> /Library/Java/JavaVirtualMachines/jdk1.8.0_221.jdk/Contents/Home で設定
