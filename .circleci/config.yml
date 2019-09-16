@@ -90,6 +90,10 @@ jobs:
       - run:
           name: Run Lint Test
           command: ./gradlew lint
+      - run:
+          name: デバッグ APK とリリース APK をビルド
+          command: |
+            ./gradlew :app:assembleDebug
 workflows:
   version: 2
   one_and_two:
