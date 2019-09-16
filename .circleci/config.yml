@@ -91,12 +91,21 @@ jobs:
           name: Run Lint Test
           command: ./gradlew lint
       - run:
-          name: Build
-          command: |
-            ./gradlew :app:assembleDebug
+          name: Build Code
+          command: ./gradlew assembleDebug
       - store_artifacts:
-          path: app/build/outputs/apk/
-          destination: apks/
+          path: app/build/reports
+          destination: reports
+      - store_artifacts:
+          path: app/build/outputs
+          destination: ap
+#      - run:
+#          name: Build
+#          command: |
+#            ./gradlew :app:assembleDebug
+#      - store_artifacts:
+#          path: app/build/outputs/apk/
+#          destination: apks/
 workflows:
   version: 2
   one_and_two:
