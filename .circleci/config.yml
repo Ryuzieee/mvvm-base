@@ -5,7 +5,7 @@ jobs:
   # ジョブ名
   # ジョブはステップの集まりです
   # 各ジョブでは、docker、machine、macos のいずれかの Executor を宣言する必要があります
-  one:
+  dummy1:
     # プロジェクトをビルドする際にどの Docker イメージを使うか指定します
     # CircleCI は、イメージを使用して「コンテナ」を立ち上げます
     # ここでは「circleci/ruby:2.4.1」イメージ
@@ -26,12 +26,11 @@ jobs:
           # root からの相対パスにする必要があります
           paths:
             - echo-output
-  two:
+  dummy2:
     docker:
       - image: circleci/ruby:2.4.1
     steps:
       - checkout
-      - run: echo "A more familiar hi"
       # ファイルを参照するjobではattach_workspaceを使います
       # 「workspace」の受け取り
       - attach_workspace:
@@ -41,15 +40,14 @@ jobs:
           name: ダミーアーティファクトの作成
           command: |
             mkdir /tmp/artifacts;
-            echo "my artifact files in a dir" > /tmp/artifacts/artifact;
+            echo "Test artifact files in a dir" > /tmp/artifacts/artifact;
       - store_artifacts:
           path: /tmp/artifacts
-
       # 上記で作成した「echo-output」の内容をcatでチェック
       # "Trying out workspaces"と書き込みがある -> Print "It worked!"
       # "Trying out workspaces"と書き込みがない -> Print "Nope!" & error
       - run: |
-          if [[ $(cat my_workspace/echo-output) == "Trying out workspaces" ]]; then
+          if [[ $(cat workspace/echo-output) == "Trying out workspaces" ]]; then
             echo "It worked!";
           else
             echo "Nope!"; exit 1
@@ -92,14 +90,14 @@ jobs:
           destination: app
 workflows:
   version: 2
-  one_and_two:
+  dummy_and_test:
     jobs:
-      - one
-      - two:
+      - dummy1
+      - dummy2:
           # job実行の前提条件
-          # two実行の前提条件としてoneが必須
           requires:
-            - one
+            - dummy1
       - test:
           requires:
-            - one
+            - dummy1
+            - dummy2
