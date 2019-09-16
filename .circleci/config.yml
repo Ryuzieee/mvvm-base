@@ -17,7 +17,7 @@ jobs:
       # ディレクトリを作成
       - run: mkdir -p workspace
       # 上記で作成したディレクトリ内に「echo-output」を作成し、"Test"と書き込み
-      - run: echo "Test" > my_workspace/echo-output
+      - run: echo "Test" > workspace/echo-output
       # Circle CI 2.0ではjobごとに異なるDockerコンテナが起動するので、
       # 別のjobにファイルを受け渡すにはpersist_to_workspaceを使います
       - persist_to_workspace:
