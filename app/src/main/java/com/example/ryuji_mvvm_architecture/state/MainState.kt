@@ -6,10 +6,10 @@ import com.example.ryuji_mvvm_architecture.view.fragment.SecondFragment
 import com.example.ryuji_mvvm_architecture.view.fragment.ThirdFragment
 
 // region ParentScreenState
-enum class ParentScreenState(val fragment: Fragment, val title: String, val progress: Int): ScreenState {
-    FIRST(FirstFragment(), "①", 33),
-    SECOND(SecondFragment(), "②", 66),
-    THIRD(ThirdFragment(), "③", 100);
+enum class ParentScreenState(val fragment: Fragment, val title: String, val progress: Int) : ScreenState {
+    FIRST(FirstFragment(), "1/3", 33),
+    SECOND(SecondFragment(), "2/3", 66),
+    THIRD(ThirdFragment(), "3/3", 100);
 }
 // endregion
 
@@ -37,7 +37,7 @@ data class SecondState(val screenState: SecondScreenState, val data: SecondData)
 
 // region Third
 enum class ThirdScreenState : ScreenState {
-    FINISH
+    BACK
 }
 
 data class ThirdData(val text: String = "DEFAULT")

@@ -8,6 +8,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.ryuji_mvvm_architecture.R
+import com.example.ryuji_mvvm_architecture.model.FragmentTransitionAnimation
 import com.example.ryuji_mvvm_architecture.viewmodel.BaseViewModel
 
 abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(private val VMClass: Class<VM>) :
@@ -30,7 +31,6 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(private va
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        supportActionBar?.title = null
         initializeViewModel(viewModel)
         initialize()
         if (savedInstanceState == null) transition(firstFragment())
@@ -55,25 +55,23 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(private va
 
     abstract fun initializeViewModel(viewModel: VM)
 
-    abstract fun transitionAnimation(): Boolean
+    abstract fun animation(): FragmentTransitionAnimation?
 
     // endregion
 
     // region Fragment Control
 
-    // TODO: ここの在り方は考える
-
     open fun transition(fragment: Fragment) {
-
         val isFirstFragment = fragment == firstFragment()
         supportFragmentManager.beginTransaction().run {
             // 初期表示かつアニメーション不使用の場合はAnimationを無効にする
-            if (!isFirstFragment && transitionAnimation()) {
+            val animation = animation()
+            if (!isFirstFragment && animation != null) {
                 setCustomAnimations(
-                    R.anim.slide_in_right,
-                    R.anim.slide_out_left,
-                    R.anim.slide_in_left,
-                    R.anim.slide_out_right
+                    animation.enter ?: 0,
+                    animation.exit ?: 0,
+                    animation.popEnter ?: 0,
+                    animation.popExit ?: 0
                 )
             }
             replace(R.id.container, fragment)
