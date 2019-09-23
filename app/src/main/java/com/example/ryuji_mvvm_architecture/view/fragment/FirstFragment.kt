@@ -16,21 +16,18 @@ class FirstFragment : BaseFragment<MainViewModel, FragmentFirstBinding>(MainView
     }
 
     override fun initialize() {
-        viewModel.dispatch(FirstScreenState.INITIALIZE)
         binding.apply {
             nextButton.setOnClickListener {
                 viewModel?.dispatch(FirstScreenState.NEXT)
+            }
+            // TODO: おまけ
+            fetchButton.setOnClickListener {
+                viewModel?.dispatch(FirstScreenState.FETCH)
             }
         }
         viewModel.getFirstState().observe(this, Observer<FirstState> { firstState ->
             // TODO: 連鎖処置など
         })
-
-        // TODO: おまけ
-        binding.apply {
-            fetchButton.setOnClickListener {
-                viewModel?.dispatch(FirstScreenState.FETCH)
-            }
-        }
+        viewModel.dispatch(FirstScreenState.INITIALIZE)
     }
 }
