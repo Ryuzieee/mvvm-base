@@ -1,6 +1,7 @@
 package com.example.ryuji_mvvm_architecture.viewmodel
 
 import android.app.Application
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MutableLiveData
 import com.example.ryuji_mvvm_architecture.state.*
 
@@ -42,6 +43,15 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
         } else {
             null
         }
+    }
+
+    fun isBack(supportFragmentManager: FragmentManager): Boolean {
+        // parentTransitionStateのindexが現在のStateよりも小さい場合は画面を戻ると判断しback
+        val new = ParentScreenState.values().indexOf(parentScreenState.value)
+        val old = ParentScreenState.values().indexOfFirst {
+            it.fragment == supportFragmentManager.fragments.first()
+        }
+        return old > new
     }
 
     // endregion

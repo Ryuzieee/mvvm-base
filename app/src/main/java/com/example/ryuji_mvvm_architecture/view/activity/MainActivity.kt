@@ -10,8 +10,6 @@ import com.example.ryuji_mvvm_architecture.model.FragmentTransitionAnimation
 import com.example.ryuji_mvvm_architecture.state.ParentScreenState
 import com.example.ryuji_mvvm_architecture.viewmodel.MainViewModel
 
-
-
 class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(MainViewModel::class.java) {
 
     override fun layoutResource() = R.layout.activity_main
@@ -41,16 +39,7 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(MainViewMo
         binding.toolbarBack.setOnClickListener { onBackPressed() }
         viewModel.getParentScreenState().observe(this, Observer<ParentScreenState> { parentScreenState ->
             updateToolbar(parentScreenState)
-            // parentTransitionStateのindexが現在のStateよりも小さい場合は画面を戻ると判断しback
-            val new = ParentScreenState.values().indexOf(parentScreenState)
-            val old = ParentScreenState.values().indexOfFirst {
-                it.fragment == supportFragmentManager.fragments.first()
-            }
-            if (old > new) {
-                back()
-            } else {
-                transition(parentScreenState.fragment)
-            }
+            if (viewModel.isBack(supportFragmentManager)) back() else transition(parentScreenState.fragment)
         })
     }
 
