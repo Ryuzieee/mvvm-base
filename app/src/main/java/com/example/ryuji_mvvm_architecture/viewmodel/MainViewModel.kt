@@ -1,6 +1,7 @@
 package com.example.ryuji_mvvm_architecture.viewmodel
 
 import android.app.Application
+import android.os.Handler
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MutableLiveData
 import com.example.ryuji_mvvm_architecture.state.*
@@ -104,6 +105,30 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
 
     private fun secondDispatch(state: SecondScreenState, dispatchData: Any?) {
         when (state) {
+            SecondScreenState.FETCH_FROM_SERVER -> {
+                // onCreateで呼ばれるFETCH_FROM_SERVERはstateがnull(初期化されていない)の時のみ実行する
+                if (secondState.value == null) {
+                    secondState.value = SecondState(
+                        screenState = SecondScreenState.LOADING,
+                        data = SecondData()
+                    )
+                    Handler().postDelayed({
+                        // API実行(5秒で取得)
+                        secondState.value = secondState.value?.copy(
+                            screenState = SecondScreenState.FETCHED,
+                            data = secondState.value?.data?.copy(
+                                text = "NEXT"
+                            ) ?: SecondData()
+                        )
+                    }, 3000)
+                }
+            }
+            SecondScreenState.LOADING -> {
+                // Nothing
+            }
+            SecondScreenState.FETCHED -> {
+                // Nothing
+            }
             SecondScreenState.NEXT -> nextParentScreenState()?.let { parentDispatch(it) }
         }
     }
