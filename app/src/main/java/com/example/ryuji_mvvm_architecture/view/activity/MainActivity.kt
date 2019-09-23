@@ -20,12 +20,7 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(MainViewMo
         binding.viewModel = viewModel
     }
 
-    override fun animation() = FragmentTransitionAnimation(
-        enter = R.anim.slide_in_right,
-        exit = R.anim.slide_out_left,
-        popEnter = R.anim.slide_in_left,
-        popExit = R.anim.slide_out_right
-    )
+    override fun animation() = FragmentTransitionAnimation().rightToLeft()
 
     override fun onBackPressed() {
         viewModel.previousParentScreenState()?.let {

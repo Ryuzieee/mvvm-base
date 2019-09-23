@@ -28,6 +28,9 @@ data class FirstState(val screenState: FirstScreenState, val data: FirstData)
 
 // region Second
 enum class SecondScreenState : ScreenState {
+    FETCH_FROM_SERVER,
+    LOADING,
+    FETCHED,
     NEXT
 }
 
