@@ -1,7 +1,8 @@
 package com.example.ryuji_mvvm_architecture.view.activity
 
-import android.widget.TextView
-import androidx.appcompat.app.ActionBar
+import android.animation.ObjectAnimator
+import android.view.animation.DecelerateInterpolator
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.example.ryuji_mvvm_architecture.R
 import com.example.ryuji_mvvm_architecture.databinding.ActivityMainBinding
@@ -34,18 +35,10 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(MainViewMo
         } ?: super.onBackPressed()
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
-        return true
-    }
-
     override fun initialize() {
         viewModel.dispatch(ParentScreenState.FIRST)
         setSupportActionBar(binding.toolbar)
-        supportActionBar?.let {
-            it.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
-            it.setCustomView(R.layout.actionbar)
-        }
+        binding.toolbarBack.setOnClickListener { onBackPressed() }
         viewModel.getParentScreenState().observe(this, Observer<ParentScreenState> { parentScreenState ->
             updateToolbar(parentScreenState)
             // parentTransitionStateのindexが現在のStateよりも小さい場合は画面を戻ると判断しback
@@ -62,10 +55,14 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(MainViewMo
     }
 
     private fun updateToolbar(parentScreenState: ParentScreenState) {
-        supportActionBar?.let {
-            it.customView.findViewById<TextView>(R.id.action_bar_title).text = parentScreenState.title
-            it.setDisplayHomeAsUpEnabled(parentScreenState.fragment != firstFragment())
-            it.setHomeButtonEnabled(parentScreenState.fragment != firstFragment())
+        binding.apply {
+            toolbarBack.isVisible = parentScreenState.fragment != firstFragment()
+            toolbarTitle.text = parentScreenState.title
+            ObjectAnimator.ofInt(toolbarProgress, "progress", parentScreenState.progress).run {
+                duration = 500
+                interpolator = DecelerateInterpolator()
+                start()
+            }
         }
     }
 
