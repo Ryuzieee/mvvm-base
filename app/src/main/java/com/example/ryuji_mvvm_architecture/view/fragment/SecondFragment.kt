@@ -2,7 +2,6 @@ package com.example.ryuji_mvvm_architecture.view.fragment
 
 import com.example.ryuji_mvvm_architecture.R
 import com.example.ryuji_mvvm_architecture.databinding.FragmentSecondBinding
-import com.example.ryuji_mvvm_architecture.state.ParentScreenState
 import com.example.ryuji_mvvm_architecture.state.SecondScreenState
 import com.example.ryuji_mvvm_architecture.viewmodel.MainViewModel
 

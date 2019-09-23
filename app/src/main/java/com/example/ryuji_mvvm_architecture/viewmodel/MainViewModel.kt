@@ -24,9 +24,6 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
 
     fun getThirdState(): MutableLiveData<ThirdState> = thirdState
 
-    // endregion
-
-
     fun nextParentScreenState(): ParentScreenState? {
         val current = ParentScreenState.values().indexOf(parentScreenState.value)
         // 現在のindexがMAX未満である場合、現在の表示を最終ページ以外であると見なし、indexを+1したページを返却する
@@ -47,6 +44,7 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
         }
     }
 
+    // endregion
 
     // region Dispatch
 
@@ -66,7 +64,7 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
     private fun firstDispatch(state: FirstScreenState, dispatchData: Any?) {
         when (state) {
             FirstScreenState.INITIALIZE -> {
-                // onCreateで呼ばれるINITIALIZEはstateがnullの時のみ実行する
+                // onCreateで呼ばれるINITIALIZEはstateがnull(初期化されていない)の時のみ実行する
                 if (firstState.value == null) {
                     firstState.value = FirstState(
                         screenState = FirstScreenState.INITIALIZED,

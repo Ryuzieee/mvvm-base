@@ -1,8 +1,5 @@
 package com.example.ryuji_mvvm_architecture.view.activity
 
-import android.animation.ObjectAnimator
-import android.view.animation.DecelerateInterpolator
-import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.example.ryuji_mvvm_architecture.R
 import com.example.ryuji_mvvm_architecture.databinding.ActivityMainBinding
