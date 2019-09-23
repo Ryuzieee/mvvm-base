@@ -29,7 +29,10 @@ class SecondFragment : BaseFragment<MainViewModel, FragmentSecondBinding>(MainVi
                 SecondScreenState.FETCHED -> {
                     binding.apply {
                         progressDialog.isVisible = false
-                        nextButton.text = secondState.data.text
+                        nextButton.apply {
+                            isVisible = true
+                            text = secondState.data.text
+                        }
                     }
                 }
                 else -> {

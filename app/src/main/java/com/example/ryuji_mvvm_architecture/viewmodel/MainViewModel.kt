@@ -3,6 +3,7 @@ package com.example.ryuji_mvvm_architecture.viewmodel
 import android.app.Application
 import android.os.Handler
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.ryuji_mvvm_architecture.state.*
 
@@ -10,21 +11,21 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
 
     // region LiveData
 
-    private var parentScreenState: MutableLiveData<ParentScreenState> = MutableLiveData()
+    private var parentScreenState = MutableLiveData<ParentScreenState>()
 
-    private var firstState: MutableLiveData<FirstState> = MutableLiveData()
+    private var firstState = MutableLiveData<FirstState>()
 
-    private var secondState: MutableLiveData<SecondState> = MutableLiveData()
+    private var secondState = MutableLiveData<SecondState>()
 
-    private var thirdState: MutableLiveData<ThirdState> = MutableLiveData()
+    private var thirdState = MutableLiveData<ThirdState>()
 
-    fun getParentScreenState(): MutableLiveData<ParentScreenState> = parentScreenState
+    fun getParentScreenState() = parentScreenState
 
-    fun getFirstState(): MutableLiveData<FirstState> = firstState
+    fun getFirstState() = firstState
 
-    fun getSecondState(): MutableLiveData<SecondState> = secondState
+    fun getSecondState() = secondState
 
-    fun getThirdState(): MutableLiveData<ThirdState> = thirdState
+    fun getThirdState() = thirdState
 
     fun nextParentScreenState(): ParentScreenState? {
         val current = ParentScreenState.values().indexOf(parentScreenState.value)
@@ -149,6 +150,23 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
 
     private fun parentDispatch(state: ParentScreenState) {
         parentScreenState.value = state
+    }
+
+    // endregion
+
+    // region validation test
+
+    val username = MutableLiveData<String>()
+    val password = MutableLiveData<String>()
+    val termOfUse = MutableLiveData<Boolean>()
+
+    private fun isValid() =
+        !username.value.isNullOrBlank() && !password.value.isNullOrBlank() && termOfUse.value == true
+
+    val canSubmit = MediatorLiveData<Boolean>().also { result ->
+        result.addSource(username) { result.value = isValid() }
+        result.addSource(password) { result.value = isValid() }
+        result.addSource(termOfUse) { result.value = isValid() }
     }
 
     // endregion
