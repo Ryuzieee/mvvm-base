@@ -1,11 +1,15 @@
 package com.example.ryuji_mvvm_architecture.view.activity
 
+import android.widget.TextView
+import androidx.appcompat.app.ActionBar
 import androidx.lifecycle.Observer
 import com.example.ryuji_mvvm_architecture.R
 import com.example.ryuji_mvvm_architecture.databinding.ActivityMainBinding
 import com.example.ryuji_mvvm_architecture.model.FragmentTransitionAnimation
 import com.example.ryuji_mvvm_architecture.state.ParentScreenState
 import com.example.ryuji_mvvm_architecture.viewmodel.MainViewModel
+
+
 
 class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(MainViewModel::class.java) {
 
@@ -30,26 +34,39 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(MainViewMo
         } ?: super.onBackPressed()
     }
 
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
+    }
+
     override fun initialize() {
         viewModel.dispatch(ParentScreenState.FIRST)
-        binding.apply {
-            // TODO: 何故か最初のobserveでの「binding.toolbar.title = parentTransitionState.title」で更新されないため
-            toolbar.title = ParentScreenState.FIRST.title
-            setSupportActionBar(toolbar)
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.let {
+            it.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
+            it.setCustomView(R.layout.actionbar)
         }
-        viewModel.getParentScreenState().observe(this, Observer<ParentScreenState> { parentTransitionState ->
-            binding.toolbar.title = parentTransitionState.title
+        viewModel.getParentScreenState().observe(this, Observer<ParentScreenState> { parentScreenState ->
+            updateToolbar(parentScreenState)
             // parentTransitionStateのindexが現在のStateよりも小さい場合は画面を戻ると判断しback
-            val new = ParentScreenState.values().indexOf(parentTransitionState)
+            val new = ParentScreenState.values().indexOf(parentScreenState)
             val old = ParentScreenState.values().indexOfFirst {
                 it.fragment == supportFragmentManager.fragments.first()
             }
             if (old > new) {
                 back()
             } else {
-                transition(parentTransitionState.fragment)
+                transition(parentScreenState.fragment)
             }
         })
+    }
+
+    private fun updateToolbar(parentScreenState: ParentScreenState) {
+        supportActionBar?.let {
+            it.customView.findViewById<TextView>(R.id.action_bar_title).text = parentScreenState.title
+            it.setDisplayHomeAsUpEnabled(parentScreenState.fragment != firstFragment())
+            it.setHomeButtonEnabled(parentScreenState.fragment != firstFragment())
+        }
     }
 
 }
