@@ -34,13 +34,15 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(MainViewMo
     }
 
     override fun initialize() {
-        viewModel.dispatch(ParentScreenState.FIRST)
-        setSupportActionBar(binding.toolbar)
-        binding.toolbarBack.setOnClickListener { onBackPressed() }
+        binding.apply {
+            setSupportActionBar(toolbar)
+            toolbarBack.setOnClickListener { onBackPressed() }
+        }
         viewModel.getParentScreenState().observe(this, Observer<ParentScreenState> { parentScreenState ->
             updateToolbar(parentScreenState)
             if (viewModel.isBack(supportFragmentManager)) back() else transition(parentScreenState.fragment)
         })
+        viewModel.dispatch(ParentScreenState.FIRST)
     }
 
     private fun updateToolbar(parentScreenState: ParentScreenState) {

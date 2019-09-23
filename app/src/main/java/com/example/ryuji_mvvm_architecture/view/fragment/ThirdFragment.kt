@@ -1,8 +1,10 @@
 package com.example.ryuji_mvvm_architecture.view.fragment
 
+import androidx.lifecycle.Observer
 import com.example.ryuji_mvvm_architecture.R
 import com.example.ryuji_mvvm_architecture.databinding.FragmentThirdBinding
 import com.example.ryuji_mvvm_architecture.state.ThirdScreenState
+import com.example.ryuji_mvvm_architecture.state.ThirdState
 import com.example.ryuji_mvvm_architecture.viewmodel.MainViewModel
 
 class ThirdFragment : BaseFragment<MainViewModel, FragmentThirdBinding>(MainViewModel::class.java) {
@@ -19,5 +21,8 @@ class ThirdFragment : BaseFragment<MainViewModel, FragmentThirdBinding>(MainView
                 viewModel?.dispatch(ThirdScreenState.BACK)
             }
         }
+        viewModel.getThirdState().observe(this, Observer<ThirdState> { thirdState ->
+            // TODO: 連鎖処置など
+        })
     }
 }
