@@ -8,17 +8,45 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
 
     // region LiveData
 
-    var parentScreenState: MutableLiveData<ParentScreenState> = MutableLiveData()
+    private var parentScreenState: MutableLiveData<ParentScreenState> = MutableLiveData()
 
-    var progressState: MutableLiveData<ParentScreenState> = MutableLiveData()
+    private var firstState: MutableLiveData<FirstState> = MutableLiveData()
 
-    var firstState: MutableLiveData<FirstState> = MutableLiveData()
+    private var secondState: MutableLiveData<SecondState> = MutableLiveData()
 
-    var secondState: MutableLiveData<SecondState> = MutableLiveData()
+    private var thirdState: MutableLiveData<ThirdState> = MutableLiveData()
 
-    var thirdState: MutableLiveData<ThirdState> = MutableLiveData()
+    fun getParentScreenState(): MutableLiveData<ParentScreenState> = parentScreenState
+
+    fun getFirstState(): MutableLiveData<FirstState> = firstState
+
+    fun getSecondState(): MutableLiveData<SecondState> = secondState
+
+    fun getThirdState(): MutableLiveData<ThirdState> = thirdState
 
     // endregion
+
+
+    fun nextParentScreenState(): ParentScreenState? {
+        val current = ParentScreenState.values().indexOf(parentScreenState.value)
+        // 現在のindexがMAX未満である場合、現在の表示を最終ページ以外であると見なし、indexを+1したページを返却する
+        return if (current < ParentScreenState.values().lastIndex) {
+            ParentScreenState.values()[current + 1]
+        } else {
+            null
+        }
+    }
+
+    fun previousParentScreenState(): ParentScreenState? {
+        val current = ParentScreenState.values().indexOf(parentScreenState.value)
+        // 現在のindexが1以上である場合、現在の表示を2ページ目以降と見なし、indexを-1したページを返却する
+        return if (current > 0) {
+            ParentScreenState.values()[current - 1]
+        } else {
+            null
+        }
+    }
+
 
     // region Dispatch
 
@@ -27,7 +55,7 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
             is FirstScreenState -> firstDispatch(state, dispatchData)
             is SecondScreenState -> secondDispatch(state, dispatchData)
             is ThirdScreenState -> thirdDispatch(state, dispatchData)
-            is ParentScreenState -> parentDispatch(state, dispatchData)
+            is ParentScreenState -> parentDispatch(state)
         }
     }
 
@@ -38,29 +66,25 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
     private fun firstDispatch(state: FirstScreenState, dispatchData: Any?) {
         when (state) {
             FirstScreenState.INITIALIZE -> {
-                when (firstState.value?.screenState) {
-                    FirstScreenState.INITIALIZED, FirstScreenState.FETCHED -> {}
-                    else -> {
-                        firstState.value = FirstState(
-                            screenState = FirstScreenState.INITIALIZED,
-                            data = FirstData(
-                                text = "INITIALIZE"
-                            )
+                // onCreateで呼ばれるINITIALIZEはstateがnullの時のみ実行する
+                if (firstState.value == null) {
+                    firstState.value = FirstState(
+                        screenState = FirstScreenState.INITIALIZED,
+                        data = FirstData(
+                            text = "INITIALIZE"
                         )
-                    }
+                    )
                 }
             }
             FirstScreenState.FETCH -> {
-                firstState.value = FirstState(
+                firstState.value = firstState.value?.copy(
                     screenState = FirstScreenState.FETCHED,
                     data = firstState.value?.data?.copy(
                         text = "FETCH"
-                    ) ?: FirstData(text = "INITIALIZE")
+                    ) ?: FirstData()
                 )
             }
-            FirstScreenState.NEXT -> {
-                parentScreenState.value = ParentScreenState.SECOND
-            }
+            FirstScreenState.NEXT -> nextParentScreenState()?.run { parentDispatch(this) }
             else -> {
             }
         }
@@ -72,9 +96,7 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
 
     private fun secondDispatch(state: SecondScreenState, dispatchData: Any?) {
         when (state) {
-            SecondScreenState.NEXT -> {
-                parentScreenState.value = ParentScreenState.THIRD
-            }
+            SecondScreenState.NEXT -> nextParentScreenState()?.run { parentDispatch(this) }
         }
     }
 
@@ -84,9 +106,7 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
 
     private fun thirdDispatch(state: ThirdScreenState, dispatchData: Any?) {
         when (state) {
-            ThirdScreenState.FINISH -> {
-                parentScreenState.value = ParentScreenState.SECOND
-            }
+            ThirdScreenState.BACK -> previousParentScreenState()?.run { parentDispatch(this) }
         }
     }
 
@@ -94,9 +114,10 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
 
     // region Parent Dispatch
 
-    private fun parentDispatch(state: ParentScreenState, dispatchData: Any?) {
-        progressState.value = state
+    private fun parentDispatch(state: ParentScreenState) {
+        parentScreenState.value = state
     }
 
     // endregion
+
 }

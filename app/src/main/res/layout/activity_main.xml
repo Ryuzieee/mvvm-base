@@ -22,13 +22,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     android:background="?attr/colorPrimary"
-                    app:popupTheme="@style/AppTheme.PopupOverlay">
-
-                <include
-                        layout="@layout/content_header_pager_main"
-                        android:id="@+id/content_header_pager_main"/>
-
-            </androidx.appcompat.widget.Toolbar>
+                    app:popupTheme="@style/AppTheme.PopupOverlay"/>
 
         </com.google.android.material.appbar.AppBarLayout>
 
