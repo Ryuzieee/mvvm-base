@@ -82,7 +82,7 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
                     ) ?: FirstData()
                 )
             }
-            FirstScreenState.NEXT -> nextParentScreenState()?.run { parentDispatch(this) }
+            FirstScreenState.NEXT -> nextParentScreenState()?.let { parentDispatch(it) }
             else -> {
             }
         }
@@ -94,7 +94,7 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
 
     private fun secondDispatch(state: SecondScreenState, dispatchData: Any?) {
         when (state) {
-            SecondScreenState.NEXT -> nextParentScreenState()?.run { parentDispatch(this) }
+            SecondScreenState.NEXT -> nextParentScreenState()?.let { parentDispatch(it) }
         }
     }
 
@@ -104,7 +104,7 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
 
     private fun thirdDispatch(state: ThirdScreenState, dispatchData: Any?) {
         when (state) {
-            ThirdScreenState.BACK -> previousParentScreenState()?.run { parentDispatch(this) }
+            ThirdScreenState.BACK -> previousParentScreenState()?.let { parentDispatch(it) }
         }
     }
 
