@@ -19,8 +19,9 @@ class ThirdFragment : BaseFragment<MainViewModel, FragmentThirdBinding>(MainView
         binding.signupButton.setOnClickListener {
             viewModel.dispatch(ThirdScreenState.BACK)
         }
-        viewModel.getThirdState().observe(this, Observer<ThirdState> { thirdState ->
+        viewModel.thirdState.observe(this, Observer<ThirdState> { thirdState ->
             // TODO: 連鎖処置など
         })
+        viewModel.dispatch(ThirdScreenState.INITIAL)
     }
 }

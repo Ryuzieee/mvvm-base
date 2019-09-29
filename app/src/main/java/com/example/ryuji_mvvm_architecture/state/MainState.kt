@@ -1,6 +1,8 @@
 package com.example.ryuji_mvvm_architecture.state
 
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.ryuji_mvvm_architecture.view.fragment.FirstFragment
 import com.example.ryuji_mvvm_architecture.view.fragment.SecondFragment
 import com.example.ryuji_mvvm_architecture.view.fragment.ThirdFragment
@@ -40,9 +42,18 @@ data class SecondState(val screenState: SecondScreenState, val data: SecondData)
 
 // region Third
 enum class ThirdScreenState : ScreenState {
+    INITIAL,
     BACK
 }
 
-data class ThirdData(val text: String = "DEFAULT")
+data class ThirdData(
+    val username: MutableLiveData<String> = MutableLiveData(),
+    val password: MutableLiveData<String> = MutableLiveData(),
+    val termOfUse: MutableLiveData<Boolean> = MutableLiveData(),
+    val canSubmit: MediatorLiveData<Boolean> = MediatorLiveData()
+) {
+    fun isValid() = !username.value.isNullOrBlank() && !password.value.isNullOrBlank() && termOfUse.value == true
+}
+
 data class ThirdState(val screenState: ThirdScreenState, val data: ThirdData)
 // endregion
