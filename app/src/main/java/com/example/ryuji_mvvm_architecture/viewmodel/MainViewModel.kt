@@ -3,7 +3,6 @@ package com.example.ryuji_mvvm_architecture.viewmodel
 import android.app.Application
 import android.os.Handler
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.ryuji_mvvm_architecture.state.*
 
@@ -17,15 +16,13 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
 
     private var secondState = MutableLiveData<SecondState>()
 
-    private var thirdState = MutableLiveData<ThirdState>()
+    var thirdState = MutableLiveData(ThirdState(ThirdScreenState.INITIAL, ThirdData()))
 
     fun getParentScreenState() = parentScreenState
 
     fun getFirstState() = firstState
 
     fun getSecondState() = secondState
-
-    fun getThirdState() = thirdState
 
     fun nextParentScreenState(): ParentScreenState? {
         val current = ParentScreenState.values().indexOf(parentScreenState.value)
@@ -140,6 +137,16 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
 
     private fun thirdDispatch(state: ThirdScreenState, dispatchData: Any?) {
         when (state) {
+            ThirdScreenState.INITIAL -> {
+                thirdState.value?.data?.let { data ->
+                    // Observerのリストを作成
+                    val observerList = listOf(data.username, data.password, data.termOfUse)
+                    // canSubmit(MediatorLiveData)からObserverのリストを削除
+                    observerList.forEach { data.canSubmit.removeSource(it) }
+                    // canSubmit(MediatorLiveData)にObserverのリストを追加
+                    observerList.forEach { data.canSubmit.addSource(it) { data.canSubmit.value = data.isValid() } }
+                }
+            }
             ThirdScreenState.BACK -> previousParentScreenState()?.let { parentDispatch(it) }
         }
     }
@@ -150,23 +157,6 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
 
     private fun parentDispatch(state: ParentScreenState) {
         parentScreenState.value = state
-    }
-
-    // endregion
-
-    // region validation test
-
-    val username = MutableLiveData<String>()
-    val password = MutableLiveData<String>()
-    val termOfUse = MutableLiveData<Boolean>()
-
-    private fun isValid() =
-        !username.value.isNullOrBlank() && !password.value.isNullOrBlank() && termOfUse.value == true
-
-    val canSubmit = MediatorLiveData<Boolean>().also { result ->
-        result.addSource(username) { result.value = isValid() }
-        result.addSource(password) { result.value = isValid() }
-        result.addSource(termOfUse) { result.value = isValid() }
     }
 
     // endregion

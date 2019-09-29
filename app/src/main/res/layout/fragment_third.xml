@@ -21,7 +21,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
-                    android:text="@={viewModel.username}"/>
+                    android:text="@{viewModel.thirdState.data.username}"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -35,13 +35,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
-                    android:text="@={viewModel.password}"/>
+                    android:text="@{viewModel.thirdState.data.password}"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <CheckBox
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:checked="@={viewModel.termOfUse}"
+                android:checked="@{viewModel.thirdState.data.termOfUse}"
                 android:layout_margin="8dp"
                 android:text="利用規約に同意"/>
 
@@ -50,7 +50,7 @@
                 style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:enabled="@{viewModel.canSubmit}"
+                android:enabled="@{viewModel.thirdState.data.canSubmit}"
                 android:layout_margin="8dp"
                 android:text="Signup"/>
 
