@@ -8,6 +8,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.ryuji_mvvm_architecture.R
+import com.example.ryuji_mvvm_architecture.util.ReceivedType
 import com.example.ryuji_mvvm_architecture.util.FragmentTransitionAnimation
 
 abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(private val VMClass: Class<VM>) :
@@ -36,6 +37,10 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(private va
     }
 
     override fun onBackPressed() {
+        viewModel.previousTransitionState()?.let { viewModel.dispatch(it) } ?: onBack()
+    }
+
+    private fun onBack() {
         if (supportFragmentManager.backStackEntryCount < 1) {
             super.onBackPressed()
         } else {
@@ -90,5 +95,11 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(private va
     open fun initialize() {}
 
     // endregion
+
+    abstract val onReceivedMap: Map<ReceivedType, (() -> Unit)>
+
+    open fun onReceived(onReceived: ReceivedType) {
+        onReceivedMap[onReceived]?.let { it() }
+    }
 
 }

@@ -8,7 +8,9 @@ import com.example.ryuji_mvvm_architecture.R
 import com.example.ryuji_mvvm_architecture.base.BaseActivity
 import com.example.ryuji_mvvm_architecture.base.TransitionState
 import com.example.ryuji_mvvm_architecture.databinding.ActivityMainBinding
+import com.example.ryuji_mvvm_architecture.util.ReceivedType
 import com.example.ryuji_mvvm_architecture.util.FragmentTransitionAnimation
+
 
 class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(MainViewModel::class.java) {
 
@@ -16,27 +18,25 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(MainViewMo
 
     override fun firstFragment() = ParentScreenState.FIRST.fragment
 
+    override val onReceivedMap: Map<ReceivedType, () -> Unit> = mapOf(
+        ReceivedType.CLICK_TOOL_BAR_BACK to { onBackPressed() }
+    )
+
     override fun initializeViewModel(viewModel: MainViewModel) {
         binding.viewModel = viewModel
     }
 
     override fun animation() = FragmentTransitionAnimation().rightToLeft()
 
-    override fun onBackPressed() {
-        viewModel.previousTransitionState()?.let {
-            viewModel.dispatch(it)
-        } ?: super.onBackPressed()
-    }
-
     override fun initialize() {
         binding.apply {
             setSupportActionBar(toolbar)
-            toolbarBack.setOnClickListener { onBackPressed() }
+            toolbarBack.setOnClickListener { onReceived(ReceivedType.CLICK_TOOL_BAR_BACK) }
         }
         viewModel.transitionState.observe(this, Observer<TransitionState> {
-            val parentScreenState = it as ParentScreenState
-            updateToolbar(parentScreenState)
-            if (viewModel.isBack(supportFragmentManager)) back() else transition(parentScreenState.fragment)
+            it as ParentScreenState
+            updateToolbar(it)
+            if (viewModel.isBack(supportFragmentManager)) back() else transition(it.fragment)
         })
         viewModel.dispatch(ParentScreenState.FIRST)
     }

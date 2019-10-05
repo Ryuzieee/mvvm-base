@@ -50,6 +50,13 @@ data class SecondProperty(override val screenState: SecondScreenState, override 
             screenState = screenState as SecondScreenState,
             data = dispatchData?.let { it as SecondData } ?: data)
     }
+
+    fun isLoading(): Boolean {
+        return when (screenState) {
+            SecondScreenState.FETCH_FROM_SERVER, SecondScreenState.LOADING -> true
+            SecondScreenState.FETCHED, SecondScreenState.NEXT -> false
+        }
+    }
 }
 // endregion
 
