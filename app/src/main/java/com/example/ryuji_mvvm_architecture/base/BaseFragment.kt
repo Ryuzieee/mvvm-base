@@ -9,7 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.ryuji_mvvm_architecture.util.ClickType
+import com.example.ryuji_mvvm_architecture.util.ReceivedType
 
 abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(private val VMClass: Class<VM>) : Fragment() {
 
@@ -68,9 +68,9 @@ abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(private va
 
     // endregion
 
-    abstract val onClickedMap: Map<ClickType, (() -> Unit)>
+    abstract val onReceivedMap: Map<ReceivedType, (() -> Unit)>
 
-    open fun onClicked(onClick: ClickType) {
-        onClickedMap[onClick]?.let { it() }
+    open fun onReceived(onReceived: ReceivedType) {
+        onReceivedMap[onReceived]?.let { it() }
     }
 }
