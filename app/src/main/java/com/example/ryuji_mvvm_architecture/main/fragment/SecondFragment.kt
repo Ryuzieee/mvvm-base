@@ -1,6 +1,5 @@
 package com.example.ryuji_mvvm_architecture.main.fragment
 
-import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.example.ryuji_mvvm_architecture.R
 import com.example.ryuji_mvvm_architecture.base.BaseFragment
@@ -18,24 +17,8 @@ class SecondFragment : BaseFragment<MainViewModel, FragmentSecondBinding>(MainVi
     }
 
     override fun initialize() {
-        binding.nextButton.setOnClickListener {
-            viewModel.dispatch(SecondScreenState.NEXT)
-        }
-        viewModel.secondProperty.observe(this, Observer<SecondProperty> { secondProperty ->
-            // TODO: 連鎖処置など
-            when (secondProperty.screenState) {
-                SecondScreenState.LOADING -> {
-                    binding.progressDialog.isVisible = true
-                }
-                SecondScreenState.FETCHED -> {
-                    binding.apply {
-                        progressDialog.isVisible = false
-                        nextButton.isVisible = true
-                    }
-                }
-            }
-        })
-
+        binding.nextButton.setOnClickListener { viewModel.dispatch(SecondScreenState.NEXT) }
+        viewModel.secondProperty.observe(this, Observer<SecondProperty> {})
         viewModel.dispatch(SecondScreenState.FETCH_FROM_SERVER)
     }
 }
