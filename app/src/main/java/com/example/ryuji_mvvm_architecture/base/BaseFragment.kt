@@ -1,4 +1,4 @@
-package com.example.ryuji_mvvm_architecture.view.fragment
+package com.example.ryuji_mvvm_architecture.base
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,7 +9,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.ryuji_mvvm_architecture.viewmodel.BaseViewModel
 
 abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(private val VMClass: Class<VM>) : Fragment() {
 

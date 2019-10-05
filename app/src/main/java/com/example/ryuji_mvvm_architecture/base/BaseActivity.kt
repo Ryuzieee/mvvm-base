@@ -1,4 +1,4 @@
-package com.example.ryuji_mvvm_architecture.view.activity
+package com.example.ryuji_mvvm_architecture.base
 
 import android.os.Bundle
 import androidx.annotation.LayoutRes
@@ -8,8 +8,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.ryuji_mvvm_architecture.R
-import com.example.ryuji_mvvm_architecture.model.FragmentTransitionAnimation
-import com.example.ryuji_mvvm_architecture.viewmodel.BaseViewModel
+import com.example.ryuji_mvvm_architecture.util.FragmentTransitionAnimation
 
 abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(private val VMClass: Class<VM>) :
     AppCompatActivity() {
