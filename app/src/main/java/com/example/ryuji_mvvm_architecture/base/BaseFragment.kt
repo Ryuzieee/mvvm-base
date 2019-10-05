@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.example.ryuji_mvvm_architecture.util.ClickType
 
 abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(private val VMClass: Class<VM>) : Fragment() {
 
@@ -66,4 +67,10 @@ abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(private va
     open fun initialize() {}
 
     // endregion
+
+    abstract val onClickedMap: Map<ClickType, (() -> Unit)>
+
+    open fun onClicked(onClick: ClickType) {
+        onClickedMap[onClick]?.let { it() }
+    }
 }

@@ -7,6 +7,7 @@ import com.example.ryuji_mvvm_architecture.databinding.FragmentFirstBinding
 import com.example.ryuji_mvvm_architecture.main.FirstProperty
 import com.example.ryuji_mvvm_architecture.main.FirstScreenState
 import com.example.ryuji_mvvm_architecture.main.MainViewModel
+import com.example.ryuji_mvvm_architecture.util.ClickType
 
 class FirstFragment : BaseFragment<MainViewModel, FragmentFirstBinding>(MainViewModel::class.java) {
 
@@ -16,8 +17,12 @@ class FirstFragment : BaseFragment<MainViewModel, FragmentFirstBinding>(MainView
         binding.viewModel = viewModel
     }
 
+    override val onClickedMap: Map<ClickType, () -> Unit> = mapOf(
+        ClickType.NEXT_BUTTON_1 to { viewModel.dispatch(FirstScreenState.NEXT) }
+    )
+
     override fun initialize() {
-        binding.nextButton.setOnClickListener { viewModel.dispatch(FirstScreenState.NEXT) }
+        binding.nextButton.setOnClickListener { onClicked(ClickType.NEXT_BUTTON_1) }
         viewModel.firstProperty.observe(this, Observer<FirstProperty> {})
         viewModel.dispatch(FirstScreenState.INITIALIZE)
     }

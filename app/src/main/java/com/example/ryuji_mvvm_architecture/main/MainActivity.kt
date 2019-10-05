@@ -8,13 +8,19 @@ import com.example.ryuji_mvvm_architecture.R
 import com.example.ryuji_mvvm_architecture.base.BaseActivity
 import com.example.ryuji_mvvm_architecture.base.TransitionState
 import com.example.ryuji_mvvm_architecture.databinding.ActivityMainBinding
+import com.example.ryuji_mvvm_architecture.util.ClickType
 import com.example.ryuji_mvvm_architecture.util.FragmentTransitionAnimation
+
 
 class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(MainViewModel::class.java) {
 
     override fun layoutResource() = R.layout.activity_main
 
     override fun firstFragment() = ParentScreenState.FIRST.fragment
+
+    override val onClickedMap: Map<ClickType, () -> Unit> = mapOf(
+        ClickType.TOOL_BAR_BACK to { onBackPressed() }
+    )
 
     override fun initializeViewModel(viewModel: MainViewModel) {
         binding.viewModel = viewModel
@@ -25,9 +31,10 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(MainViewMo
     override fun initialize() {
         binding.apply {
             setSupportActionBar(toolbar)
-            toolbarBack.setOnClickListener { onBackPressed() }
+            toolbarBack.setOnClickListener { onClicked(ClickType.TOOL_BAR_BACK) }
         }
-        viewModel.transitionState.observe(this, Observer<TransitionState> { it as ParentScreenState
+        viewModel.transitionState.observe(this, Observer<TransitionState> {
+            it as ParentScreenState
             updateToolbar(it)
             if (viewModel.isBack(supportFragmentManager)) back() else transition(it.fragment)
         })
