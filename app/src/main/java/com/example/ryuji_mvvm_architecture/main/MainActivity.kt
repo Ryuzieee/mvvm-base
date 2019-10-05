@@ -22,21 +22,14 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(MainViewMo
 
     override fun animation() = FragmentTransitionAnimation().rightToLeft()
 
-    override fun onBackPressed() {
-        viewModel.previousTransitionState()?.let {
-            viewModel.dispatch(it)
-        } ?: super.onBackPressed()
-    }
-
     override fun initialize() {
         binding.apply {
             setSupportActionBar(toolbar)
             toolbarBack.setOnClickListener { onBackPressed() }
         }
-        viewModel.transitionState.observe(this, Observer<TransitionState> {
-            val parentScreenState = it as ParentScreenState
-            updateToolbar(parentScreenState)
-            if (viewModel.isBack(supportFragmentManager)) back() else transition(parentScreenState.fragment)
+        viewModel.transitionState.observe(this, Observer<TransitionState> { it as ParentScreenState
+            updateToolbar(it)
+            if (viewModel.isBack(supportFragmentManager)) back() else transition(it.fragment)
         })
         viewModel.dispatch(ParentScreenState.FIRST)
     }

@@ -36,6 +36,10 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(private va
     }
 
     override fun onBackPressed() {
+        viewModel.previousTransitionState()?.let { viewModel.dispatch(it) } ?: onBack()
+    }
+
+    private fun onBack() {
         if (supportFragmentManager.backStackEntryCount < 1) {
             super.onBackPressed()
         } else {
