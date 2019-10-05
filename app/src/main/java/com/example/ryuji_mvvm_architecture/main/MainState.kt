@@ -22,14 +22,17 @@ enum class ParentScreenState(override val fragment: Fragment, val title: String,
 // region First
 enum class FirstScreenState : ScreenState {
     INITIALIZE,
-    INITIALIZED,
-    FETCH,
-    FETCHED,
     NEXT
 }
 
 data class FirstData(val text: String = "DEFAULT") : Data
-data class FirstProperty(override val screenState: FirstScreenState, override val data: FirstData) : Property
+data class FirstProperty(override val screenState: FirstScreenState, override val data: FirstData) : Property {
+    override fun makeNewProperty(screenState: ScreenState, dispatchData: Data?): Property {
+        return this.copy(
+            screenState = screenState as FirstScreenState,
+            data = dispatchData?.let { it as FirstData } ?: data)
+    }
+}
 // endregion
 
 // region Second
@@ -41,7 +44,13 @@ enum class SecondScreenState : ScreenState {
 }
 
 data class SecondData(val text: String = "DEFAULT") : Data
-data class SecondProperty(override val screenState: SecondScreenState, override val data: SecondData) : Property
+data class SecondProperty(override val screenState: SecondScreenState, override val data: SecondData) : Property {
+    override fun makeNewProperty(screenState: ScreenState, dispatchData: Data?): Property {
+        return this.copy(
+            screenState = screenState as SecondScreenState,
+            data = dispatchData?.let { it as SecondData } ?: data)
+    }
+}
 // endregion
 
 // region Third
@@ -59,6 +68,12 @@ data class ThirdData(
     fun isValid() = !username.value.isNullOrBlank() && !password.value.isNullOrBlank() && termOfUse.value == true
 }
 
-data class ThirdProperty(override val screenState: ThirdScreenState, override val data: ThirdData) : Property
+data class ThirdProperty(override val screenState: ThirdScreenState, override val data: ThirdData) : Property {
+    override fun makeNewProperty(screenState: ScreenState, dispatchData: Data?): Property {
+        return this.copy(
+            screenState = screenState as ThirdScreenState,
+            data = dispatchData?.let { it as ThirdData } ?: data)
+    }
+}
 
 // endregion

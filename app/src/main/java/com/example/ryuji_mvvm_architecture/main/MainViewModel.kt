@@ -10,12 +10,6 @@ import com.example.ryuji_mvvm_architecture.base.TransitionState
 
 class MainViewModel(application: Application) : BaseViewModel(application) {
 
-    companion object {
-        const val FIRST_INDEX = 0
-        const val SECOND_INDEX = 1
-        const val THIRD_INDEX = 2
-    }
-
     // region LiveData
 
     override val transitionState = MutableLiveData<TransitionState>()
@@ -33,9 +27,9 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
         MutableLiveData<ThirdProperty>(ThirdProperty(screenState = ThirdScreenState.INITIAL, data = ThirdData()))
     )
 
-    val firstProperty = propertyList[FIRST_INDEX] as MutableLiveData<FirstProperty>
-    val secondProperty = propertyList[SECOND_INDEX] as MutableLiveData<SecondProperty>
-    val thirdProperty = propertyList[THIRD_INDEX] as MutableLiveData<ThirdProperty>
+    val firstProperty = propertyList[0] as MutableLiveData<FirstProperty>
+    val secondProperty = propertyList[1] as MutableLiveData<SecondProperty>
+    val thirdProperty = propertyList[2] as MutableLiveData<ThirdProperty>
 
     // endregion
 
@@ -44,13 +38,9 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
     override val functionMap: Map<ScreenState, (() -> Unit)?> = mapOf(
         FirstScreenState.INITIALIZE to null,
         FirstScreenState.NEXT to { firstScreenStateNext() },
-        SecondScreenState.FETCH_FROM_SERVER to {
-            secondScreenStateFetchFromServer()
-        },
+        SecondScreenState.FETCH_FROM_SERVER to { secondScreenStateFetchFromServer() },
         SecondScreenState.LOADING to {},
-        SecondScreenState.FETCHED to {
-            secondScreenStateFetched()
-        },
+        SecondScreenState.FETCHED to null,
         SecondScreenState.NEXT to { secondScreenStateNext() },
         ThirdScreenState.INITIAL to { thirdScreenStateInitial() },
         ThirdScreenState.BACK to { thirdScreenStateBack() }
@@ -62,14 +52,8 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
 
     private fun secondScreenStateFetchFromServer() {
         Handler().postDelayed({
-            dispatch(SecondScreenState.FETCHED)
+            dispatch(SecondScreenState.FETCHED, secondProperty.value?.data?.copy(text = "FETCHED"))
         }, 3000)
-    }
-
-    private fun secondScreenStateFetched() {
-        secondProperty.value = secondProperty.value?.copy(
-            screenState = SecondScreenState.FETCHED
-        )
     }
 
     private fun secondScreenStateNext() {

@@ -24,18 +24,14 @@ class SecondFragment : BaseFragment<MainViewModel, FragmentSecondBinding>(MainVi
         viewModel.secondProperty.observe(this, Observer<SecondProperty> { secondProperty ->
             // TODO: 連鎖処置など
             when (secondProperty.screenState) {
-                SecondScreenState.LOADING -> binding.progressDialog.isVisible = true
+                SecondScreenState.LOADING -> {
+                    binding.progressDialog.isVisible = true
+                }
                 SecondScreenState.FETCHED -> {
                     binding.apply {
                         progressDialog.isVisible = false
-                        nextButton.apply {
-                            isVisible = true
-                            text = secondProperty.data.text
-                        }
+                        nextButton.isVisible = true
                     }
-                }
-                else -> {
-                    // Nothing
                 }
             }
         })

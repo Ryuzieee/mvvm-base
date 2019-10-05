@@ -23,9 +23,13 @@ abstract class BaseViewModel(application: Application) : AndroidViewModel(applic
             }
             else -> {
                 propertyList.forEachIndexed { index, mutableLiveData ->
-                    if (mutableLiveData.value?.screenState == screenState) {
-                        // TODO: stateの更新
-                        //  screenStateの型をみて`mutableLiveData.value?.screenState`と合致すれば対象のプロパティを更新
+                    // Propertyの更新
+                    if (mutableLiveData.value?.screenState?.javaClass == screenState.javaClass) {
+                        val newProperty = propertyList[index].value?.makeNewProperty(
+                            screenState = screenState,
+                            dispatchData = if (dispatchData is Data) dispatchData else null
+                        )
+                        propertyList[index].value = newProperty
                     }
                 }
                 functionMap[screenState]?.let { it() }
