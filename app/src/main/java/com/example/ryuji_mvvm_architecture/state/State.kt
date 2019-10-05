@@ -1,3 +1,0 @@
-package com.example.ryuji_mvvm_architecture.state
-
-interface ScreenState

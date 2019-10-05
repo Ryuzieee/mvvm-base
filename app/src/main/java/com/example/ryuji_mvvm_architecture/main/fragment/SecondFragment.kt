@@ -1,12 +1,13 @@
-package com.example.ryuji_mvvm_architecture.view.fragment
+package com.example.ryuji_mvvm_architecture.main.fragment
 
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.example.ryuji_mvvm_architecture.R
+import com.example.ryuji_mvvm_architecture.base.BaseFragment
 import com.example.ryuji_mvvm_architecture.databinding.FragmentSecondBinding
-import com.example.ryuji_mvvm_architecture.state.SecondScreenState
-import com.example.ryuji_mvvm_architecture.state.SecondState
-import com.example.ryuji_mvvm_architecture.viewmodel.MainViewModel
+import com.example.ryuji_mvvm_architecture.main.MainViewModel
+import com.example.ryuji_mvvm_architecture.main.SecondProperty
+import com.example.ryuji_mvvm_architecture.main.SecondScreenState
 
 class SecondFragment : BaseFragment<MainViewModel, FragmentSecondBinding>(MainViewModel::class.java) {
 
@@ -17,21 +18,19 @@ class SecondFragment : BaseFragment<MainViewModel, FragmentSecondBinding>(MainVi
     }
 
     override fun initialize() {
-        binding.apply {
-            nextButton.setOnClickListener {
-                viewModel?.dispatch(SecondScreenState.NEXT)
-            }
+        binding.nextButton.setOnClickListener {
+            viewModel.dispatch(SecondScreenState.NEXT)
         }
-        viewModel.getSecondState().observe(this, Observer<SecondState> { secondState ->
+        viewModel.secondProperty.observe(this, Observer<SecondProperty> { secondProperty ->
             // TODO: 連鎖処置など
-            when (secondState.screenState) {
+            when (secondProperty.screenState) {
                 SecondScreenState.LOADING -> binding.progressDialog.isVisible = true
                 SecondScreenState.FETCHED -> {
                     binding.apply {
                         progressDialog.isVisible = false
                         nextButton.apply {
                             isVisible = true
-                            text = secondState.data.text
+                            text = secondProperty.data.text
                         }
                     }
                 }
@@ -40,6 +39,7 @@ class SecondFragment : BaseFragment<MainViewModel, FragmentSecondBinding>(MainVi
                 }
             }
         })
+
         viewModel.dispatch(SecondScreenState.FETCH_FROM_SERVER)
     }
 }

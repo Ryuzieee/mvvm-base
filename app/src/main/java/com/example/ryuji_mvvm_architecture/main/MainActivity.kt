@@ -1,14 +1,14 @@
-package com.example.ryuji_mvvm_architecture.view.activity
+package com.example.ryuji_mvvm_architecture.main
 
 import android.animation.ObjectAnimator
 import android.view.animation.DecelerateInterpolator
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.example.ryuji_mvvm_architecture.R
+import com.example.ryuji_mvvm_architecture.base.BaseActivity
+import com.example.ryuji_mvvm_architecture.base.TransitionState
 import com.example.ryuji_mvvm_architecture.databinding.ActivityMainBinding
-import com.example.ryuji_mvvm_architecture.model.FragmentTransitionAnimation
-import com.example.ryuji_mvvm_architecture.state.ParentScreenState
-import com.example.ryuji_mvvm_architecture.viewmodel.MainViewModel
+import com.example.ryuji_mvvm_architecture.util.FragmentTransitionAnimation
 
 class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(MainViewModel::class.java) {
 
@@ -23,7 +23,7 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(MainViewMo
     override fun animation() = FragmentTransitionAnimation().rightToLeft()
 
     override fun onBackPressed() {
-        viewModel.previousParentScreenState()?.let {
+        viewModel.previousTransitionState()?.let {
             viewModel.dispatch(it)
         } ?: super.onBackPressed()
     }
@@ -33,7 +33,8 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(MainViewMo
             setSupportActionBar(toolbar)
             toolbarBack.setOnClickListener { onBackPressed() }
         }
-        viewModel.getParentScreenState().observe(this, Observer<ParentScreenState> { parentScreenState ->
+        viewModel.transitionState.observe(this, Observer<TransitionState> {
+            val parentScreenState = it as ParentScreenState
             updateToolbar(parentScreenState)
             if (viewModel.isBack(supportFragmentManager)) back() else transition(parentScreenState.fragment)
         })

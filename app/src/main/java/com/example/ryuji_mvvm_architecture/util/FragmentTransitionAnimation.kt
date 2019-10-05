@@ -1,4 +1,4 @@
-package com.example.ryuji_mvvm_architecture.model
+package com.example.ryuji_mvvm_architecture.util
 
 import com.example.ryuji_mvvm_architecture.R
 

@@ -2,7 +2,9 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
-        <variable name="viewModel" type="com.example.ryuji_mvvm_architecture.viewmodel.MainViewModel"/>
+        <variable name="viewModel" type="com.example.ryuji_mvvm_architecture.main.MainViewModel"/>
+        <import type="com.example.ryuji_mvvm_architecture.main.ThirdProperty"/>
+        <import type="androidx.lifecycle.MutableLiveData"/>
     </data>
 
     <LinearLayout
@@ -21,7 +23,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
-                    android:text="@={viewModel.thirdState.data.username}"/>
+                    android:text="@={viewModel.thirdProperty.data.username}"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -35,13 +37,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
-                    android:text="@={viewModel.thirdState.data.password}"/>
+                    android:text="@={viewModel.thirdProperty.data.password}"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <CheckBox
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:checked="@={viewModel.thirdState.data.termOfUse}"
+                android:checked="@={viewModel.thirdProperty.data.termOfUse}"
                 android:layout_margin="8dp"
                 android:text="利用規約に同意"/>
 
@@ -50,7 +52,7 @@
                 style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:enabled="@{viewModel.thirdState.data.canSubmit}"
+                android:enabled="@{viewModel.thirdProperty.data.canSubmit}"
                 android:layout_margin="8dp"
                 android:text="Signup"/>
 

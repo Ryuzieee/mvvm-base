@@ -3,31 +3,13 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
-        <variable name="viewModel" type="com.example.ryuji_mvvm_architecture.viewmodel.MainViewModel"/>
+        <variable name="viewModel" type="com.example.ryuji_mvvm_architecture.main.MainViewModel"/>
 
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             android:padding="20dp">
-
-        <EditText
-                android:id="@+id/edit_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{viewModel.firstState.data.text}"
-                android:textSize="12sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
-
-        <Button
-                android:id="@+id/fetch_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="FETCH"
-                app:layout_constraintTop_toBottomOf="@id/edit_text"
-                app:layout_constraintStart_toStartOf="parent"/>
 
         <Button
                 android:id="@+id/next_button"

@@ -3,7 +3,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
-        <variable name="viewModel" type="com.example.ryuji_mvvm_architecture.viewmodel.MainViewModel"/>
+        <variable name="viewModel" type="com.example.ryuji_mvvm_architecture.main.MainViewModel"/>
 
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
