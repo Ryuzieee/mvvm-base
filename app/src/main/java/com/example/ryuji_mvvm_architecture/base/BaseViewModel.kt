@@ -25,6 +25,7 @@ abstract class BaseViewModel(application: Application) : AndroidViewModel(applic
                 propertyList.forEachIndexed { index, mutableLiveData ->
                     if (mutableLiveData.value?.screenState == screenState) {
                         // TODO: stateの更新
+                        //  screenStateの型をみて`mutableLiveData.value?.screenState`と合致すれば対象のプロパティを更新
                     }
                 }
                 functionMap[screenState]?.let { it() }
