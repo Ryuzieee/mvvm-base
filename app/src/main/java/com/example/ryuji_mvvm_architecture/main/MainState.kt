@@ -17,6 +17,7 @@ enum class MainTransitionState(override val fragment: Fragment, val title: Strin
     FIRST(FirstFragment(), "1/3", 33),
     SECOND(SecondFragment(), "2/3", 66),
     THIRD(ThirdFragment(), "3/3", 100);
+
     fun isFirstFragment() = fragment == FIRST.fragment
 }
 // endregion

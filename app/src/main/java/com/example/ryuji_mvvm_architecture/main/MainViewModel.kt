@@ -12,7 +12,7 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
 
     // region LiveData
 
-    override val transitionState: MutableLiveData<TransitionState> = MutableLiveData()
+    override val transitionState: MutableLiveData<TransitionState> = MutableLiveData(MainTransitionState.FIRST)
 
     override val transitionStateList = MainTransitionState.values().asList()
 

@@ -6,16 +6,23 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.example.ryuji_mvvm_architecture.R
 import com.example.ryuji_mvvm_architecture.base.BaseActivity
-import com.example.ryuji_mvvm_architecture.base.TransitionState
 import com.example.ryuji_mvvm_architecture.databinding.ActivityMainBinding
 import com.example.ryuji_mvvm_architecture.util.FragmentTransitionAnimation
-import com.example.ryuji_mvvm_architecture.util.ReceivedType
 
 
-class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(MainViewModel::class.java) {
+class MainActivity :
+    BaseActivity<MainViewModel, ActivityMainBinding, MainActivity.MainReceivedType>(MainViewModel::class.java) {
 
-    override val onReceivedMap: Map<ReceivedType, (() -> Unit)> = mapOf(
-        ReceivedType.CLICK_TOOL_BAR_BACK to { onBackPressed() }
+    enum class MainReceivedType {
+        ON_BACK_PRESSED,
+        UPDATE_TOOLBAR,
+        TRANSITION
+    }
+
+    override val onReceivedMap: Map<MainReceivedType, (Any?) -> Unit> = mapOf(
+        MainReceivedType.ON_BACK_PRESSED to { _ -> onBackPressed() },
+        MainReceivedType.UPDATE_TOOLBAR to { parameter -> updateToolbar(parameter as MainTransitionState) },
+        MainReceivedType.TRANSITION to { parameter -> transition(parameter as MainTransitionState) }
     )
 
     override fun layoutResource() = R.layout.activity_main
@@ -31,11 +38,11 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(MainViewMo
     override fun initialize() {
         binding.apply {
             setSupportActionBar(toolbar)
-            toolbarBack.setOnClickListener { onReceived(ReceivedType.CLICK_TOOL_BAR_BACK) }
+            toolbarBack.setOnClickListener { onReceived(MainReceivedType.ON_BACK_PRESSED) }
         }
         viewModel.mainTransitionState.observe(this, Observer<MainTransitionState> {
-            updateToolbar(it)
-            transition(it)
+            onReceived(MainReceivedType.UPDATE_TOOLBAR, it)
+            onReceived(MainReceivedType.TRANSITION, it)
         })
         viewModel.dispatch(MainTransitionState.FIRST)
     }
@@ -51,5 +58,4 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(MainViewMo
             }
         }
     }
-
 }

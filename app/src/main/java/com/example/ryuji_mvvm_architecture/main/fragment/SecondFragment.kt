@@ -7,12 +7,17 @@ import com.example.ryuji_mvvm_architecture.databinding.FragmentSecondBinding
 import com.example.ryuji_mvvm_architecture.main.MainViewModel
 import com.example.ryuji_mvvm_architecture.main.SecondProperty
 import com.example.ryuji_mvvm_architecture.main.SecondScreenState
-import com.example.ryuji_mvvm_architecture.util.ReceivedType
 
-class SecondFragment : BaseFragment<MainViewModel, FragmentSecondBinding>(MainViewModel::class.java) {
+class SecondFragment :
+    BaseFragment<MainViewModel, FragmentSecondBinding, SecondFragment.SecondReceivedType>(MainViewModel::class.java) {
 
-    override val onReceivedMap: Map<ReceivedType, () -> Unit> = mapOf(
-        ReceivedType.CLICK_BACK_BUTTON_1 to { viewModel.dispatch(SecondScreenState.NEXT) }
+
+    enum class SecondReceivedType {
+        CLICK_NEXT_BUTTON
+    }
+
+    override val onReceivedMap: Map<SecondReceivedType, (Any?) -> Unit> = mapOf(
+        SecondReceivedType.CLICK_NEXT_BUTTON to { _ -> viewModel.dispatch(SecondScreenState.NEXT) }
     )
 
     override fun layoutResource() = R.layout.fragment_second
@@ -22,7 +27,7 @@ class SecondFragment : BaseFragment<MainViewModel, FragmentSecondBinding>(MainVi
     }
 
     override fun initialize() {
-        binding.nextButton.setOnClickListener { onReceived(ReceivedType.CLICK_BACK_BUTTON_1) }
+        binding.nextButton.setOnClickListener { onReceived(SecondReceivedType.CLICK_NEXT_BUTTON) }
         viewModel.secondProperty.observe(viewLifecycleOwner, Observer<SecondProperty> {})
         viewModel.dispatch(SecondScreenState.FETCH_FROM_SERVER)
     }
