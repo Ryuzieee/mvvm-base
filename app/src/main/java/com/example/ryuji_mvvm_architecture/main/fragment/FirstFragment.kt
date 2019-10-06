@@ -37,6 +37,7 @@ class FirstFragment : BaseFragment<MainViewModel, FragmentFirstBinding>(MainView
 
         // TODO: カルーセル出してみる!!
         // https://github.com/AndroidCodility/HorizontalRecyclerview
+        // https://stackoverflow.com/questions/52590517/horizontal-recyclerview-has-item-cardview-bottom-textview-part-not-fully-display
         context?.let {
             if (Utility.isOnline(it)) {
                 val version = ArrayList<Version>()
