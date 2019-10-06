@@ -11,11 +11,13 @@ import com.example.ryuji_mvvm_architecture.main.fragment.FirstFragment
 import com.example.ryuji_mvvm_architecture.main.fragment.SecondFragment
 import com.example.ryuji_mvvm_architecture.main.fragment.ThirdFragment
 
-// region ParentScreenState
-enum class ParentScreenState(override val fragment: Fragment, val title: String, val progress: Int) : TransitionState {
+// region MainTransitionState
+enum class MainTransitionState(override val fragment: Fragment, val title: String, val progress: Int) :
+    TransitionState {
     FIRST(FirstFragment(), "1/3", 33),
     SECOND(SecondFragment(), "2/3", 66),
     THIRD(ThirdFragment(), "3/3", 100);
+    fun isFirstFragment() = fragment == FIRST.fragment
 }
 // endregion
 
@@ -26,8 +28,9 @@ enum class FirstScreenState : ScreenState {
 }
 
 data class FirstData(val text: String = "DEFAULT") : Data
+
 data class FirstProperty(override val screenState: FirstScreenState, override val data: FirstData) : Property {
-    override fun makeNewProperty(screenState: ScreenState, dispatchData: Data?): Property {
+    override fun updateProperty(screenState: ScreenState, dispatchData: Data?): Property {
         return this.copy(
             screenState = screenState as FirstScreenState,
             data = dispatchData?.let { it as FirstData } ?: data)
@@ -44,8 +47,9 @@ enum class SecondScreenState : ScreenState {
 }
 
 data class SecondData(val text: String = "DEFAULT") : Data
+
 data class SecondProperty(override val screenState: SecondScreenState, override val data: SecondData) : Property {
-    override fun makeNewProperty(screenState: ScreenState, dispatchData: Data?): Property {
+    override fun updateProperty(screenState: ScreenState, dispatchData: Data?): Property {
         return this.copy(
             screenState = screenState as SecondScreenState,
             data = dispatchData?.let { it as SecondData } ?: data)
@@ -76,7 +80,7 @@ data class ThirdData(
 }
 
 data class ThirdProperty(override val screenState: ThirdScreenState, override val data: ThirdData) : Property {
-    override fun makeNewProperty(screenState: ScreenState, dispatchData: Data?): Property {
+    override fun updateProperty(screenState: ScreenState, dispatchData: Data?): Property {
         return this.copy(
             screenState = screenState as ThirdScreenState,
             data = dispatchData?.let { it as ThirdData } ?: data)

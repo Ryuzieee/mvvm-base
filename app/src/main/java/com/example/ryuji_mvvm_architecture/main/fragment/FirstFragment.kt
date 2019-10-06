@@ -11,15 +11,15 @@ import com.example.ryuji_mvvm_architecture.util.ReceivedType
 
 class FirstFragment : BaseFragment<MainViewModel, FragmentFirstBinding>(MainViewModel::class.java) {
 
+    override val onReceivedMap: Map<ReceivedType, () -> Unit> = mapOf(
+        ReceivedType.CLICK_NEXT_BUTTON_1 to { viewModel.dispatch(FirstScreenState.NEXT) }
+    )
+
     override fun layoutResource() = R.layout.fragment_first
 
     override fun initializeViewModel(viewModel: MainViewModel) {
         binding.viewModel = viewModel
     }
-
-    override val onReceivedMap: Map<ReceivedType, () -> Unit> = mapOf(
-        ReceivedType.CLICK_NEXT_BUTTON_1 to { viewModel.dispatch(FirstScreenState.NEXT) }
-    )
 
     override fun initialize() {
         binding.nextButton.setOnClickListener { onReceived(ReceivedType.CLICK_NEXT_BUTTON_1) }

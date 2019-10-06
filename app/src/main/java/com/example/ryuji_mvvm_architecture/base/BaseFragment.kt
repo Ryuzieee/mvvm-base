@@ -56,6 +56,8 @@ abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(private va
 
     // region Must Implement For Initialize
 
+    abstract val onReceivedMap: Map<ReceivedType, (() -> Unit)>
+
     @LayoutRes
     abstract fun layoutResource(): Int
 
@@ -66,11 +68,8 @@ abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(private va
     // 初期化したい処理があれば使用する
     open fun initialize() {}
 
+    open fun onReceived(onReceived: ReceivedType) = onReceivedMap[onReceived]?.let { it() }
+
     // endregion
 
-    abstract val onReceivedMap: Map<ReceivedType, (() -> Unit)>
-
-    open fun onReceived(onReceived: ReceivedType) {
-        onReceivedMap[onReceived]?.let { it() }
-    }
 }

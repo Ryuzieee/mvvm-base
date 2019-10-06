@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.example.ryuji_mvvm_architecture.main.ParentScreenState
+import com.example.ryuji_mvvm_architecture.main.MainTransitionState
 
 abstract class BaseViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -25,11 +25,11 @@ abstract class BaseViewModel(application: Application) : AndroidViewModel(applic
                 propertyList.forEachIndexed { index, mutableLiveData ->
                     // Propertyの更新
                     if (mutableLiveData.value?.screenState?.javaClass == screenState.javaClass) {
-                        val newProperty = propertyList[index].value?.makeNewProperty(
+                        val updateProperty = propertyList[index].value?.updateProperty(
                             screenState = screenState,
                             dispatchData = if (dispatchData is Data) dispatchData else null
                         )
-                        propertyList[index].value = newProperty
+                        propertyList[index].value = updateProperty
                     }
                 }
                 functionMap[screenState]?.let { it() }
@@ -48,7 +48,7 @@ abstract class BaseViewModel(application: Application) : AndroidViewModel(applic
     }
 
     open fun previousTransitionState(): TransitionState? {
-        val current = ParentScreenState.values().indexOf(transitionState.value)
+        val current = MainTransitionState.values().indexOf(transitionState.value)
         // 現在のindexが1以上である場合、現在の表示を2ページ目以降と見なし、indexを-1したページを返却する
         return if (current > 0) {
             transitionStateList[current - 1]
