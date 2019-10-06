@@ -36,6 +36,7 @@ class FirstFragment : BaseFragment<MainViewModel, FragmentFirstBinding>(MainView
         viewModel.dispatch(INITIAL)
 
         // TODO: カルーセル出してみる!!
+        // https://github.com/AndroidCodility/HorizontalRecyclerview
         context?.let {
             if (Utility.isOnline(it)) {
                 val version = ArrayList<Version>()
