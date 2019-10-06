@@ -8,18 +8,19 @@ import com.example.ryuji_mvvm_architecture.R
 import com.example.ryuji_mvvm_architecture.base.BaseActivity
 import com.example.ryuji_mvvm_architecture.databinding.ActivityMainBinding
 import com.example.ryuji_mvvm_architecture.util.FragmentTransitionAnimation
+import com.example.ryuji_mvvm_architecture.base.ReceivedType
 
 
 class MainActivity :
-    BaseActivity<MainViewModel, ActivityMainBinding, MainActivity.MainReceivedType>(MainViewModel::class.java) {
+    BaseActivity<MainViewModel, ActivityMainBinding>(MainViewModel::class.java) {
 
-    enum class MainReceivedType {
+    enum class MainReceivedType : ReceivedType {
         ON_BACK_PRESSED,
         UPDATE_TOOLBAR,
         TRANSITION
     }
 
-    override val onReceivedMap: Map<MainReceivedType, (Any?) -> Unit> = mapOf(
+    override val onReceivedMap: Map<ReceivedType, (Any?) -> Unit> = mapOf(
         MainReceivedType.ON_BACK_PRESSED to { _ -> onBackPressed() },
         MainReceivedType.UPDATE_TOOLBAR to { parameter -> updateToolbar(parameter as MainTransitionState) },
         MainReceivedType.TRANSITION to { parameter -> transition(parameter as MainTransitionState) }

@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.ryuji_mvvm_architecture.R
 import com.example.ryuji_mvvm_architecture.util.FragmentTransitionAnimation
 
-abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding, T>(private val VMClass: Class<VM>) :
+abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(private val VMClass: Class<VM>) :
     AppCompatActivity() {
 
     // region Property
@@ -51,7 +51,7 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding, T>(private
 
     // region Must Implement For Initialize
 
-    abstract val onReceivedMap: Map<T, (Any?) -> Unit>
+    abstract val onReceivedMap: Map<ReceivedType, (Any?) -> Unit>
 
     @LayoutRes
     abstract fun layoutResource(): Int
@@ -103,7 +103,8 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding, T>(private
     // 初期化したい処理があれば使用する
     open fun initialize() {}
 
-    open fun onReceived(receivedType: T, parameter: Any? = null) = onReceivedMap[receivedType]?.let { it(parameter) }
+    open fun onReceived(receivedType: ReceivedType, parameter: Any? = null) =
+        onReceivedMap[receivedType]?.let { it(parameter) }
 
     // endregion
 

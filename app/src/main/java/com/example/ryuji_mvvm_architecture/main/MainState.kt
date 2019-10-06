@@ -24,7 +24,7 @@ enum class MainTransitionState(override val fragment: Fragment, val title: Strin
 
 // region First
 enum class FirstScreenState : ScreenState {
-    INITIALIZE,
+    INITIAL,
     NEXT
 }
 
@@ -41,7 +41,7 @@ data class FirstProperty(override val screenState: FirstScreenState, override va
 
 // region Second
 enum class SecondScreenState : ScreenState {
-    FETCH_FROM_SERVER,
+    INITIAL,
     LOADING,
     FETCHED,
     NEXT
@@ -58,7 +58,7 @@ data class SecondProperty(override val screenState: SecondScreenState, override 
 
     fun isLoading(): Boolean {
         return when (screenState) {
-            SecondScreenState.FETCH_FROM_SERVER, SecondScreenState.LOADING -> true
+            SecondScreenState.INITIAL, SecondScreenState.LOADING -> true
             SecondScreenState.FETCHED, SecondScreenState.NEXT -> false
         }
     }

@@ -17,14 +17,9 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
     override val transitionStateList = MainTransitionState.values().asList()
 
     override val propertyList: List<MutableLiveData<out Property>> = listOf(
-        MutableLiveData<FirstProperty>(FirstProperty(screenState = FirstScreenState.INITIALIZE, data = FirstData())),
-        MutableLiveData<SecondProperty>(
-            SecondProperty(
-                screenState = SecondScreenState.FETCH_FROM_SERVER,
-                data = SecondData()
-            )
-        ),
-        MutableLiveData<ThirdProperty>(ThirdProperty(screenState = ThirdScreenState.INITIAL, data = ThirdData()))
+        MutableLiveData<FirstProperty>(FirstProperty(FirstScreenState.INITIAL, FirstData())),
+        MutableLiveData<SecondProperty>(SecondProperty(SecondScreenState.INITIAL, SecondData())),
+        MutableLiveData<ThirdProperty>(ThirdProperty(ThirdScreenState.INITIAL, ThirdData()))
     )
 
     val mainTransitionState = transitionState as MutableLiveData<MainTransitionState>
@@ -37,10 +32,10 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
     // region Dispatch
 
     override val functionMap: Map<ScreenState, (() -> Unit)?> = mapOf(
-        FirstScreenState.INITIALIZE to null,
+        FirstScreenState.INITIAL to null,
         FirstScreenState.NEXT to { firstScreenStateNext() },
-        SecondScreenState.FETCH_FROM_SERVER to { secondScreenStateFetchFromServer() },
-        SecondScreenState.LOADING to {},
+        SecondScreenState.INITIAL to { secondScreenStateFetchFromServer() },
+        SecondScreenState.LOADING to null,
         SecondScreenState.FETCHED to null,
         SecondScreenState.NEXT to { secondScreenStateNext() },
         ThirdScreenState.INITIAL to { thirdScreenStateInitial() },

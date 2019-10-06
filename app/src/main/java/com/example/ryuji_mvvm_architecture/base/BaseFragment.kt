@@ -10,7 +10,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 
-abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding, T>(private val VMClass: Class<VM>) : Fragment() {
+abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(private val VMClass: Class<VM>) : Fragment() {
 
     // region Property
 
@@ -55,7 +55,7 @@ abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding, T>(private
 
     // region Must Implement For Initialize
 
-    abstract val onReceivedMap: Map<T, (Any?) -> Unit>
+    abstract val onReceivedMap: Map<ReceivedType, (Any?) -> Unit>
 
     @LayoutRes
     abstract fun layoutResource(): Int
@@ -67,7 +67,8 @@ abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding, T>(private
     // 初期化したい処理があれば使用する
     open fun initialize() {}
 
-    open fun onReceived(receivedType: T, parameter: Any? = null) = onReceivedMap[receivedType]?.let { it(parameter) }
+    open fun onReceived(receivedType: ReceivedType, parameter: Any? = null) =
+        onReceivedMap[receivedType]?.let { it(parameter) }
 
     // endregion
 
