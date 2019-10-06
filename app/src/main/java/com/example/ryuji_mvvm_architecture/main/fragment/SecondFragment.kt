@@ -23,7 +23,7 @@ class SecondFragment : BaseFragment<MainViewModel, FragmentSecondBinding>(MainVi
 
     override fun initialize() {
         binding.nextButton.setOnClickListener { onReceived(ReceivedType.CLICK_BACK_BUTTON_1) }
-        viewModel.secondProperty.observe(this, Observer<SecondProperty> {})
+        viewModel.secondProperty.observe(viewLifecycleOwner, Observer<SecondProperty> {})
         viewModel.dispatch(SecondScreenState.FETCH_FROM_SERVER)
     }
 }

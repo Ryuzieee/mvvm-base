@@ -23,7 +23,7 @@ class ThirdFragment : BaseFragment<MainViewModel, FragmentThirdBinding>(MainView
 
     override fun initialize() {
         binding.signupButton.setOnClickListener { onReceived(ReceivedType.CLICK_BACK_BUTTON_1) }
-        viewModel.thirdProperty.observe(this, Observer<ThirdProperty> {})
+        viewModel.thirdProperty.observe(viewLifecycleOwner, Observer<ThirdProperty> {})
         viewModel.dispatch(ThirdScreenState.INITIAL)
     }
 }

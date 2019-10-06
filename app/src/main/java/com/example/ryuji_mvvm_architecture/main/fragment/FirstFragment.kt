@@ -23,7 +23,7 @@ class FirstFragment : BaseFragment<MainViewModel, FragmentFirstBinding>(MainView
 
     override fun initialize() {
         binding.nextButton.setOnClickListener { onReceived(ReceivedType.CLICK_NEXT_BUTTON_1) }
-        viewModel.firstProperty.observe(this, Observer<FirstProperty> {})
+        viewModel.firstProperty.observe(viewLifecycleOwner, Observer<FirstProperty> {})
         viewModel.dispatch(FirstScreenState.INITIALIZE)
     }
 }
