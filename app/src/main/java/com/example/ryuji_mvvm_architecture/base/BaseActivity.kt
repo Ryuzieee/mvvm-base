@@ -30,7 +30,7 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(private va
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initializeViewModel(viewModel)
+        bindViewModel(viewModel)
         initialize()
         if (savedInstanceState == null) createOrReplaceFragment(firstFragment())
     }
@@ -58,7 +58,7 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(private va
 
     abstract fun firstFragment(): Fragment
 
-    abstract fun initializeViewModel(viewModel: VM)
+    abstract fun bindViewModel(viewModel: VM)
 
     abstract fun animation(): FragmentTransitionAnimation?
 

@@ -43,10 +43,10 @@ abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(private va
     private fun binding(inflater: LayoutInflater, container: ViewGroup) {
         binding = DataBindingUtil.inflate(inflater, layoutResource(), container, false)
         binding.lifecycleOwner = viewLifecycleOwner
-        initializeViewModel(viewModel)
+        bindViewModel(viewModel)
     }
 
-    abstract fun initializeViewModel(viewModel: VM)
+    abstract fun bindViewModel(viewModel: VM)
 
     // TODO: ViewModelFactory使ってもいいかも
     private fun getVM(): VM = ViewModelProvider(activity!!).get(VMClass)

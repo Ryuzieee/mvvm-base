@@ -6,13 +6,13 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.example.ryuji_mvvm_architecture.R
 import com.example.ryuji_mvvm_architecture.base.BaseActivity
-import com.example.ryuji_mvvm_architecture.databinding.ActivityMainBinding
-import com.example.ryuji_mvvm_architecture.util.FragmentTransitionAnimation
 import com.example.ryuji_mvvm_architecture.base.ReceivedType
+import com.example.ryuji_mvvm_architecture.databinding.ActivityMainBinding
+import com.example.ryuji_mvvm_architecture.main.MainActivity.MainReceivedType.*
+import com.example.ryuji_mvvm_architecture.main.MainTransitionState.FIRST
+import com.example.ryuji_mvvm_architecture.util.FragmentTransitionAnimation
 
-
-class MainActivity :
-    BaseActivity<MainViewModel, ActivityMainBinding>(MainViewModel::class.java) {
+class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(MainViewModel::class.java) {
 
     enum class MainReceivedType : ReceivedType {
         ON_BACK_PRESSED,
@@ -21,16 +21,16 @@ class MainActivity :
     }
 
     override val onReceivedMap: Map<ReceivedType, (Any?) -> Unit> = mapOf(
-        MainReceivedType.ON_BACK_PRESSED to { _ -> onBackPressed() },
-        MainReceivedType.UPDATE_TOOLBAR to { parameter -> updateToolbar(parameter as MainTransitionState) },
-        MainReceivedType.TRANSITION to { parameter -> transition(parameter as MainTransitionState) }
+        ON_BACK_PRESSED to { _ -> onBackPressed() },
+        UPDATE_TOOLBAR to { parameter -> updateToolbar(parameter as MainTransitionState) },
+        TRANSITION to { parameter -> transition(parameter as MainTransitionState) }
     )
 
     override fun layoutResource() = R.layout.activity_main
 
-    override fun firstFragment() = MainTransitionState.FIRST.fragment
+    override fun firstFragment() = FIRST.fragment
 
-    override fun initializeViewModel(viewModel: MainViewModel) {
+    override fun bindViewModel(viewModel: MainViewModel) {
         binding.viewModel = viewModel
     }
 
@@ -39,13 +39,13 @@ class MainActivity :
     override fun initialize() {
         binding.apply {
             setSupportActionBar(toolbar)
-            toolbarBack.setOnClickListener { onReceived(MainReceivedType.ON_BACK_PRESSED) }
+            toolbarBack.setOnClickListener { onReceived(ON_BACK_PRESSED) }
         }
         viewModel.mainTransitionState.observe(this, Observer<MainTransitionState> {
-            onReceived(MainReceivedType.UPDATE_TOOLBAR, it)
-            onReceived(MainReceivedType.TRANSITION, it)
+            onReceived(UPDATE_TOOLBAR, it)
+            onReceived(TRANSITION, it)
         })
-        viewModel.dispatch(MainTransitionState.FIRST)
+        viewModel.dispatch(FIRST)
     }
 
     private fun updateToolbar(mainTransitionState: MainTransitionState) {
