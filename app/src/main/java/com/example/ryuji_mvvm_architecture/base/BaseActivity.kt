@@ -1,6 +1,7 @@
 package com.example.ryuji_mvvm_architecture.base
 
 import android.os.Bundle
+import android.util.Log
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -37,6 +38,12 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(private va
 
     override fun onBackPressed() {
         viewModel.previousTransitionState()?.let { viewModel.dispatch(it) } ?: onBack()
+    }
+
+    override fun finish() {
+        // TODO: ログを使用する!!
+        Log.d("ログ", viewModel.log.toString())
+        super.finish()
     }
 
     private fun onBack() {

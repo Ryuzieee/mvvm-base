@@ -1,12 +1,15 @@
 package com.example.ryuji_mvvm_architecture.base
 
 import android.app.Application
+import android.util.Log
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.example.ryuji_mvvm_architecture.main.MainTransitionState
 
 abstract class BaseViewModel(application: Application) : AndroidViewModel(application) {
+
+    open val log = mutableListOf<String>()
 
     abstract val transitionState: MutableLiveData<TransitionState>
 
@@ -17,6 +20,7 @@ abstract class BaseViewModel(application: Application) : AndroidViewModel(applic
     abstract val functionMap: Map<ScreenState, (() -> Unit)?>
 
     open fun dispatch(screenState: ScreenState, dispatchData: Any? = null) {
+        log.add(screenState.javaClass.simpleName + "." + screenState)
         when (screenState) {
             is TransitionState -> {
                 transitionState.value = screenState
