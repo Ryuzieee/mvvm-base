@@ -51,6 +51,7 @@ dependencies {
     // ktx
     implementation 'androidx.core:core-ktx:1.2.0-alpha04'
 
-    // glide
-    implementation 'com.github.bumptech.glide:glide:4.9.0'
+    // banner
+    // TODO: Glideとコンフリクトしてしまう!!
+    implementation 'com.github.MoeidHeidari:banner:1.04'
 }

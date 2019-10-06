@@ -10,12 +10,15 @@
             android:layout_height="match_parent"
             android:layout_width="match_parent">
 
-        <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view"
+        <com.example.moeidbannerlibrary.banner.BannerLayout
+                android:id="@+id/banner"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="8dp"
+                android:layout_height="200dp"
+                app:autoPlaying="true"
+                app:centerScale="1.0"
+                app:itemSpace="40"
+                app:moveSpeed="0.5"
+                app:showIndicator="false"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"/>
@@ -25,7 +28,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="NEXT"
-                app:layout_constraintTop_toBottomOf="@id/recycler_view"
+                app:layout_constraintTop_toBottomOf="@id/banner"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"/>
 
