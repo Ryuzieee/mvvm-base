@@ -3,7 +3,6 @@ package com.example.ryuji_mvvm_architecture.main.fragment
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.codility.recyclerpicasso.MyAdapter
 import com.example.ryuji_mvvm_architecture.R
 import com.example.ryuji_mvvm_architecture.base.BaseFragment
 import com.example.ryuji_mvvm_architecture.base.ReceiverType
@@ -11,6 +10,7 @@ import com.example.ryuji_mvvm_architecture.databinding.FragmentFirstBinding
 import com.example.ryuji_mvvm_architecture.main.FirstScreenState.INITIAL
 import com.example.ryuji_mvvm_architecture.main.FirstScreenState.NEXT
 import com.example.ryuji_mvvm_architecture.main.MainViewModel
+import com.example.ryuji_mvvm_architecture.main.MyAdapter
 import com.example.ryuji_mvvm_architecture.main.Version
 import com.example.ryuji_mvvm_architecture.main.fragment.FirstFragment.FirstReceiverType.CLICK_NEXT_BUTTON
 import com.example.ryuji_mvvm_architecture.util.Utility
