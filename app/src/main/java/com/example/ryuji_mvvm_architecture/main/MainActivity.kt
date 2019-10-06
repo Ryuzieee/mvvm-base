@@ -6,21 +6,21 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.example.ryuji_mvvm_architecture.R
 import com.example.ryuji_mvvm_architecture.base.BaseActivity
-import com.example.ryuji_mvvm_architecture.base.ReceivedType
+import com.example.ryuji_mvvm_architecture.base.ReceiverType
 import com.example.ryuji_mvvm_architecture.databinding.ActivityMainBinding
-import com.example.ryuji_mvvm_architecture.main.MainActivity.MainReceivedType.*
+import com.example.ryuji_mvvm_architecture.main.MainActivity.MainReceiverType.*
 import com.example.ryuji_mvvm_architecture.main.MainTransitionState.FIRST
 import com.example.ryuji_mvvm_architecture.util.FragmentTransitionAnimation
 
 class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(MainViewModel::class.java) {
 
-    enum class MainReceivedType : ReceivedType {
+    enum class MainReceiverType : ReceiverType {
         ON_BACK_PRESSED,
         UPDATE_TOOLBAR,
         TRANSITION
     }
 
-    override val onReceivedMap: Map<ReceivedType, (Any?) -> Unit> = mapOf(
+    override val receiverMap: Map<ReceiverType, (Any?) -> Unit> = mapOf(
         ON_BACK_PRESSED to { _ -> onBackPressed() },
         UPDATE_TOOLBAR to { parameter -> updateToolbar(parameter as MainTransitionState) },
         TRANSITION to { parameter -> transition(parameter as MainTransitionState) }
@@ -39,11 +39,11 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(MainViewMo
     override fun initialize() {
         binding.apply {
             setSupportActionBar(toolbar)
-            toolbarBack.setOnClickListener { onReceived(ON_BACK_PRESSED) }
+            toolbarBack.setOnClickListener { onReceive(ON_BACK_PRESSED) }
         }
         viewModel.mainTransitionState.observe(this, Observer<MainTransitionState> {
-            onReceived(UPDATE_TOOLBAR, it)
-            onReceived(TRANSITION, it)
+            onReceive(UPDATE_TOOLBAR, it)
+            onReceive(TRANSITION, it)
         })
         viewModel.dispatch(FIRST)
     }

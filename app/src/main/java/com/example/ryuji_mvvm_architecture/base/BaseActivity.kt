@@ -51,7 +51,7 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(private va
 
     // region Must Implement For Initialize
 
-    abstract val onReceivedMap: Map<ReceivedType, (Any?) -> Unit>
+    abstract val receiverMap: Map<ReceiverType, (Any?) -> Unit>
 
     @LayoutRes
     abstract fun layoutResource(): Int
@@ -103,8 +103,8 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(private va
     // 初期化したい処理があれば使用する
     open fun initialize() {}
 
-    open fun onReceived(receivedType: ReceivedType, parameter: Any? = null) =
-        onReceivedMap[receivedType]?.let { it(parameter) }
+    open fun onReceive(receiverType: ReceiverType, parameter: Any? = null) =
+        receiverMap[receiverType]?.let { it(parameter) }
 
     // endregion
 
