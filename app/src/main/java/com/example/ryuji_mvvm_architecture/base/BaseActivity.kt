@@ -8,8 +8,8 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.ryuji_mvvm_architecture.R
-import com.example.ryuji_mvvm_architecture.util.ReceivedType
 import com.example.ryuji_mvvm_architecture.util.FragmentTransitionAnimation
+import com.example.ryuji_mvvm_architecture.util.ReceivedType
 
 abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(private val VMClass: Class<VM>) :
     AppCompatActivity() {
@@ -33,7 +33,7 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(private va
         super.onCreate(savedInstanceState)
         initializeViewModel(viewModel)
         initialize()
-        if (savedInstanceState == null) transition(firstFragment())
+        if (savedInstanceState == null) createOrReplaceFragment(firstFragment())
     }
 
     override fun onBackPressed() {
@@ -52,6 +52,8 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(private va
 
     // region Must Implement For Initialize
 
+    abstract val onReceivedMap: Map<ReceivedType, (() -> Unit)>
+
     @LayoutRes
     abstract fun layoutResource(): Int
 
@@ -65,7 +67,15 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(private va
 
     // region Fragment Control
 
-    open fun transition(fragment: Fragment) {
+    open fun transition(transitionState: TransitionState) {
+        if (viewModel.isBack(supportFragmentManager)) {
+            back()
+            return
+        }
+        createOrReplaceFragment(transitionState.fragment)
+    }
+
+    open fun createOrReplaceFragment(fragment: Fragment) {
         val isFirstFragment = fragment == firstFragment()
         supportFragmentManager.beginTransaction().run {
             // 初期表示かつアニメーション不使用の場合はAnimationを無効にする
@@ -94,12 +104,8 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(private va
     // 初期化したい処理があれば使用する
     open fun initialize() {}
 
+    open fun onReceived(onReceived: ReceivedType) = onReceivedMap[onReceived]?.let { it() }
+
     // endregion
-
-    abstract val onReceivedMap: Map<ReceivedType, (() -> Unit)>
-
-    open fun onReceived(onReceived: ReceivedType) {
-        onReceivedMap[onReceived]?.let { it() }
-    }
 
 }

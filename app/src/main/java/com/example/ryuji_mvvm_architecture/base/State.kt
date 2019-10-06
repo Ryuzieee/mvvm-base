@@ -13,5 +13,5 @@ interface TransitionState : ScreenState {
 interface Property {
     val screenState: ScreenState
     val data: Data
-    fun makeNewProperty(screenState: ScreenState, dispatchData: Data?): Property
+    fun updateProperty(screenState: ScreenState, dispatchData: Data?): Property
 }

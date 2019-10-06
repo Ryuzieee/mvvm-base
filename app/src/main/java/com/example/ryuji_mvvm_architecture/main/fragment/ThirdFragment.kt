@@ -11,19 +11,19 @@ import com.example.ryuji_mvvm_architecture.util.ReceivedType
 
 class ThirdFragment : BaseFragment<MainViewModel, FragmentThirdBinding>(MainViewModel::class.java) {
 
+    override val onReceivedMap: Map<ReceivedType, () -> Unit> = mapOf(
+        ReceivedType.CLICK_BACK_BUTTON_1 to { viewModel.dispatch(ThirdScreenState.BACK) }
+    )
+
     override fun layoutResource() = R.layout.fragment_third
 
     override fun initializeViewModel(viewModel: MainViewModel) {
         binding.viewModel = viewModel
     }
 
-    override val onReceivedMap: Map<ReceivedType, () -> Unit> = mapOf(
-        ReceivedType.CLICK_BACK_BUTTON_1 to { viewModel.dispatch(ThirdScreenState.BACK) }
-    )
-
     override fun initialize() {
         binding.signupButton.setOnClickListener { onReceived(ReceivedType.CLICK_BACK_BUTTON_1) }
-        viewModel.thirdProperty.observe(this, Observer<ThirdProperty> {})
+        viewModel.thirdProperty.observe(viewLifecycleOwner, Observer<ThirdProperty> {})
         viewModel.dispatch(ThirdScreenState.INITIAL)
     }
 }

@@ -12,9 +12,9 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
 
     // region LiveData
 
-    override val transitionState = MutableLiveData<TransitionState>()
+    override val transitionState: MutableLiveData<TransitionState> = MutableLiveData()
 
-    override val transitionStateList = ParentScreenState.values().asList()
+    override val transitionStateList = MainTransitionState.values().asList()
 
     override val propertyList: List<MutableLiveData<out Property>> = listOf(
         MutableLiveData<FirstProperty>(FirstProperty(screenState = FirstScreenState.INITIALIZE, data = FirstData())),
@@ -27,6 +27,7 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
         MutableLiveData<ThirdProperty>(ThirdProperty(screenState = ThirdScreenState.INITIAL, data = ThirdData()))
     )
 
+    val mainTransitionState = transitionState as MutableLiveData<MainTransitionState>
     val firstProperty = propertyList[0] as MutableLiveData<FirstProperty>
     val secondProperty = propertyList[1] as MutableLiveData<SecondProperty>
     val thirdProperty = propertyList[2] as MutableLiveData<ThirdProperty>
