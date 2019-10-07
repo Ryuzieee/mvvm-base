@@ -16,16 +16,31 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
 
     override val transitionStateList = MainTransitionState.values().asList()
 
-    override val propertyList: List<MutableLiveData<out Property>> = listOf(
-        MutableLiveData<FirstProperty>(FirstProperty(FirstScreenState.INITIAL, FirstData())),
-        MutableLiveData<SecondProperty>(SecondProperty(SecondScreenState.INITIAL, SecondData())),
-        MutableLiveData<ThirdProperty>(ThirdProperty(ThirdScreenState.INITIAL, ThirdData()))
+    override val propertyMap: Map<String, MutableLiveData<out Property>> = mapOf(
+        FirstScreenState.values().first().id() to MutableLiveData<FirstProperty>(
+            FirstProperty(
+                FirstScreenState.INITIAL,
+                FirstData()
+            )
+        ),
+        SecondScreenState.values().first().id() to MutableLiveData<SecondProperty>(
+            SecondProperty(
+                SecondScreenState.INITIAL,
+                SecondData()
+            )
+        ),
+        ThirdScreenState.values().first().id() to MutableLiveData<ThirdProperty>(
+            ThirdProperty(
+                ThirdScreenState.INITIAL,
+                ThirdData()
+            )
+        )
     )
 
     val mainTransitionState = transitionState as MutableLiveData<MainTransitionState>
-    val firstProperty = propertyList[0] as MutableLiveData<FirstProperty>
-    val secondProperty = propertyList[1] as MutableLiveData<SecondProperty>
-    val thirdProperty = propertyList[2] as MutableLiveData<ThirdProperty>
+    val firstProperty = propertyMap[FirstScreenState.values().first().id()] as MutableLiveData<FirstProperty>
+    val secondProperty = propertyMap[SecondScreenState.values().first().id()] as MutableLiveData<SecondProperty>
+    val thirdProperty = propertyMap[ThirdScreenState.values().first().id()] as MutableLiveData<ThirdProperty>
 
     // endregion
 

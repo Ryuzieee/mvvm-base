@@ -1,7 +1,6 @@
 package com.example.ryuji_mvvm_architecture.base
 
 import android.app.Application
-import android.util.Log
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
@@ -15,28 +14,23 @@ abstract class BaseViewModel(application: Application) : AndroidViewModel(applic
 
     abstract val transitionStateList: List<TransitionState>
 
-    abstract val propertyList: List<MutableLiveData<out Property>>
+    abstract val propertyMap: Map<String, MutableLiveData<out Property>>
 
     abstract val functionMap: Map<ScreenState, (() -> Unit)?>
 
     open fun dispatch(screenState: ScreenState, dispatchData: Any? = null) {
         log.add(screenState.javaClass.simpleName + "." + screenState)
         when (screenState) {
-            is TransitionState -> {
-                transitionState.value = screenState
-            }
-            else -> {
-                propertyList.forEachIndexed { index, mutableLiveData ->
-                    // Propertyの更新
-                    if (mutableLiveData.value?.screenState?.javaClass == screenState.javaClass) {
-                        val updateProperty = propertyList[index].value?.updateProperty(
-                            screenState = screenState,
-                            dispatchData = if (dispatchData is Data) dispatchData else null
-                        )
-                        propertyList[index].value = updateProperty
-                    }
+            is TransitionState -> transitionState.value = screenState
+            is FragmentScreenState -> {
+                propertyMap[screenState.id()]?.value?.let { property ->
+                    val newProperty = property.createNewProperty(
+                        fragmentScreenState = screenState,
+                        dispatchData = if (dispatchData is Data) dispatchData else null
+                    )
+                    propertyMap[screenState.id()]?.value = newProperty
+                    functionMap[screenState]?.let { it() }
                 }
-                functionMap[screenState]?.let { it() }
             }
         }
     }

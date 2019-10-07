@@ -3,10 +3,7 @@ package com.example.ryuji_mvvm_architecture.main
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.ryuji_mvvm_architecture.base.Data
-import com.example.ryuji_mvvm_architecture.base.Property
-import com.example.ryuji_mvvm_architecture.base.ScreenState
-import com.example.ryuji_mvvm_architecture.base.TransitionState
+import com.example.ryuji_mvvm_architecture.base.*
 import com.example.ryuji_mvvm_architecture.main.fragment.FirstFragment
 import com.example.ryuji_mvvm_architecture.main.fragment.SecondFragment
 import com.example.ryuji_mvvm_architecture.main.fragment.ThirdFragment
@@ -23,41 +20,46 @@ enum class MainTransitionState(override val fragment: Fragment, val title: Strin
 // endregion
 
 // region First
-enum class FirstScreenState : ScreenState {
+enum class FirstScreenState : FragmentScreenState {
     INITIAL,
-    NEXT
+    NEXT;
+
+    override fun id() = javaClass.simpleName
 }
 
 data class FirstData(val text: String = "DEFAULT") : Data
 
-data class FirstProperty(override val screenState: FirstScreenState, override val data: FirstData) : Property {
-    override fun updateProperty(screenState: ScreenState, dispatchData: Data?): Property {
+data class FirstProperty(override val fragmentScreenState: FirstScreenState, override val data: FirstData) : Property {
+    override fun createNewProperty(fragmentScreenState: FragmentScreenState, dispatchData: Data?): Property {
         return this.copy(
-            screenState = screenState as FirstScreenState,
+            fragmentScreenState = fragmentScreenState as FirstScreenState,
             data = dispatchData?.let { it as FirstData } ?: data)
     }
 }
 // endregion
 
 // region Second
-enum class SecondScreenState : ScreenState {
+enum class SecondScreenState : FragmentScreenState {
     INITIAL,
     LOADING,
     FETCHED,
-    NEXT
+    NEXT;
+
+    override fun id() = javaClass.simpleName
 }
 
 data class SecondData(val text: String = "DEFAULT") : Data
 
-data class SecondProperty(override val screenState: SecondScreenState, override val data: SecondData) : Property {
-    override fun updateProperty(screenState: ScreenState, dispatchData: Data?): Property {
+data class SecondProperty(override val fragmentScreenState: SecondScreenState, override val data: SecondData) :
+    Property {
+    override fun createNewProperty(fragmentScreenState: FragmentScreenState, dispatchData: Data?): Property {
         return this.copy(
-            screenState = screenState as SecondScreenState,
+            fragmentScreenState = fragmentScreenState as SecondScreenState,
             data = dispatchData?.let { it as SecondData } ?: data)
     }
 
     fun isLoading(): Boolean {
-        return when (screenState) {
+        return when (fragmentScreenState) {
             SecondScreenState.INITIAL, SecondScreenState.LOADING -> true
             SecondScreenState.FETCHED, SecondScreenState.NEXT -> false
         }
@@ -66,9 +68,11 @@ data class SecondProperty(override val screenState: SecondScreenState, override 
 // endregion
 
 // region Third
-enum class ThirdScreenState : ScreenState {
+enum class ThirdScreenState : ScreenState, FragmentScreenState {
     INITIAL,
-    BACK
+    BACK;
+
+    override fun id() = javaClass.simpleName
 }
 
 data class ThirdData(
@@ -80,10 +84,10 @@ data class ThirdData(
     fun isValid() = !username.value.isNullOrBlank() && !password.value.isNullOrBlank() && termOfUse.value == true
 }
 
-data class ThirdProperty(override val screenState: ThirdScreenState, override val data: ThirdData) : Property {
-    override fun updateProperty(screenState: ScreenState, dispatchData: Data?): Property {
+data class ThirdProperty(override val fragmentScreenState: ThirdScreenState, override val data: ThirdData) : Property {
+    override fun createNewProperty(fragmentScreenState: FragmentScreenState, dispatchData: Data?): Property {
         return this.copy(
-            screenState = screenState as ThirdScreenState,
+            fragmentScreenState = fragmentScreenState as ThirdScreenState,
             data = dispatchData?.let { it as ThirdData } ?: data)
     }
 }

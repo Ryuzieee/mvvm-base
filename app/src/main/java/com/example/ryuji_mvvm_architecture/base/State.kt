@@ -10,8 +10,12 @@ interface TransitionState : ScreenState {
     val fragment: Fragment
 }
 
+interface FragmentScreenState : ScreenState {
+    fun id(): String
+}
+
 interface Property {
-    val screenState: ScreenState
+    val fragmentScreenState: FragmentScreenState
     val data: Data
-    fun updateProperty(screenState: ScreenState, dispatchData: Data?): Property
+    fun createNewProperty(fragmentScreenState: FragmentScreenState, dispatchData: Data?): Property
 }
