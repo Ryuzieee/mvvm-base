@@ -1,6 +1,5 @@
 package com.example.ryuji_mvvm_architecture.main.fragment
 
-import com.example.moeidbannerlibrary.banner.BaseBannerAdapter
 import com.example.ryuji_mvvm_architecture.base.BaseFragment
 import com.example.ryuji_mvvm_architecture.base.ReceiverType
 import com.example.ryuji_mvvm_architecture.databinding.FragmentFirstBinding
@@ -28,18 +27,5 @@ class FirstFragment : BaseFragment<MainViewModel, FragmentFirstBinding>(MainView
     override fun initialize() {
         binding.nextButton.setOnClickListener { onReceive(CLICK_NEXT_BUTTON) }
         viewModel.dispatch(INITIAL)
-
-        // TODO: カルーセル出してみる!!
-        val urls = mutableListOf<String>(
-            "https://raw.githubusercontent.com/AndroidCodility/StaggeredRecyclerView/master/images/one.jpg",
-            "https://raw.githubusercontent.com/AndroidCodility/StaggeredRecyclerView/master/images/nine.jpg",
-            "https://raw.githubusercontent.com/AndroidCodility/StaggeredRecyclerView/master/images/ten.jpg"
-        )
-        val bannerAdapter = BaseBannerAdapter(activity, urls)
-        bannerAdapter.setOnBannerItemClickListener { }
-        binding.banner.apply {
-            setAdapter(bannerAdapter)
-            setAutoPlayDuration(3000)
-        }
     }
 }

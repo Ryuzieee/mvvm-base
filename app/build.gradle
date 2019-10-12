@@ -50,8 +50,4 @@ dependencies {
 
     // ktx
     implementation 'androidx.core:core-ktx:1.2.0-alpha04'
-
-    // banner
-    // TODO: Glideとコンフリクトしてしまう!!
-    implementation 'com.github.MoeidHeidari:banner:1.04'
 }

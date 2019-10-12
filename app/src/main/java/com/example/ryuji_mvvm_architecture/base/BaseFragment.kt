@@ -20,6 +20,20 @@ abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(private va
 
     // endregion
 
+    // region Must Implement For Initialize
+
+    abstract val receiverMap: Map<ReceiverType, (Any?) -> Unit>
+
+    @LayoutRes
+    abstract fun layoutResource(): Int
+
+    abstract fun bindViewModel(viewModel: VM)
+
+    // 初期化したい処理
+    abstract fun initialize()
+
+    // endregion
+
     // region Life Cycle
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,26 +60,12 @@ abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(private va
         bindViewModel(viewModel)
     }
 
-    abstract fun bindViewModel(viewModel: VM)
-
     // TODO: ViewModelFactory使ってもいいかも
     private fun getVM(): VM = ViewModelProvider(activity!!).get(VMClass)
 
     // endregion
 
-    // region Must Implement For Initialize
-
-    abstract val receiverMap: Map<ReceiverType, (Any?) -> Unit>
-
-    @LayoutRes
-    abstract fun layoutResource(): Int
-
-    // endregion
-
     // region Option
-
-    // 初期化したい処理があれば使用する
-    open fun initialize() {}
 
     open fun onReceive(receiverType: ReceiverType, parameter: Any? = null) =
         receiverMap[receiverType]?.let { it(parameter) }

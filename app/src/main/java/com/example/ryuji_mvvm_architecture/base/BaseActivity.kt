@@ -1,7 +1,6 @@
 package com.example.ryuji_mvvm_architecture.base
 
 import android.os.Bundle
-import android.util.Log
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -27,35 +26,6 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(private va
 
     // endregion
 
-    // region Life Cycle
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        bindViewModel(viewModel)
-        initialize()
-        if (savedInstanceState == null) createOrReplaceFragment(firstFragment())
-    }
-
-    override fun onBackPressed() {
-        viewModel.previousTransitionState()?.let { viewModel.dispatch(it) } ?: onBack()
-    }
-
-    override fun finish() {
-        // TODO: ログを使用する!!
-        Log.d("ログ", viewModel.log.toString())
-        super.finish()
-    }
-
-    private fun onBack() {
-        if (supportFragmentManager.backStackEntryCount < 1) {
-            super.onBackPressed()
-        } else {
-            back()
-        }
-    }
-
-    // endregion
-
     // region Must Implement For Initialize
 
     abstract val receiverMap: Map<ReceiverType, (Any?) -> Unit>
@@ -69,7 +39,33 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(private va
 
     abstract fun animation(): FragmentTransitionAnimation?
 
+    // 初期化したい処理
+    abstract fun initialize()
+
     // endregion
+
+    // region Life Cycle
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        bindViewModel(viewModel)
+        initialize()
+        if (savedInstanceState == null) createOrReplaceFragment(firstFragment())
+    }
+
+    override fun onBackPressed() {
+        viewModel.previousTransitionState()?.let { viewModel.dispatch(it) } ?: onBack()
+    }
+
+    // endregion
+
+    private fun onBack() {
+        if (supportFragmentManager.backStackEntryCount < 1) {
+            super.onBackPressed()
+        } else {
+            back()
+        }
+    }
 
     // region Fragment Control
 
@@ -106,9 +102,6 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(private va
     // endregion
 
     // region Option
-
-    // 初期化したい処理があれば使用する
-    open fun initialize() {}
 
     open fun onReceive(receiverType: ReceiverType, parameter: Any? = null) =
         receiverMap[receiverType]?.let { it(parameter) }
