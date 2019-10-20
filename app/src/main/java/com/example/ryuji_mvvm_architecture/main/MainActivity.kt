@@ -26,7 +26,7 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(MainViewMo
         TRANSITION to { parameter -> transition(parameter as MainTransitionState) }
     )
 
-    override val viewModelProviderFactory: ViewModelProvider.Factory = MainViewModelFactory(MainProvider())
+    override val viewModelProviderFactory: ViewModelProvider.Factory = MainViewModelFactory(MainProviderImpl())
 
     override fun layoutResource() = R.layout.activity_main
 
