@@ -2,37 +2,33 @@ package com.example.ryuji_mvvm_architecture.sub.recyclerView
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.example.ryuji_mvvm_architecture.R
+import com.example.ryuji_mvvm_architecture.databinding.ItemCoupleCardBinding
 
-class CoupleListAdapter(private val mContext: Context, private val itemsList: List<String>) :
-    RecyclerView.Adapter<CoupleListAdapter.ItemRowHolder>() {
+class CoupleListAdapter
+constructor(
+    private val mContext: Context,
+    private val itemsList: List<String>
+) : RecyclerView.Adapter<CoupleListAdapter.BindingHolder>() {
 
-    override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): ItemRowHolder {
-        val view = LayoutInflater.from(viewGroup.context).inflate(R.layout.item_couple_card, null)
-        return ItemRowHolder(view)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BindingHolder {
+        val layoutInflater = LayoutInflater.from(parent.context)
+        val binding = ItemCoupleCardBinding.inflate(layoutInflater, parent, false)
+        return BindingHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: ItemRowHolder, i: Int) {
-        val url = itemsList[i]
-        /* Glide.with(mContext)
-                .load(feedItem.getImageURL())
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .centerCrop()
-                .error(R.drawable.bg)
-                .into(feedListRowHolder.thumbView);*/
-    }
-
-    override fun getItemCount() = itemsList.size
-
-    inner class ItemRowHolder(view: View) : RecyclerView.ViewHolder(view) {
-        init {
-            val coupleImage = view.findViewById<View>(R.id.couple_image) as ImageView
-            view.setOnClickListener { v -> Toast.makeText(v.context, "", Toast.LENGTH_SHORT).show() }
+    override fun onBindViewHolder(holder: BindingHolder, position: Int) {
+        val urlModel = UrlModel(itemsList[position])
+        holder.binding.apply {
+            model = urlModel
+            originalLinearLayout.setOnClickListener {}
         }
     }
+
+    override fun getItemCount(): Int = itemsList.size
+
+    class BindingHolder(var binding: ItemCoupleCardBinding) : RecyclerView.ViewHolder(binding.root)
 }
+
+data class UrlModel(val name: String)

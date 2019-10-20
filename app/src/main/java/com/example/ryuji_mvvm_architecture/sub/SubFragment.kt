@@ -9,6 +9,9 @@ import com.example.ryuji_mvvm_architecture.sub.recyclerView.CoupleListAdapter
 
 class SubFragment : BaseFragment<SubViewModel, FragmentSubBinding>() {
 
+    private val coupleListAdapter: CoupleListAdapter by lazy {
+        CoupleListAdapter(requireContext(), listOf("", "", "", "", "", "", "", "", "", ""))
+    }
     override val receiverMap: Map<ReceiverType, (Any?) -> Unit> = emptyMap()
 
     override fun layoutResource() = com.example.ryuji_mvvm_architecture.R.layout.fragment_sub
@@ -22,7 +25,7 @@ class SubFragment : BaseFragment<SubViewModel, FragmentSubBinding>() {
         binding.recyclerView.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            adapter = CoupleListAdapter(context, listOf("", "", "", "", "", "", "", "", "", ""))
+            adapter = coupleListAdapter
         }
     }
 }
