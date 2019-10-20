@@ -70,7 +70,7 @@ data class SecondProperty(override val fragmentScreenState: SecondScreenState, o
 // region Third
 enum class ThirdScreenState : ScreenState, FragmentScreenState {
     INITIAL,
-    BACK;
+    START_NEXT_ACTIVITY;
 
     override fun id() = javaClass.simpleName
 }

@@ -31,13 +31,8 @@ class SubViewModel : BaseViewModel() {
     // region Dispatch
 
     override val functionMap: Map<ScreenState, (() -> Unit)?> = mapOf(
-        SubScreenState.INITIAL to null,
-        SubScreenState.NEXT to { firstScreenStateNext() }
+        SubScreenState.INITIAL to null
     )
-
-    private fun firstScreenStateNext() {
-        nextTransitionState()?.let { dispatch(it) }
-    }
 
     // endregion
 

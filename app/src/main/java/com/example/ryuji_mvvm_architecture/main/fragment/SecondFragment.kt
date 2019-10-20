@@ -6,7 +6,6 @@ import com.example.ryuji_mvvm_architecture.base.ReceiverType
 import com.example.ryuji_mvvm_architecture.databinding.FragmentSecondBinding
 import com.example.ryuji_mvvm_architecture.main.MainViewModel
 import com.example.ryuji_mvvm_architecture.main.SecondScreenState
-import com.example.ryuji_mvvm_architecture.main.SecondScreenState.INITIAL
 import com.example.ryuji_mvvm_architecture.main.fragment.SecondFragment.SecondReceiverType.CLICK_NEXT_BUTTON
 
 class SecondFragment : BaseFragment<MainViewModel, FragmentSecondBinding>() {
@@ -27,6 +26,6 @@ class SecondFragment : BaseFragment<MainViewModel, FragmentSecondBinding>() {
 
     override fun initialize() {
         binding.nextButton.setOnClickListener { onReceive(CLICK_NEXT_BUTTON) }
-        viewModel.dispatch(INITIAL)
+        viewModel.dispatch(SecondScreenState.INITIAL)
     }
 }

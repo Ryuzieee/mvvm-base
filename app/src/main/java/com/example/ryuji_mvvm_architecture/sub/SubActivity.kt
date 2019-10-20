@@ -37,7 +37,8 @@ class SubActivity : BaseActivity<SubViewModel, ActivitySubBinding>(SubViewModel:
 
     override fun initialize() {
         binding.apply {
-            setSupportActionBar(toolbar)
+            // これは一度でいいっぽい!!
+//            setSupportActionBar(toolbar)
             toolbarBack.setOnClickListener { onReceive(SubReceiverType.ON_BACK_PRESSED) }
         }
         viewModel.subTransitionState.observe(this, Observer<SubTransitionState> {

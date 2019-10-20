@@ -17,8 +17,7 @@ enum class SubTransitionState(override val fragment: Fragment) :
 
 // region SUB
 enum class SubScreenState : FragmentScreenState {
-    INITIAL,
-    NEXT;
+    INITIAL;
 
     override fun id() = javaClass.simpleName
 }

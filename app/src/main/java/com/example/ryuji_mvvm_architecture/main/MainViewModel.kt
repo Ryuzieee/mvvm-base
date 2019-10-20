@@ -53,7 +53,7 @@ class MainViewModel(private val provider: MainProvider) : BaseViewModel() {
         SecondScreenState.FETCHED to null,
         SecondScreenState.NEXT to { secondScreenStateNext() },
         ThirdScreenState.INITIAL to { thirdScreenStateInitial() },
-        ThirdScreenState.BACK to { thirdScreenStateBack() }
+        ThirdScreenState.START_NEXT_ACTIVITY to null
     )
 
     private fun firstScreenStateNext() {
@@ -79,10 +79,6 @@ class MainViewModel(private val provider: MainProvider) : BaseViewModel() {
             // canSubmit(MediatorLiveData)にObserverのリストを追加
             observerList.forEach { data.canSubmit.addSource(it) { data.canSubmit.value = data.isValid() } }
         }
-    }
-
-    private fun thirdScreenStateBack() {
-        previousTransitionState()?.let { dispatch(it) }
     }
 
     // endregion

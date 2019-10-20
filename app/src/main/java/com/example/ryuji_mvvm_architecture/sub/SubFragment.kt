@@ -11,13 +11,10 @@ class SubFragment : BaseFragment<SubViewModel, FragmentSubBinding>() {
     override fun layoutResource() = com.example.ryuji_mvvm_architecture.R.layout.fragment_sub
 
     override fun bindViewModel(viewModel: SubViewModel) {
-        binding.viewModel = viewModel as SubViewModel
+        binding.viewModel = viewModel
     }
 
     override fun initialize() {
-        binding.nextButton.setOnClickListener {
-            // Nothing
-        }
         viewModel.dispatch(SubScreenState.INITIAL)
     }
 }
