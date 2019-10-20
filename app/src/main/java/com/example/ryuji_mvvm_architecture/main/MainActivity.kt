@@ -10,7 +10,6 @@ import com.example.ryuji_mvvm_architecture.base.BaseActivity
 import com.example.ryuji_mvvm_architecture.base.ReceiverType
 import com.example.ryuji_mvvm_architecture.databinding.ActivityMainBinding
 import com.example.ryuji_mvvm_architecture.main.MainActivity.MainReceiverType.*
-import com.example.ryuji_mvvm_architecture.main.MainTransitionState.FIRST
 import com.example.ryuji_mvvm_architecture.util.FragmentTransitionAnimation
 
 class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(MainViewModel::class.java) {
@@ -31,7 +30,7 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(MainViewMo
 
     override fun layoutResource() = R.layout.activity_main
 
-    override fun firstFragment() = FIRST.fragment
+    override fun firstFragment() = MainTransitionState.FIRST.fragment
 
     override fun bindViewModel(viewModel: MainViewModel) {
         binding.viewModel = viewModel
@@ -48,7 +47,7 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(MainViewMo
             onReceive(UPDATE_TOOLBAR, it)
             onReceive(TRANSITION, it)
         })
-        viewModel.dispatch(FIRST)
+        viewModel.dispatch(MainTransitionState.FIRST)
     }
 
     private fun updateToolbar(mainTransitionState: MainTransitionState) {
