@@ -2,7 +2,6 @@ package com.example.ryuji_mvvm_architecture.main.fragment
 
 import com.example.ryuji_mvvm_architecture.R
 import com.example.ryuji_mvvm_architecture.base.BaseFragment
-import com.example.ryuji_mvvm_architecture.base.BaseViewModel
 import com.example.ryuji_mvvm_architecture.base.ReceiverType
 import com.example.ryuji_mvvm_architecture.databinding.FragmentSecondBinding
 import com.example.ryuji_mvvm_architecture.main.MainViewModel
@@ -10,7 +9,7 @@ import com.example.ryuji_mvvm_architecture.main.SecondScreenState
 import com.example.ryuji_mvvm_architecture.main.SecondScreenState.INITIAL
 import com.example.ryuji_mvvm_architecture.main.fragment.SecondFragment.SecondReceiverType.CLICK_NEXT_BUTTON
 
-class SecondFragment : BaseFragment<FragmentSecondBinding>() {
+class SecondFragment : BaseFragment<MainViewModel, FragmentSecondBinding>() {
 
     enum class SecondReceiverType : ReceiverType {
         CLICK_NEXT_BUTTON
@@ -22,8 +21,8 @@ class SecondFragment : BaseFragment<FragmentSecondBinding>() {
 
     override fun layoutResource() = R.layout.fragment_second
 
-    override fun bindViewModel(viewModel: BaseViewModel) {
-        binding.viewModel = viewModel as MainViewModel
+    override fun bindViewModel(viewModel: MainViewModel) {
+        binding.viewModel = viewModel
     }
 
     override fun initialize() {

@@ -9,13 +9,13 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 
-abstract class BaseFragment<T : ViewDataBinding> : Fragment() {
+abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding> : Fragment() {
 
     // region Property
 
-    lateinit var viewModel: BaseViewModel
+    lateinit var viewModel: VM
 
-    open lateinit var binding: T
+    open lateinit var binding: DB
 
     // endregion
 
@@ -27,7 +27,7 @@ abstract class BaseFragment<T : ViewDataBinding> : Fragment() {
     @LayoutRes
     abstract fun layoutResource(): Int
 
-    abstract fun bindViewModel(viewModel: BaseViewModel)
+    abstract fun bindViewModel(viewModel: VM)
 
     // 初期化したい処理
     abstract fun initialize()
@@ -60,7 +60,7 @@ abstract class BaseFragment<T : ViewDataBinding> : Fragment() {
         bindViewModel(viewModel)
     }
 
-    private fun getVM(): BaseViewModel = (requireActivity() as BaseActivity<*, *>).viewModel
+    private fun getVM(): VM = (requireActivity() as BaseActivity<*, *>).viewModel as VM
 
     // endregion
 
