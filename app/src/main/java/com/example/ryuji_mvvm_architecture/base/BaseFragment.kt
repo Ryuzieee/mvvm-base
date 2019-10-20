@@ -8,9 +8,8 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 
-abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(private val VMClass: Class<VM>) : Fragment() {
+abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding> : Fragment() {
 
     // region Property
 
@@ -23,6 +22,7 @@ abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(private va
     // region Must Implement For Initialize
 
     abstract val receiverMap: Map<ReceiverType, (Any?) -> Unit>
+
 
     @LayoutRes
     abstract fun layoutResource(): Int
@@ -60,8 +60,7 @@ abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(private va
         bindViewModel(viewModel)
     }
 
-    // TODO: ViewModelFactory使ってもいいかも
-    private fun getVM(): VM = ViewModelProvider(activity!!).get(VMClass)
+    private fun getVM(): VM = (requireActivity() as BaseActivity<*, *>).viewModel as VM
 
     // endregion
 

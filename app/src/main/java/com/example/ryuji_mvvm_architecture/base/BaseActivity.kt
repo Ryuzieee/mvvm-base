@@ -20,8 +20,7 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(private va
     }
 
     val viewModel by lazy {
-        // TODO: ViewModelFactory使ってもいいかも
-        ViewModelProvider(this).get(VMClass)
+        viewModelProviderFactory.create(VMClass)
     }
 
     // endregion
@@ -29,6 +28,8 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(private va
     // region Must Implement For Initialize
 
     abstract val receiverMap: Map<ReceiverType, (Any?) -> Unit>
+
+    abstract val viewModelProviderFactory: ViewModelProvider.Factory
 
     @LayoutRes
     abstract fun layoutResource(): Int

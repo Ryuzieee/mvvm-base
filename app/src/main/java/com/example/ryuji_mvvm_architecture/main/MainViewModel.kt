@@ -1,6 +1,5 @@
 package com.example.ryuji_mvvm_architecture.main
 
-import android.app.Application
 import android.os.Handler
 import androidx.lifecycle.MutableLiveData
 import com.example.ryuji_mvvm_architecture.base.BaseViewModel
@@ -8,7 +7,7 @@ import com.example.ryuji_mvvm_architecture.base.Property
 import com.example.ryuji_mvvm_architecture.base.ScreenState
 import com.example.ryuji_mvvm_architecture.base.TransitionState
 
-class MainViewModel(application: Application) : BaseViewModel(application) {
+class MainViewModel(private val provider: MainProvider) : BaseViewModel() {
 
     // region LiveData
 
@@ -63,7 +62,7 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
 
     private fun secondScreenStateFetchFromServer() {
         Handler().postDelayed({
-            dispatch(SecondScreenState.FETCHED, secondProperty.value?.data?.copy(text = "FETCHED"))
+            dispatch(SecondScreenState.FETCHED, secondProperty.value?.data?.copy(text = provider.request()))
         }, 3000)
     }
 

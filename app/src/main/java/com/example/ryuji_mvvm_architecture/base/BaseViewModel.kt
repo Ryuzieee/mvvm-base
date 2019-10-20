@@ -1,12 +1,11 @@
 package com.example.ryuji_mvvm_architecture.base
 
-import android.app.Application
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.example.ryuji_mvvm_architecture.main.MainTransitionState
 
-abstract class BaseViewModel(application: Application) : AndroidViewModel(application) {
+abstract class BaseViewModel : ViewModel() {
 
     open val log = mutableListOf<String>()
 

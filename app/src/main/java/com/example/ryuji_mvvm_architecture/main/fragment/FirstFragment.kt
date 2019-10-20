@@ -8,7 +8,7 @@ import com.example.ryuji_mvvm_architecture.main.FirstScreenState.NEXT
 import com.example.ryuji_mvvm_architecture.main.MainViewModel
 import com.example.ryuji_mvvm_architecture.main.fragment.FirstFragment.FirstReceiverType.CLICK_NEXT_BUTTON
 
-class FirstFragment : BaseFragment<MainViewModel, FragmentFirstBinding>(MainViewModel::class.java) {
+class FirstFragment : BaseFragment<MainViewModel, FragmentFirstBinding>() {
 
     enum class FirstReceiverType : ReceiverType {
         CLICK_NEXT_BUTTON

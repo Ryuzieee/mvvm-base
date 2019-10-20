@@ -9,8 +9,7 @@ import com.example.ryuji_mvvm_architecture.main.SecondScreenState
 import com.example.ryuji_mvvm_architecture.main.SecondScreenState.INITIAL
 import com.example.ryuji_mvvm_architecture.main.fragment.SecondFragment.SecondReceiverType.CLICK_NEXT_BUTTON
 
-class SecondFragment : BaseFragment<MainViewModel, FragmentSecondBinding>(MainViewModel::class.java) {
-
+class SecondFragment : BaseFragment<MainViewModel, FragmentSecondBinding>() {
 
     enum class SecondReceiverType : ReceiverType {
         CLICK_NEXT_BUTTON

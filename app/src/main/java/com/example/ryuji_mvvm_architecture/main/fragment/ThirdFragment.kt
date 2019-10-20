@@ -9,7 +9,7 @@ import com.example.ryuji_mvvm_architecture.main.ThirdScreenState.BACK
 import com.example.ryuji_mvvm_architecture.main.ThirdScreenState.INITIAL
 import com.example.ryuji_mvvm_architecture.main.fragment.ThirdFragment.ThirdReceiverType.CLICK_BACK_BUTTON
 
-class ThirdFragment : BaseFragment<MainViewModel, FragmentThirdBinding>(MainViewModel::class.java) {
+class ThirdFragment : BaseFragment<MainViewModel, FragmentThirdBinding>() {
 
     enum class ThirdReceiverType : ReceiverType {
         CLICK_BACK_BUTTON

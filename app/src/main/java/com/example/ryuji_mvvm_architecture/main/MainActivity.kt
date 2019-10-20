@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator
 import android.view.animation.DecelerateInterpolator
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.example.ryuji_mvvm_architecture.R
 import com.example.ryuji_mvvm_architecture.base.BaseActivity
 import com.example.ryuji_mvvm_architecture.base.ReceiverType
@@ -25,6 +26,8 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(MainViewMo
         UPDATE_TOOLBAR to { parameter -> updateToolbar(parameter as MainTransitionState) },
         TRANSITION to { parameter -> transition(parameter as MainTransitionState) }
     )
+
+    override val viewModelProviderFactory: ViewModelProvider.Factory = MainViewModelFactory(MainProvider())
 
     override fun layoutResource() = R.layout.activity_main
 
