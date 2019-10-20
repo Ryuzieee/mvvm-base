@@ -10,13 +10,13 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.ryuji_mvvm_architecture.R
 import com.example.ryuji_mvvm_architecture.util.FragmentTransitionAnimation
 
-abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(private val VMClass: Class<VM>) :
+abstract class BaseActivity<T1 : BaseViewModel, T2 : ViewDataBinding>(private val VMClass: Class<T1>) :
     AppCompatActivity() {
 
     // region Property
 
     val binding by lazy {
-        DataBindingUtil.setContentView(this, layoutResource()) as DB
+        DataBindingUtil.setContentView(this, layoutResource()) as T2
     }
 
     val viewModel by lazy {
@@ -36,7 +36,7 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(private va
 
     abstract fun firstFragment(): Fragment
 
-    abstract fun bindViewModel(viewModel: VM)
+    abstract fun bindViewModel(viewModel: T1)
 
     abstract fun animation(): FragmentTransitionAnimation?
 
