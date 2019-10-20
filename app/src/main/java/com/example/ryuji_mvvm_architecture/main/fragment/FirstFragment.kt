@@ -1,6 +1,7 @@
 package com.example.ryuji_mvvm_architecture.main.fragment
 
 import com.example.ryuji_mvvm_architecture.base.BaseFragment
+import com.example.ryuji_mvvm_architecture.base.BaseViewModel
 import com.example.ryuji_mvvm_architecture.base.ReceiverType
 import com.example.ryuji_mvvm_architecture.databinding.FragmentFirstBinding
 import com.example.ryuji_mvvm_architecture.main.FirstScreenState.INITIAL
@@ -8,7 +9,7 @@ import com.example.ryuji_mvvm_architecture.main.FirstScreenState.NEXT
 import com.example.ryuji_mvvm_architecture.main.MainViewModel
 import com.example.ryuji_mvvm_architecture.main.fragment.FirstFragment.FirstReceiverType.CLICK_NEXT_BUTTON
 
-class FirstFragment : BaseFragment<MainViewModel, FragmentFirstBinding>() {
+class FirstFragment : BaseFragment<FragmentFirstBinding>() {
 
     enum class FirstReceiverType : ReceiverType {
         CLICK_NEXT_BUTTON
@@ -20,8 +21,8 @@ class FirstFragment : BaseFragment<MainViewModel, FragmentFirstBinding>() {
 
     override fun layoutResource() = com.example.ryuji_mvvm_architecture.R.layout.fragment_first
 
-    override fun bindViewModel(viewModel: MainViewModel) {
-        binding.viewModel = viewModel
+    override fun bindViewModel(viewModel: BaseViewModel) {
+        binding.viewModel = viewModel as MainViewModel
     }
 
     override fun initialize() {
