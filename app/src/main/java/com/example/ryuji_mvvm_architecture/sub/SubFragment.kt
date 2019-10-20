@@ -1,18 +1,16 @@
 package com.example.ryuji_mvvm_architecture.sub
 
 import com.example.ryuji_mvvm_architecture.base.BaseFragment
-import com.example.ryuji_mvvm_architecture.base.BaseViewModel
 import com.example.ryuji_mvvm_architecture.base.ReceiverType
 import com.example.ryuji_mvvm_architecture.databinding.FragmentSubBinding
 
-class SubFragment : BaseFragment<FragmentSubBinding>() {
-
+class SubFragment : BaseFragment<SubViewModel, FragmentSubBinding>() {
 
     override val receiverMap: Map<ReceiverType, (Any?) -> Unit> = emptyMap()
 
     override fun layoutResource() = com.example.ryuji_mvvm_architecture.R.layout.fragment_sub
 
-    override fun bindViewModel(viewModel: BaseViewModel) {
+    override fun bindViewModel(viewModel: SubViewModel) {
         binding.viewModel = viewModel as SubViewModel
     }
 
