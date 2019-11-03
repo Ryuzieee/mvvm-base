@@ -17,6 +17,7 @@ import com.example.ryuji_mvvm_architecture.util.FragmentTransitionAnimation
 class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(MainViewModel::class.java) {
 
     override val receiverMap: Map<TransitionState, (TransitionState) -> Unit> = mapOf(
+        // TODO:なんか気持ち悪いから直す🤮
         MainTransitionState.FIRST to { transitionState -> updateToolbar(transitionState as MainTransitionState) },
         MainTransitionState.SECOND to { transitionState -> updateToolbar(transitionState as MainTransitionState) },
         MainTransitionState.THIRD to { transitionState -> updateToolbar(transitionState as MainTransitionState) }
