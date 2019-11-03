@@ -6,16 +6,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.ryuji_mvvm_architecture.R
+import com.example.ryuji_mvvm_architecture.main.MainTransitionState
+import com.example.ryuji_mvvm_architecture.main.view.MainActivity
 import com.example.ryuji_mvvm_architecture.util.FragmentTransitionAnimation
 
 abstract class BaseActivity<T1 : BaseViewModel, T2 : ViewDataBinding>(private val VMClass: Class<T1>) :
     AppCompatActivity() {
 
     // region メンバ変数(初期化必須)
-
-    abstract val receiverMap: Map<ReceiverType, (Any?) -> Unit>
 
     abstract val viewModelProviderFactory: ViewModelProvider.Factory
 
@@ -27,6 +28,8 @@ abstract class BaseActivity<T1 : BaseViewModel, T2 : ViewDataBinding>(private va
     abstract fun bindViewModel(viewModel: T1)
 
     abstract fun animation(): FragmentTransitionAnimation?
+
+    abstract val receiverMap: Map<TransitionState, (TransitionState) -> Unit>
 
     // endregion
 
@@ -47,6 +50,10 @@ abstract class BaseActivity<T1 : BaseViewModel, T2 : ViewDataBinding>(private va
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bindViewModel(viewModel)
+        viewModel.transitionState.observe(this, Observer<TransitionState> {
+            transition(it)
+            onReceive(it)
+        })
         initialize()
         if (savedInstanceState == null) createOrReplaceFragment(firstFragment())
     }
@@ -59,7 +66,7 @@ abstract class BaseActivity<T1 : BaseViewModel, T2 : ViewDataBinding>(private va
 
     // region フラグメント管理
 
-    internal fun transition(transitionState: TransitionState) {
+    private fun transition(transitionState: TransitionState) {
         if (viewModel.isBack(supportFragmentManager)) {
             back()
             return
@@ -93,9 +100,6 @@ abstract class BaseActivity<T1 : BaseViewModel, T2 : ViewDataBinding>(private va
 
     // region メンバ関数
 
-    internal fun onReceive(receiverType: ReceiverType, parameter: Any? = null) =
-        receiverMap[receiverType]?.let { it(parameter) }
-
     // 初期化したい処理
     open fun initialize() {}
 
@@ -105,6 +109,10 @@ abstract class BaseActivity<T1 : BaseViewModel, T2 : ViewDataBinding>(private va
         } else {
             back()
         }
+    }
+
+    private fun onReceive(transitionState: TransitionState) {
+        receiverMap[transitionState]?.let { it(transitionState) }
     }
 
     // endregion

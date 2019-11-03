@@ -3,31 +3,23 @@ package com.example.ryuji_mvvm_architecture.main.view
 import android.animation.ObjectAnimator
 import android.view.animation.DecelerateInterpolator
 import androidx.core.view.isVisible
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.ryuji_mvvm_architecture.R
 import com.example.ryuji_mvvm_architecture.base.BaseActivity
-import com.example.ryuji_mvvm_architecture.base.ReceiverType
+import com.example.ryuji_mvvm_architecture.base.TransitionState
 import com.example.ryuji_mvvm_architecture.databinding.ActivityMainBinding
 import com.example.ryuji_mvvm_architecture.main.MainTransitionState
 import com.example.ryuji_mvvm_architecture.main.MainViewModel
 import com.example.ryuji_mvvm_architecture.main.MainViewModelFactory
 import com.example.ryuji_mvvm_architecture.main.provider.MainProviderImpl
-import com.example.ryuji_mvvm_architecture.main.view.MainActivity.MainReceiverType.*
 import com.example.ryuji_mvvm_architecture.util.FragmentTransitionAnimation
 
 class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(MainViewModel::class.java) {
 
-    enum class MainReceiverType : ReceiverType {
-        ON_BACK_PRESSED,
-        UPDATE_TOOLBAR,
-        TRANSITION
-    }
-
-    override val receiverMap: Map<ReceiverType, (Any?) -> Unit> = mapOf(
-        ON_BACK_PRESSED to { _ -> onBackPressed() },
-        UPDATE_TOOLBAR to { parameter -> updateToolbar(parameter as MainTransitionState) },
-        TRANSITION to { parameter -> transition(parameter as MainTransitionState) }
+    override val receiverMap: Map<TransitionState, (TransitionState) -> Unit> = mapOf(
+        MainTransitionState.FIRST to { transitionState -> updateToolbar(transitionState as MainTransitionState) },
+        MainTransitionState.SECOND to { transitionState -> updateToolbar(transitionState as MainTransitionState) },
+        MainTransitionState.THIRD to { transitionState -> updateToolbar(transitionState as MainTransitionState) }
     )
 
     override val viewModelProviderFactory: ViewModelProvider.Factory =
@@ -46,12 +38,8 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(MainViewMo
     override fun initialize() {
         binding.apply {
             setSupportActionBar(toolbar)
-            toolbarBack.setOnClickListener { onReceive(ON_BACK_PRESSED) }
+            toolbarBack.setOnClickListener { onBackPressed() }
         }
-        viewModel.mainTransitionState.observe(this, Observer<MainTransitionState> {
-            onReceive(UPDATE_TOOLBAR, it)
-            onReceive(TRANSITION, it)
-        })
         viewModel.dispatch(MainTransitionState.FIRST)
     }
 
