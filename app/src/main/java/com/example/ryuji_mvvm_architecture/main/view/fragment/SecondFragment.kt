@@ -2,21 +2,17 @@ package com.example.ryuji_mvvm_architecture.main.view.fragment
 
 import com.example.ryuji_mvvm_architecture.R
 import com.example.ryuji_mvvm_architecture.base.BaseFragment
-import com.example.ryuji_mvvm_architecture.base.ReceiverType
+import com.example.ryuji_mvvm_architecture.base.Data
+import com.example.ryuji_mvvm_architecture.base.FragmentScreenState
 import com.example.ryuji_mvvm_architecture.databinding.FragmentSecondBinding
 import com.example.ryuji_mvvm_architecture.main.MainViewModel
 import com.example.ryuji_mvvm_architecture.main.SecondScreenState
-import com.example.ryuji_mvvm_architecture.main.view.fragment.SecondFragment.SecondReceiverType.CLICK_NEXT_BUTTON
 
 class SecondFragment : BaseFragment<MainViewModel, FragmentSecondBinding>() {
 
-    enum class SecondReceiverType : ReceiverType {
-        CLICK_NEXT_BUTTON
-    }
+    override val propertyId: String = SecondScreenState.INITIAL.id()
 
-    override val receiverMap: Map<ReceiverType, (Any?) -> Unit> = mapOf(
-        CLICK_NEXT_BUTTON to { _ -> viewModel.dispatch(SecondScreenState.NEXT) }
-    )
+    override val receiverMap: Map<FragmentScreenState, (Data) -> Unit> = emptyMap()
 
     override fun layoutResource() = R.layout.fragment_second
 
@@ -25,7 +21,7 @@ class SecondFragment : BaseFragment<MainViewModel, FragmentSecondBinding>() {
     }
 
     override fun initialize() {
-        binding.nextButton.setOnClickListener { onReceive(CLICK_NEXT_BUTTON) }
+        binding.nextButton.setOnClickListener { viewModel.dispatch(SecondScreenState.NEXT) }
         viewModel.dispatch(SecondScreenState.INITIAL)
     }
 }

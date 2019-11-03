@@ -37,7 +37,6 @@ class MainViewModel(private val provider: MainProvider) : BaseViewModel() {
         )
     )
 
-    val mainTransitionState = transitionState as MutableLiveData<MainTransitionState>
     val firstProperty = propertyMap[FirstScreenState.values().first().id()] as MutableLiveData<FirstProperty>
     val secondProperty = propertyMap[SecondScreenState.values().first().id()] as MutableLiveData<SecondProperty>
     val thirdProperty = propertyMap[ThirdScreenState.values().first().id()] as MutableLiveData<ThirdProperty>

@@ -1,24 +1,21 @@
 package com.example.ryuji_mvvm_architecture.main.view.fragment
 
 import android.content.Intent
-import androidx.lifecycle.Observer
 import com.example.ryuji_mvvm_architecture.base.BaseFragment
-import com.example.ryuji_mvvm_architecture.base.ReceiverType
+import com.example.ryuji_mvvm_architecture.base.Data
+import com.example.ryuji_mvvm_architecture.base.FragmentScreenState
 import com.example.ryuji_mvvm_architecture.databinding.FragmentThirdBinding
 import com.example.ryuji_mvvm_architecture.main.MainViewModel
-import com.example.ryuji_mvvm_architecture.main.ThirdProperty
 import com.example.ryuji_mvvm_architecture.main.ThirdScreenState
 import com.example.ryuji_mvvm_architecture.sub.SubActivity
 
 
 class ThirdFragment : BaseFragment<MainViewModel, FragmentThirdBinding>() {
 
-    enum class ThirdReceiverType : ReceiverType {
-        START_NEXT_ACTIVITY
-    }
+    override val propertyId: String = ThirdScreenState.INITIAL.id()
 
-    override val receiverMap: Map<ReceiverType, (Any?) -> Unit> = mapOf(
-        ThirdReceiverType.START_NEXT_ACTIVITY to { _ -> viewModel.dispatch(ThirdScreenState.START_NEXT_ACTIVITY) }
+    override val receiverMap: Map<FragmentScreenState, (Data) -> Unit> = mapOf(
+        ThirdScreenState.START_NEXT_ACTIVITY to { data -> transitionToSubActivity(data) }
     )
 
     override fun layoutResource() = com.example.ryuji_mvvm_architecture.R.layout.fragment_third
@@ -28,12 +25,11 @@ class ThirdFragment : BaseFragment<MainViewModel, FragmentThirdBinding>() {
     }
 
     override fun initialize() {
-        binding.signupButton.setOnClickListener { onReceive(ThirdReceiverType.START_NEXT_ACTIVITY) }
+        binding.signupButton.setOnClickListener { viewModel.dispatch(ThirdScreenState.START_NEXT_ACTIVITY) }
         viewModel.dispatch(ThirdScreenState.INITIAL)
-        viewModel.thirdProperty.observe(this, Observer<ThirdProperty> {
-            if (it.fragmentScreenState == ThirdScreenState.START_NEXT_ACTIVITY) {
-                startActivity(Intent(requireActivity(), SubActivity::class.java))
-            }
-        })
+    }
+
+    private fun transitionToSubActivity(data: Data) {
+        startActivity(Intent(requireActivity(), SubActivity::class.java))
     }
 }

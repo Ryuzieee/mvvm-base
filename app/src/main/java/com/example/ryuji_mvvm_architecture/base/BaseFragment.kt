@@ -8,17 +8,15 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 
 abstract class BaseFragment<T1 : BaseViewModel, T2 : ViewDataBinding> : Fragment() {
 
     // region メンバ変数(初期化必須)
 
-    abstract val receiverMap: Map<ReceiverType, (Any?) -> Unit>
+    abstract val receiverMap: Map<FragmentScreenState, (Data) -> Unit>
 
-    @LayoutRes
-    abstract fun layoutResource(): Int
-
-    abstract fun bindViewModel(viewModel: T1)
+    abstract val propertyId: String
 
     // endregion
 
@@ -42,6 +40,9 @@ abstract class BaseFragment<T1 : BaseViewModel, T2 : ViewDataBinding> : Fragment
         savedInstanceState: Bundle?
     ): View {
         binding(inflater, container!!)
+        viewModel.propertyMap[propertyId]?.observe(this, Observer<Property> {
+            onReceive(it.fragmentScreenState, it.data)
+        })
         initialize()
         return binding.root
     }
@@ -49,6 +50,11 @@ abstract class BaseFragment<T1 : BaseViewModel, T2 : ViewDataBinding> : Fragment
     // endregion
 
     // region メンバ関数(初期化必須)
+
+    @LayoutRes
+    abstract fun layoutResource(): Int
+
+    abstract fun bindViewModel(viewModel: T1)
 
     private fun getVM(): T1 = (requireActivity() as BaseActivity<*, *>).viewModel as T1
 
@@ -62,8 +68,8 @@ abstract class BaseFragment<T1 : BaseViewModel, T2 : ViewDataBinding> : Fragment
         bindViewModel(viewModel)
     }
 
-    internal fun onReceive(receiverType: ReceiverType, parameter: Any? = null) =
-        receiverMap[receiverType]?.let { it(parameter) }
+    internal fun onReceive(fragmentScreenState: FragmentScreenState, data: Data) =
+        receiverMap[fragmentScreenState]?.let { it(data) }
 
     // 初期化したい処理
     open fun initialize() {}
