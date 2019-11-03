@@ -25,15 +25,15 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(MainViewMo
     override val viewModelProviderFactory: ViewModelProvider.Factory =
         MainViewModelFactory(MainProviderImpl())
 
-    override fun layoutResource() = R.layout.activity_main
+    override val layoutResource = R.layout.activity_main
 
-    override fun firstFragment() = MainTransitionState.FIRST.fragment
+    override val firstFragment = MainTransitionState.FIRST.fragment
 
     override fun bindViewModel(viewModel: MainViewModel) {
         binding.viewModel = viewModel
     }
 
-    override fun animation() = FragmentTransitionAnimation().rightToLeft()
+    override val animation = FragmentTransitionAnimation().rightToLeft()
 
     override fun initialize() {
         binding.apply {

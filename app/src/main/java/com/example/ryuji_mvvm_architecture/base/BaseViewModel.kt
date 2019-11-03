@@ -7,7 +7,7 @@ import com.example.ryuji_mvvm_architecture.main.MainTransitionState
 
 abstract class BaseViewModel : ViewModel() {
 
-    private val log = mutableListOf<String>()
+    internal val log = mutableListOf<String>()
 
     abstract val transitionState: MutableLiveData<TransitionState>
 

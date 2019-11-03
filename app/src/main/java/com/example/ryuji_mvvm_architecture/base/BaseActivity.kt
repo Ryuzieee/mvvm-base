@@ -1,7 +1,6 @@
 package com.example.ryuji_mvvm_architecture.base
 
 import android.os.Bundle
-import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
@@ -9,8 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.ryuji_mvvm_architecture.R
-import com.example.ryuji_mvvm_architecture.main.MainTransitionState
-import com.example.ryuji_mvvm_architecture.main.view.MainActivity
 import com.example.ryuji_mvvm_architecture.util.FragmentTransitionAnimation
 
 abstract class BaseActivity<T1 : BaseViewModel, T2 : ViewDataBinding>(private val VMClass: Class<T1>) :
@@ -20,14 +17,11 @@ abstract class BaseActivity<T1 : BaseViewModel, T2 : ViewDataBinding>(private va
 
     abstract val viewModelProviderFactory: ViewModelProvider.Factory
 
-    @LayoutRes
-    abstract fun layoutResource(): Int
+    abstract val layoutResource: Int
 
-    abstract fun firstFragment(): Fragment
+    abstract val firstFragment: Fragment
 
-    abstract fun bindViewModel(viewModel: T1)
-
-    abstract fun animation(): FragmentTransitionAnimation?
+    abstract val animation: FragmentTransitionAnimation?
 
     abstract val receiverMap: Map<TransitionState, (TransitionState) -> Unit>
 
@@ -36,7 +30,7 @@ abstract class BaseActivity<T1 : BaseViewModel, T2 : ViewDataBinding>(private va
     // region メンバ変数
 
     internal val binding by lazy {
-        DataBindingUtil.setContentView(this, layoutResource()) as T2
+        DataBindingUtil.setContentView(this, layoutResource) as T2
     }
 
     internal val viewModel by lazy {
@@ -55,7 +49,7 @@ abstract class BaseActivity<T1 : BaseViewModel, T2 : ViewDataBinding>(private va
             onReceive(it)
         })
         initialize()
-        if (savedInstanceState == null) createOrReplaceFragment(firstFragment())
+        if (savedInstanceState == null) createOrReplaceFragment(firstFragment)
     }
 
     override fun onBackPressed() {
@@ -75,10 +69,10 @@ abstract class BaseActivity<T1 : BaseViewModel, T2 : ViewDataBinding>(private va
     }
 
     private fun createOrReplaceFragment(fragment: Fragment) {
-        val isFirstFragment = fragment == firstFragment()
+        val isFirstFragment = fragment == firstFragment
         supportFragmentManager.beginTransaction().run {
             // 初期表示かつアニメーション不使用の場合はAnimationを無効にする
-            val animation = animation()
+            val animation = animation
             if (!isFirstFragment && animation != null) {
                 setCustomAnimations(
                     animation.enter ?: 0,
@@ -98,9 +92,14 @@ abstract class BaseActivity<T1 : BaseViewModel, T2 : ViewDataBinding>(private va
 
     // endregion
 
+    // region メンバ関数(初期化必須)
+
+    abstract fun bindViewModel(viewModel: T1)
+
+    // endregion
+
     // region メンバ関数
 
-    // 初期化したい処理
     open fun initialize() {}
 
     private fun onBack() {

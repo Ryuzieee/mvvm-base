@@ -1,5 +1,6 @@
 package com.example.ryuji_mvvm_architecture.main.view.fragment
 
+import com.example.ryuji_mvvm_architecture.R
 import com.example.ryuji_mvvm_architecture.base.BaseFragment
 import com.example.ryuji_mvvm_architecture.base.Data
 import com.example.ryuji_mvvm_architecture.base.FragmentScreenState
@@ -13,7 +14,7 @@ class FirstFragment : BaseFragment<MainViewModel, FragmentFirstBinding>() {
 
     override val receiverMap: Map<FragmentScreenState, (Data) -> Unit> = emptyMap()
 
-    override fun layoutResource() = com.example.ryuji_mvvm_architecture.R.layout.fragment_first
+    override val layoutResource = R.layout.fragment_first
 
     override fun bindViewModel(viewModel: MainViewModel) {
         binding.viewModel = viewModel

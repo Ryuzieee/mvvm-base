@@ -14,7 +14,7 @@ class SecondFragment : BaseFragment<MainViewModel, FragmentSecondBinding>() {
 
     override val receiverMap: Map<FragmentScreenState, (Data) -> Unit> = emptyMap()
 
-    override fun layoutResource() = R.layout.fragment_second
+    override val layoutResource = R.layout.fragment_second
 
     override fun bindViewModel(viewModel: MainViewModel) {
         binding.viewModel = viewModel

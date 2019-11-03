@@ -17,15 +17,15 @@ class SubActivity : BaseActivity<SubViewModel, ActivitySubBinding>(SubViewModel:
 
     override val viewModelProviderFactory: ViewModelProvider.Factory = SubViewModelFactory()
 
-    override fun layoutResource(): Int = R.layout.activity_sub
+    override val layoutResource: Int = R.layout.activity_sub
 
-    override fun firstFragment(): Fragment = SubTransitionState.SUB.fragment
+    override val firstFragment: Fragment = SubTransitionState.SUB.fragment
 
     override fun bindViewModel(viewModel: SubViewModel) {
         binding.viewModel = viewModel
     }
 
-    override fun animation(): FragmentTransitionAnimation? = null
+    override val animation: FragmentTransitionAnimation? = null
 
     override fun initialize() {
         binding.apply {

@@ -1,6 +1,7 @@
 package com.example.ryuji_mvvm_architecture.main.view.fragment
 
 import android.content.Intent
+import com.example.ryuji_mvvm_architecture.R
 import com.example.ryuji_mvvm_architecture.base.BaseFragment
 import com.example.ryuji_mvvm_architecture.base.Data
 import com.example.ryuji_mvvm_architecture.base.FragmentScreenState
@@ -18,7 +19,7 @@ class ThirdFragment : BaseFragment<MainViewModel, FragmentThirdBinding>() {
         ThirdScreenState.START_NEXT_ACTIVITY to { data -> transitionToSubActivity(data) }
     )
 
-    override fun layoutResource() = com.example.ryuji_mvvm_architecture.R.layout.fragment_third
+    override val layoutResource = R.layout.fragment_third
 
     override fun bindViewModel(viewModel: MainViewModel) {
         binding.viewModel = viewModel
