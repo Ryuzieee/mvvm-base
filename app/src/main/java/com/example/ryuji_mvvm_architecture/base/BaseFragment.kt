@@ -15,9 +15,9 @@ abstract class BaseFragment<T1 : BaseViewModel, T2 : ViewDataBinding> : Fragment
 
     abstract val layoutResource: Int
 
-    abstract val receiverMap: Map<FragmentScreenState, (Data) -> Unit>
-
     abstract val propertyId: String
+
+    abstract val receiverMap: Map<FragmentScreenState, (Data) -> Unit>
 
     // endregion
 
@@ -29,12 +29,13 @@ abstract class BaseFragment<T1 : BaseViewModel, T2 : ViewDataBinding> : Fragment
 
     // endregion
 
-    // region ライフサイクル
+    // region メンバ関数(初期化必須)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel = (requireActivity() as BaseActivity<*, *>).viewModel as T1
-    }
+    abstract fun bindViewModel(viewModel: T1)
+
+    // endregion
+
+    // region ライフサイクル
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,9 +43,10 @@ abstract class BaseFragment<T1 : BaseViewModel, T2 : ViewDataBinding> : Fragment
     ): View {
         binding = DataBindingUtil.inflate(inflater, layoutResource, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
+        viewModel = (requireActivity() as BaseActivity<*, *>).viewModel as T1
         bindViewModel(viewModel)
-        viewModel.propertyMap[propertyId]?.observe(this, Observer<Property> {
-            onReceive(it.fragmentScreenState, it.data)
+        viewModel.propertyMap[propertyId]?.observe(this, Observer<Property> { property ->
+            receiverMap[property.fragmentScreenState]?.let { it(property.data) }
         })
         initialize()
         return binding.root
@@ -52,16 +54,7 @@ abstract class BaseFragment<T1 : BaseViewModel, T2 : ViewDataBinding> : Fragment
 
     // endregion
 
-    // region メンバ関数(初期化必須)
-
-    abstract fun bindViewModel(viewModel: T1)
-
-    // endregion
-
     // region メンバ関数
-
-    private fun onReceive(fragmentScreenState: FragmentScreenState, data: Data) =
-        receiverMap[fragmentScreenState]?.let { it(data) }
 
     open fun initialize() {}
 

@@ -34,7 +34,7 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(MainViewMo
         binding.viewModel = viewModel
     }
 
-    override val animation = FragmentTransitionAnimation().rightToLeft()
+    override val transitionAnimation = FragmentTransitionAnimation().rightToLeft()
 
     override fun initialize() {
         binding.apply {

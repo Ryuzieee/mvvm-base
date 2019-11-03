@@ -25,7 +25,7 @@ class SubActivity : BaseActivity<SubViewModel, ActivitySubBinding>(SubViewModel:
         binding.viewModel = viewModel
     }
 
-    override val animation: FragmentTransitionAnimation? = null
+    override val transitionAnimation: FragmentTransitionAnimation? = null
 
     override fun initialize() {
         binding.apply {
