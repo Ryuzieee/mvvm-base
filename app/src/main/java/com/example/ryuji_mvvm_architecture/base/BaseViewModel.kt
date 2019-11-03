@@ -7,7 +7,7 @@ import com.example.ryuji_mvvm_architecture.main.MainTransitionState
 
 abstract class BaseViewModel : ViewModel() {
 
-    internal val log = mutableListOf<String>()
+    private val log = mutableListOf<String>()
 
     abstract val transitionState: MutableLiveData<TransitionState>
 
@@ -15,9 +15,9 @@ abstract class BaseViewModel : ViewModel() {
 
     abstract val propertyMap: Map<String, MutableLiveData<out Property>>
 
-    abstract val functionMap: Map<ScreenState, (() -> Unit)?>
+    abstract val functionMap: Map<ScreenState, ((Any?) -> Unit)?>
 
-    internal fun dispatch(screenState: ScreenState, dispatchData: Any? = null) {
+    internal fun dispatch(screenState: ScreenState, any: Any? = null) {
 
         // ScreenStateのログを収集
         log.add(screenState.javaClass.simpleName + "." + screenState)
@@ -33,10 +33,10 @@ abstract class BaseViewModel : ViewModel() {
         propertyMap[fragmentScreenState.id()]?.value?.let { property ->
             val newProperty = property.createNewProperty(
                 fragmentScreenState = fragmentScreenState,
-                dispatchData = if (dispatchData is Data) dispatchData else null
+                dispatchData = if (any is Data) any else null
             )
             propertyMap[fragmentScreenState.id()]?.value = newProperty
-            functionMap[fragmentScreenState]?.let { it() }
+            functionMap[fragmentScreenState]?.let { it(any) }
         }
 
     }

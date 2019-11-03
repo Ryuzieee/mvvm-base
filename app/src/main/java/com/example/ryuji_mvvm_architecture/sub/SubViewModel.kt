@@ -23,15 +23,14 @@ class SubViewModel : BaseViewModel() {
         )
     )
 
-    val subTransitionState = transitionState as MutableLiveData<SubTransitionState>
     val subProperty = propertyMap[SubScreenState.values().first().id()] as MutableLiveData<SubProperty>
 
     // endregion
 
     // region Dispatch
 
-    override val functionMap: Map<ScreenState, (() -> Unit)?> = mapOf(
-        SubScreenState.INITIAL to null
+    override val functionMap: Map<ScreenState, ((Any?) -> Unit)?> = mapOf(
+        SubScreenState.INITIAL to { _ -> null }
     )
 
     // endregion

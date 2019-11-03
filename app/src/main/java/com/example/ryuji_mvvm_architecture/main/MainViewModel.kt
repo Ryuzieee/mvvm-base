@@ -45,32 +45,32 @@ class MainViewModel(private val provider: MainProvider) : BaseViewModel() {
 
     // region Dispatch
 
-    override val functionMap: Map<ScreenState, (() -> Unit)?> = mapOf(
-        FirstScreenState.INITIAL to null,
-        FirstScreenState.NEXT to { firstScreenStateNext() },
-        SecondScreenState.INITIAL to { secondScreenStateFetchFromServer() },
-        SecondScreenState.LOADING to null,
-        SecondScreenState.FETCHED to null,
-        SecondScreenState.NEXT to { secondScreenStateNext() },
-        ThirdScreenState.INITIAL to { thirdScreenStateInitial() },
-        ThirdScreenState.START_NEXT_ACTIVITY to null
+    override val functionMap: Map<ScreenState, ((Any?) -> Unit)?> = mapOf(
+        FirstScreenState.INITIAL to { _ -> null },
+        FirstScreenState.NEXT to { any -> firstScreenStateNext(any) },
+        SecondScreenState.INITIAL to { any -> secondScreenStateFetchFromServer(any) },
+        SecondScreenState.LOADING to { _ -> null },
+        SecondScreenState.FETCHED to { _ -> null },
+        SecondScreenState.NEXT to { any -> secondScreenStateNext(any) },
+        ThirdScreenState.INITIAL to { any -> thirdScreenStateInitial(any) },
+        ThirdScreenState.START_NEXT_ACTIVITY to { _ -> null }
     )
 
-    private fun firstScreenStateNext() {
+    private fun firstScreenStateNext(any: Any?) {
         nextTransitionState()?.let { dispatch(it) }
     }
 
-    private fun secondScreenStateFetchFromServer() {
+    private fun secondScreenStateFetchFromServer(any: Any?) {
         Handler().postDelayed({
             dispatch(SecondScreenState.FETCHED, secondProperty.value?.data?.copy(text = provider.request()))
         }, 3000)
     }
 
-    private fun secondScreenStateNext() {
+    private fun secondScreenStateNext(any: Any?) {
         nextTransitionState()?.let { dispatch(it) }
     }
 
-    private fun thirdScreenStateInitial() {
+    private fun thirdScreenStateInitial(any: Any?) {
         thirdProperty.value?.data?.let { data ->
             // Observerのリストを作成
             val observerList = listOf(data.username, data.password, data.termOfUse)

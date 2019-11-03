@@ -29,13 +29,9 @@ abstract class BaseActivity<T1 : BaseViewModel, T2 : ViewDataBinding>(private va
 
     // region メンバ変数
 
-    internal val viewModel by lazy {
-        viewModelProviderFactory.create(VMClass)
-    }
+    internal val viewModel by lazy { viewModelProviderFactory.create(VMClass) }
 
-    internal val binding by lazy {
-        DataBindingUtil.setContentView(this, layoutResource) as T2
-    }
+    internal val binding by lazy { DataBindingUtil.setContentView(this, layoutResource) as T2 }
 
     // endregion
 
@@ -51,7 +47,7 @@ abstract class BaseActivity<T1 : BaseViewModel, T2 : ViewDataBinding>(private va
         super.onCreate(savedInstanceState)
         bindViewModel(viewModel)
         viewModel.transitionState.observe(this, Observer<TransitionState> { transitionState ->
-            transition(transitionState)
+            goBackOrForward(transitionState)
             receiverMap[transitionState]?.let { it(transitionState) }
         })
         initialize()
@@ -59,16 +55,16 @@ abstract class BaseActivity<T1 : BaseViewModel, T2 : ViewDataBinding>(private va
     }
 
     override fun onBackPressed() {
-        viewModel.previousTransitionState()?.let { viewModel.dispatch(it) } ?: onBack()
+        viewModel.previousTransitionState()?.let { viewModel.dispatch(it) } ?: super.onBackPressed()
     }
 
     // endregion
 
     // region フラグメント管理
 
-    private fun transition(transitionState: TransitionState) {
+    private fun goBackOrForward(transitionState: TransitionState) {
         if (viewModel.isBack(supportFragmentManager)) {
-            popBackStack()
+            supportFragmentManager.popBackStack()
             return
         }
         createOrReplaceFragment(transitionState.fragment)
@@ -94,21 +90,11 @@ abstract class BaseActivity<T1 : BaseViewModel, T2 : ViewDataBinding>(private va
         }
     }
 
-    private fun popBackStack() = supportFragmentManager.popBackStack()
-
     // endregion
 
     // region メンバ関数
 
     open fun initialize() {}
-
-    private fun onBack() {
-        if (supportFragmentManager.backStackEntryCount < 1) {
-            super.onBackPressed()
-        } else {
-            popBackStack()
-        }
-    }
 
     // endregion
 
