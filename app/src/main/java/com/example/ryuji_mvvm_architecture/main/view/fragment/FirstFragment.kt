@@ -1,11 +1,11 @@
-package com.example.ryuji_mvvm_architecture.main.fragment
+package com.example.ryuji_mvvm_architecture.main.view.fragment
 
 import com.example.ryuji_mvvm_architecture.base.BaseFragment
 import com.example.ryuji_mvvm_architecture.base.ReceiverType
 import com.example.ryuji_mvvm_architecture.databinding.FragmentFirstBinding
 import com.example.ryuji_mvvm_architecture.main.FirstScreenState
 import com.example.ryuji_mvvm_architecture.main.MainViewModel
-import com.example.ryuji_mvvm_architecture.main.fragment.FirstFragment.FirstReceiverType.CLICK_NEXT_BUTTON
+import com.example.ryuji_mvvm_architecture.main.view.fragment.FirstFragment.FirstReceiverType.CLICK_NEXT_BUTTON
 
 class FirstFragment : BaseFragment<MainViewModel, FragmentFirstBinding>() {
 

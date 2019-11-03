@@ -13,19 +13,7 @@ import com.example.ryuji_mvvm_architecture.util.FragmentTransitionAnimation
 abstract class BaseActivity<T1 : BaseViewModel, T2 : ViewDataBinding>(private val VMClass: Class<T1>) :
     AppCompatActivity() {
 
-    // region Property
-
-    val binding by lazy {
-        DataBindingUtil.setContentView(this, layoutResource()) as T2
-    }
-
-    val viewModel by lazy {
-        viewModelProviderFactory.create(VMClass)
-    }
-
-    // endregion
-
-    // region Must Implement For Initialize
+    // region メンバ変数(初期化必須)
 
     abstract val receiverMap: Map<ReceiverType, (Any?) -> Unit>
 
@@ -40,12 +28,21 @@ abstract class BaseActivity<T1 : BaseViewModel, T2 : ViewDataBinding>(private va
 
     abstract fun animation(): FragmentTransitionAnimation?
 
-    // 初期化したい処理
-    abstract fun initialize()
+    // endregion
+
+    // region メンバ変数
+
+    internal val binding by lazy {
+        DataBindingUtil.setContentView(this, layoutResource()) as T2
+    }
+
+    internal val viewModel by lazy {
+        viewModelProviderFactory.create(VMClass)
+    }
 
     // endregion
 
-    // region Life Cycle
+    // region ライフサイクル
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,17 +57,9 @@ abstract class BaseActivity<T1 : BaseViewModel, T2 : ViewDataBinding>(private va
 
     // endregion
 
-    private fun onBack() {
-        if (supportFragmentManager.backStackEntryCount < 1) {
-            super.onBackPressed()
-        } else {
-            back()
-        }
-    }
+    // region フラグメント管理
 
-    // region Fragment Control
-
-    open fun transition(transitionState: TransitionState) {
+    internal fun transition(transitionState: TransitionState) {
         if (viewModel.isBack(supportFragmentManager)) {
             back()
             return
@@ -78,7 +67,7 @@ abstract class BaseActivity<T1 : BaseViewModel, T2 : ViewDataBinding>(private va
         createOrReplaceFragment(transitionState.fragment)
     }
 
-    open fun createOrReplaceFragment(fragment: Fragment) {
+    private fun createOrReplaceFragment(fragment: Fragment) {
         val isFirstFragment = fragment == firstFragment()
         supportFragmentManager.beginTransaction().run {
             // 初期表示かつアニメーション不使用の場合はAnimationを無効にする
@@ -98,14 +87,25 @@ abstract class BaseActivity<T1 : BaseViewModel, T2 : ViewDataBinding>(private va
         }
     }
 
-    open fun back() = supportFragmentManager.popBackStack()
+    private fun back() = supportFragmentManager.popBackStack()
 
     // endregion
 
-    // region Option
+    // region メンバ関数
 
-    open fun onReceive(receiverType: ReceiverType, parameter: Any? = null) =
+    internal fun onReceive(receiverType: ReceiverType, parameter: Any? = null) =
         receiverMap[receiverType]?.let { it(parameter) }
+
+    // 初期化したい処理
+    open fun initialize() {}
+
+    private fun onBack() {
+        if (supportFragmentManager.backStackEntryCount < 1) {
+            super.onBackPressed()
+        } else {
+            back()
+        }
+    }
 
     // endregion
 

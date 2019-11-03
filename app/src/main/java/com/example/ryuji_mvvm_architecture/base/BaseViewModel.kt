@@ -7,7 +7,7 @@ import com.example.ryuji_mvvm_architecture.main.MainTransitionState
 
 abstract class BaseViewModel : ViewModel() {
 
-    open val log = mutableListOf<String>()
+    private val log = mutableListOf<String>()
 
     abstract val transitionState: MutableLiveData<TransitionState>
 
@@ -17,26 +17,33 @@ abstract class BaseViewModel : ViewModel() {
 
     abstract val functionMap: Map<ScreenState, (() -> Unit)?>
 
-    open fun dispatch(screenState: ScreenState, dispatchData: Any? = null) {
+    internal fun dispatch(screenState: ScreenState, dispatchData: Any? = null) {
+
+        // ScreenStateのログを収集
         log.add(screenState.javaClass.simpleName + "." + screenState)
-        when (screenState) {
-            is TransitionState -> transitionState.value = screenState
-            is FragmentScreenState -> {
-                propertyMap[screenState.id()]?.value?.let { property ->
-                    val newProperty = property.createNewProperty(
-                        fragmentScreenState = screenState,
-                        dispatchData = if (dispatchData is Data) dispatchData else null
-                    )
-                    propertyMap[screenState.id()]?.value = newProperty
-                    functionMap[screenState]?.let { it() }
-                }
-            }
+
+        // TransitionStateを更新してリターン
+        if (screenState is TransitionState) {
+            transitionState.value = screenState
+            return
         }
+
+        // Propertyを更新
+        val fragmentScreenState = screenState as FragmentScreenState
+        propertyMap[fragmentScreenState.id()]?.value?.let { property ->
+            val newProperty = property.createNewProperty(
+                fragmentScreenState = fragmentScreenState,
+                dispatchData = if (dispatchData is Data) dispatchData else null
+            )
+            propertyMap[fragmentScreenState.id()]?.value = newProperty
+            functionMap[fragmentScreenState]?.let { it() }
+        }
+
     }
 
-    open fun nextTransitionState(): TransitionState? {
+    // 1つ次のTransitionStateを返却する
+    internal fun nextTransitionState(): TransitionState? {
         val current = transitionStateList.indexOf(transitionState.value)
-        // 現在のindexがMAX未満である場合、現在の表示を最終ページ以外であると見なし、indexを+1したページを返却する
         return if (current < transitionStateList.lastIndex) {
             transitionStateList[current + 1]
         } else {
@@ -44,9 +51,9 @@ abstract class BaseViewModel : ViewModel() {
         }
     }
 
-    open fun previousTransitionState(): TransitionState? {
+    // 1つ前のTransitionStateを返却する
+    internal fun previousTransitionState(): TransitionState? {
         val current = MainTransitionState.values().indexOf(transitionState.value)
-        // 現在のindexが1以上である場合、現在の表示を2ページ目以降と見なし、indexを-1したページを返却する
         return if (current > 0) {
             transitionStateList[current - 1]
         } else {
@@ -54,8 +61,8 @@ abstract class BaseViewModel : ViewModel() {
         }
     }
 
-    open fun isBack(supportFragmentManager: FragmentManager): Boolean {
-        // TransitionStateのindexが現在のStateよりも小さい場合は画面を戻ると判断しback
+    // 1つ前のTransitionStateに戻れるか否かを返却する
+    internal fun isBack(supportFragmentManager: FragmentManager): Boolean {
         val new = transitionStateList.indexOf(transitionState.value)
         val old = transitionStateList.indexOfFirst {
             it.fragment == supportFragmentManager.fragments.first()

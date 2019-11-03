@@ -1,4 +1,4 @@
-package com.example.ryuji_mvvm_architecture.main.fragment
+package com.example.ryuji_mvvm_architecture.main.view.fragment
 
 import com.example.ryuji_mvvm_architecture.R
 import com.example.ryuji_mvvm_architecture.base.BaseFragment
@@ -6,7 +6,7 @@ import com.example.ryuji_mvvm_architecture.base.ReceiverType
 import com.example.ryuji_mvvm_architecture.databinding.FragmentSecondBinding
 import com.example.ryuji_mvvm_architecture.main.MainViewModel
 import com.example.ryuji_mvvm_architecture.main.SecondScreenState
-import com.example.ryuji_mvvm_architecture.main.fragment.SecondFragment.SecondReceiverType.CLICK_NEXT_BUTTON
+import com.example.ryuji_mvvm_architecture.main.view.fragment.SecondFragment.SecondReceiverType.CLICK_NEXT_BUTTON
 
 class SecondFragment : BaseFragment<MainViewModel, FragmentSecondBinding>() {
 

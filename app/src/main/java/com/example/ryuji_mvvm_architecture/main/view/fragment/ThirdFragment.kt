@@ -1,4 +1,4 @@
-package com.example.ryuji_mvvm_architecture.main.fragment
+package com.example.ryuji_mvvm_architecture.main.view.fragment
 
 import android.content.Intent
 import androidx.lifecycle.Observer

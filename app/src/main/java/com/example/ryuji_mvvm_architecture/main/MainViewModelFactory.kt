@@ -2,6 +2,7 @@ package com.example.ryuji_mvvm_architecture.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.ryuji_mvvm_architecture.main.provider.MainProvider
 
 class MainViewModelFactory
 constructor(private val provider: MainProvider) :

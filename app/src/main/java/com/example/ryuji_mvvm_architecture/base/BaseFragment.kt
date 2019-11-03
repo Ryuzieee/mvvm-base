@@ -11,30 +11,26 @@ import androidx.fragment.app.Fragment
 
 abstract class BaseFragment<T1 : BaseViewModel, T2 : ViewDataBinding> : Fragment() {
 
-    // region Property
-
-    lateinit var viewModel: T1
-
-    open lateinit var binding: T2
-
-    // endregion
-
-    // region Must Implement For Initialize
+    // region メンバ変数(初期化必須)
 
     abstract val receiverMap: Map<ReceiverType, (Any?) -> Unit>
-
 
     @LayoutRes
     abstract fun layoutResource(): Int
 
     abstract fun bindViewModel(viewModel: T1)
 
-    // 初期化したい処理
-    abstract fun initialize()
+    // endregion
+
+    // region メンバ変数
+
+    lateinit var viewModel: T1
+
+    internal lateinit var binding: T2
 
     // endregion
 
-    // region Life Cycle
+    // region ライフサイクル
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +48,13 @@ abstract class BaseFragment<T1 : BaseViewModel, T2 : ViewDataBinding> : Fragment
 
     // endregion
 
-    // region Private Function
+    // region メンバ関数(初期化必須)
+
+    private fun getVM(): T1 = (requireActivity() as BaseActivity<*, *>).viewModel as T1
+
+    // endregion
+
+    // region メンバ関数
 
     private fun binding(inflater: LayoutInflater, container: ViewGroup) {
         binding = DataBindingUtil.inflate(inflater, layoutResource(), container, false)
@@ -60,14 +62,11 @@ abstract class BaseFragment<T1 : BaseViewModel, T2 : ViewDataBinding> : Fragment
         bindViewModel(viewModel)
     }
 
-    private fun getVM(): T1 = (requireActivity() as BaseActivity<*, *>).viewModel as T1
-
-    // endregion
-
-    // region Option
-
-    open fun onReceive(receiverType: ReceiverType, parameter: Any? = null) =
+    internal fun onReceive(receiverType: ReceiverType, parameter: Any? = null) =
         receiverMap[receiverType]?.let { it(parameter) }
+
+    // 初期化したい処理
+    open fun initialize() {}
 
     // endregion
 

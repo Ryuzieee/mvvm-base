@@ -6,6 +6,7 @@ import com.example.ryuji_mvvm_architecture.base.BaseViewModel
 import com.example.ryuji_mvvm_architecture.base.Property
 import com.example.ryuji_mvvm_architecture.base.ScreenState
 import com.example.ryuji_mvvm_architecture.base.TransitionState
+import com.example.ryuji_mvvm_architecture.main.provider.MainProvider
 
 class MainViewModel(private val provider: MainProvider) : BaseViewModel() {
 

@@ -4,9 +4,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.ryuji_mvvm_architecture.base.*
-import com.example.ryuji_mvvm_architecture.main.fragment.FirstFragment
-import com.example.ryuji_mvvm_architecture.main.fragment.SecondFragment
-import com.example.ryuji_mvvm_architecture.main.fragment.ThirdFragment
+import com.example.ryuji_mvvm_architecture.main.view.fragment.FirstFragment
+import com.example.ryuji_mvvm_architecture.main.view.fragment.SecondFragment
+import com.example.ryuji_mvvm_architecture.main.view.fragment.ThirdFragment
 
 // region MainTransitionState
 enum class MainTransitionState(override val fragment: Fragment, val title: String, val progress: Int) :

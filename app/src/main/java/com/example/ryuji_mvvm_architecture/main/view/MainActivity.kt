@@ -1,4 +1,4 @@
-package com.example.ryuji_mvvm_architecture.main
+package com.example.ryuji_mvvm_architecture.main.view
 
 import android.animation.ObjectAnimator
 import android.view.animation.DecelerateInterpolator
@@ -9,7 +9,11 @@ import com.example.ryuji_mvvm_architecture.R
 import com.example.ryuji_mvvm_architecture.base.BaseActivity
 import com.example.ryuji_mvvm_architecture.base.ReceiverType
 import com.example.ryuji_mvvm_architecture.databinding.ActivityMainBinding
-import com.example.ryuji_mvvm_architecture.main.MainActivity.MainReceiverType.*
+import com.example.ryuji_mvvm_architecture.main.MainTransitionState
+import com.example.ryuji_mvvm_architecture.main.MainViewModel
+import com.example.ryuji_mvvm_architecture.main.MainViewModelFactory
+import com.example.ryuji_mvvm_architecture.main.provider.MainProviderImpl
+import com.example.ryuji_mvvm_architecture.main.view.MainActivity.MainReceiverType.*
 import com.example.ryuji_mvvm_architecture.util.FragmentTransitionAnimation
 
 class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(MainViewModel::class.java) {
@@ -26,7 +30,8 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(MainViewMo
         TRANSITION to { parameter -> transition(parameter as MainTransitionState) }
     )
 
-    override val viewModelProviderFactory: ViewModelProvider.Factory = MainViewModelFactory(MainProviderImpl())
+    override val viewModelProviderFactory: ViewModelProvider.Factory =
+        MainViewModelFactory(MainProviderImpl())
 
     override fun layoutResource() = R.layout.activity_main
 
