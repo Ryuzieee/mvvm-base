@@ -3,7 +3,6 @@ package com.example.ryuji_mvvm_architecture.base
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.ryuji_mvvm_architecture.main.MainTransitionState
 
 abstract class BaseViewModel : ViewModel() {
 
@@ -53,7 +52,7 @@ abstract class BaseViewModel : ViewModel() {
 
     // 1つ前のTransitionStateを返却する
     internal fun previousTransitionState(): TransitionState? {
-        val current = MainTransitionState.values().indexOf(transitionState.value)
+        val current = transitionStateList.indexOf(transitionState.value)
         return if (current > 0) {
             transitionStateList[current - 1]
         } else {
