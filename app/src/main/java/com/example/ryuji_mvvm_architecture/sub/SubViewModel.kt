@@ -29,7 +29,7 @@ class SubViewModel : BaseViewModel() {
 
     // region Dispatch
 
-    override val functionMap: Map<ScreenState, ((Any?) -> Unit)?> = mapOf(
+    override val businessLogicMap: Map<ScreenState, ((Any?) -> Unit)?> = mapOf(
         SubScreenState.INITIAL to { _ -> null }
     )
 

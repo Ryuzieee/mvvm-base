@@ -15,7 +15,7 @@ abstract class BaseViewModel : ViewModel() {
 
     abstract val propertyMap: Map<String, MutableLiveData<out Property>>
 
-    abstract val functionMap: Map<ScreenState, ((Any?) -> Unit)?>
+    abstract val businessLogicMap: Map<ScreenState, ((Any?) -> Unit)?>
 
     internal fun dispatch(screenState: ScreenState, any: Any? = null) {
 
@@ -32,11 +32,11 @@ abstract class BaseViewModel : ViewModel() {
         val fragmentScreenState = screenState as FragmentScreenState
         propertyMap[fragmentScreenState.id()]?.value?.let { property ->
             val newProperty = property.createNewProperty(
-                fragmentScreenState = fragmentScreenState,
-                dispatchData = if (any is Data) any else null
+                screenState = fragmentScreenState,
+                data = if (any is Data) any else null
             )
             propertyMap[fragmentScreenState.id()]?.value = newProperty
-            functionMap[fragmentScreenState]?.let { it(any) }
+            businessLogicMap[fragmentScreenState]?.let { it(any) }
         }
 
     }

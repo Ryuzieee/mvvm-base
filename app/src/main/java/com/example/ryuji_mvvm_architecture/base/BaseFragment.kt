@@ -46,7 +46,7 @@ abstract class BaseFragment<T1 : BaseViewModel, T2 : ViewDataBinding> : Fragment
         viewModel = (requireActivity() as BaseActivity<*, *>).viewModel as T1
         bindViewModel(viewModel)
         viewModel.propertyMap[propertyId]?.observe(this, Observer<Property> { property ->
-            receiverMap[property.fragmentScreenState]?.let { it(property.data) }
+            receiverMap[property.screenState]?.let { it(property.data) }
         })
         initialize()
         return binding.root

@@ -6,7 +6,7 @@ import com.example.ryuji_mvvm_architecture.base.FragmentScreenState
 import com.example.ryuji_mvvm_architecture.base.Property
 import com.example.ryuji_mvvm_architecture.base.TransitionState
 
-// region MainTransitionState
+// region SubTransitionState
 enum class SubTransitionState(override val fragment: Fragment) :
     TransitionState {
     SUB(SubFragment());
@@ -19,16 +19,16 @@ enum class SubTransitionState(override val fragment: Fragment) :
 enum class SubScreenState : FragmentScreenState {
     INITIAL;
 
-    override fun id() = javaClass.simpleName
+    override fun id(): String = javaClass.simpleName
 }
 
 data class SubData(val text: String = "DEFAULT") : Data
 
-data class SubProperty(override val fragmentScreenState: SubScreenState, override val data: SubData) : Property {
-    override fun createNewProperty(fragmentScreenState: FragmentScreenState, dispatchData: Data?): Property {
+data class SubProperty(override val screenState: SubScreenState, override val data: SubData) : Property {
+    override fun createNewProperty(screenState: FragmentScreenState, data: Data?): Property {
         return this.copy(
-            fragmentScreenState = fragmentScreenState as SubScreenState,
-            data = dispatchData?.let { it as SubData } ?: data)
+            screenState = screenState as SubScreenState,
+            data = data?.let { it as SubData } ?: this.data)
     }
 }
 // endregion

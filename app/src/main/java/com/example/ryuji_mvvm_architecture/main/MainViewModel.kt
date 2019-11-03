@@ -45,7 +45,7 @@ class MainViewModel(private val provider: MainProvider) : BaseViewModel() {
 
     // region Dispatch
 
-    override val functionMap: Map<ScreenState, ((Any?) -> Unit)?> = mapOf(
+    override val businessLogicMap: Map<ScreenState, ((Any?) -> Unit)?> = mapOf(
         FirstScreenState.INITIAL to { _ -> null },
         FirstScreenState.NEXT to { any -> firstScreenStateNext(any) },
         SecondScreenState.INITIAL to { any -> secondScreenStateFetchFromServer(any) },

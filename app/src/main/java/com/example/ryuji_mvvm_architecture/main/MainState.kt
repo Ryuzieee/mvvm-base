@@ -24,16 +24,16 @@ enum class FirstScreenState : FragmentScreenState {
     INITIAL,
     NEXT;
 
-    override fun id() = javaClass.simpleName
+    override fun id(): String = javaClass.simpleName
 }
 
 data class FirstData(val text: String = "DEFAULT") : Data
 
-data class FirstProperty(override val fragmentScreenState: FirstScreenState, override val data: FirstData) : Property {
-    override fun createNewProperty(fragmentScreenState: FragmentScreenState, dispatchData: Data?): Property {
+data class FirstProperty(override val screenState: FirstScreenState, override val data: FirstData) : Property {
+    override fun createNewProperty(screenState: FragmentScreenState, data: Data?): Property {
         return this.copy(
-            fragmentScreenState = fragmentScreenState as FirstScreenState,
-            data = dispatchData?.let { it as FirstData } ?: data)
+            screenState = screenState as FirstScreenState,
+            data = data?.let { it as FirstData } ?: this.data)
     }
 }
 // endregion
@@ -45,21 +45,21 @@ enum class SecondScreenState : FragmentScreenState {
     FETCHED,
     NEXT;
 
-    override fun id() = javaClass.simpleName
+    override fun id(): String = javaClass.simpleName
 }
 
 data class SecondData(val text: String = "DEFAULT") : Data
 
-data class SecondProperty(override val fragmentScreenState: SecondScreenState, override val data: SecondData) :
+data class SecondProperty(override val screenState: SecondScreenState, override val data: SecondData) :
     Property {
-    override fun createNewProperty(fragmentScreenState: FragmentScreenState, dispatchData: Data?): Property {
+    override fun createNewProperty(screenState: FragmentScreenState, data: Data?): Property {
         return this.copy(
-            fragmentScreenState = fragmentScreenState as SecondScreenState,
-            data = dispatchData?.let { it as SecondData } ?: data)
+            screenState = screenState as SecondScreenState,
+            data = data?.let { it as SecondData } ?: this.data)
     }
 
     fun isLoading(): Boolean {
-        return when (fragmentScreenState) {
+        return when (screenState) {
             SecondScreenState.INITIAL, SecondScreenState.LOADING -> true
             SecondScreenState.FETCHED, SecondScreenState.NEXT -> false
         }
@@ -72,7 +72,7 @@ enum class ThirdScreenState : ScreenState, FragmentScreenState {
     INITIAL,
     START_NEXT_ACTIVITY;
 
-    override fun id() = javaClass.simpleName
+    override fun id(): String = javaClass.simpleName
 }
 
 data class ThirdData(
@@ -84,11 +84,11 @@ data class ThirdData(
     fun isValid() = !username.value.isNullOrBlank() && !password.value.isNullOrBlank() && termOfUse.value == true
 }
 
-data class ThirdProperty(override val fragmentScreenState: ThirdScreenState, override val data: ThirdData) : Property {
-    override fun createNewProperty(fragmentScreenState: FragmentScreenState, dispatchData: Data?): Property {
+data class ThirdProperty(override val screenState: ThirdScreenState, override val data: ThirdData) : Property {
+    override fun createNewProperty(screenState: FragmentScreenState, data: Data?): Property {
         return this.copy(
-            fragmentScreenState = fragmentScreenState as ThirdScreenState,
-            data = dispatchData?.let { it as ThirdData } ?: data)
+            screenState = screenState as ThirdScreenState,
+            data = data?.let { it as ThirdData } ?: this.data)
     }
 }
 

@@ -4,8 +4,6 @@ import androidx.fragment.app.Fragment
 
 interface ScreenState
 
-interface Data
-
 interface TransitionState : ScreenState {
     val fragment: Fragment
 }
@@ -14,8 +12,10 @@ interface FragmentScreenState : ScreenState {
     fun id(): String
 }
 
+interface Data
+
 interface Property {
-    val fragmentScreenState: FragmentScreenState
+    val screenState: FragmentScreenState
     val data: Data
-    fun createNewProperty(fragmentScreenState: FragmentScreenState, dispatchData: Data?): Property
+    fun createNewProperty(screenState: FragmentScreenState, data: Data?): Property
 }
