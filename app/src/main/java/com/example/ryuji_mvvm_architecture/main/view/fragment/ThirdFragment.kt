@@ -13,13 +13,13 @@ import com.example.ryuji_mvvm_architecture.sub.SubActivity
 
 class ThirdFragment : BaseFragment<MainViewModel, FragmentThirdBinding>() {
 
+    override val layoutResource = R.layout.fragment_third
+
     override val propertyId: String = ThirdScreenState.INITIAL.id()
 
-    override val receiverMap: Map<FragmentScreenState, (Data) -> Unit> = mapOf(
+    override val observerMap: Map<FragmentScreenState, (Data) -> Unit> = mapOf(
         ThirdScreenState.START_NEXT_ACTIVITY to { data -> transitionToSubActivity(data) }
     )
-
-    override val layoutResource = R.layout.fragment_third
 
     override fun bindViewModel(viewModel: MainViewModel) {
         binding.viewModel = viewModel

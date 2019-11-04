@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.ryuji_mvvm_architecture.R
 import com.example.ryuji_mvvm_architecture.util.FragmentTransitionAnimation
 
-abstract class BaseActivity<T1 : BaseViewModel, T2 : ViewDataBinding>(private val VMClass: Class<T1>) :
+abstract class BaseActivity<T1 : BaseViewModel, T2 : ViewDataBinding>(private val viewModelClass: Class<T1>) :
     AppCompatActivity() {
 
     // region メンバ変数(初期化必須)
@@ -23,13 +23,13 @@ abstract class BaseActivity<T1 : BaseViewModel, T2 : ViewDataBinding>(private va
 
     abstract val viewModelProviderFactory: ViewModelProvider.Factory
 
-    abstract val receiverMap: Map<TransitionState, (TransitionState) -> Unit>
+    abstract val observerMap: Map<TransitionState, (TransitionState) -> Unit>
 
     // endregion
 
     // region メンバ変数
 
-    internal val viewModel by lazy { viewModelProviderFactory.create(VMClass) }
+    internal val viewModel by lazy { viewModelProviderFactory.create(viewModelClass) }
 
     internal val binding by lazy { DataBindingUtil.setContentView(this, layoutResource) as T2 }
 
@@ -48,7 +48,7 @@ abstract class BaseActivity<T1 : BaseViewModel, T2 : ViewDataBinding>(private va
         bindViewModel(viewModel)
         viewModel.transitionState.observe(this, Observer<TransitionState> { transitionState ->
             goBackOrForward(transitionState)
-            receiverMap[transitionState]?.let { it(transitionState) }
+            observerMap[transitionState]?.let { it(transitionState) }
         })
         initialize()
         if (savedInstanceState == null) createOrReplaceFragment(firstFragment)
@@ -63,10 +63,12 @@ abstract class BaseActivity<T1 : BaseViewModel, T2 : ViewDataBinding>(private va
     // region フラグメント管理
 
     private fun goBackOrForward(transitionState: TransitionState) {
+        // Back
         if (viewModel.isBack(supportFragmentManager)) {
             supportFragmentManager.popBackStack()
             return
         }
+        // Forward
         createOrReplaceFragment(transitionState.fragment)
     }
 
@@ -77,10 +79,10 @@ abstract class BaseActivity<T1 : BaseViewModel, T2 : ViewDataBinding>(private va
             val animation = transitionAnimation
             if (!isFirstFragment && animation != null) {
                 setCustomAnimations(
-                    animation.enter ?: 0,
-                    animation.exit ?: 0,
-                    animation.popEnter ?: 0,
-                    animation.popExit ?: 0
+                    animation.enter,
+                    animation.exit,
+                    animation.popEnter,
+                    animation.popExit
                 )
             }
             replace(R.id.container, fragment)

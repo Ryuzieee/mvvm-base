@@ -10,11 +10,11 @@ import com.example.ryuji_mvvm_architecture.main.SecondScreenState
 
 class SecondFragment : BaseFragment<MainViewModel, FragmentSecondBinding>() {
 
+    override val layoutResource = R.layout.fragment_second
+
     override val propertyId: String = SecondScreenState.INITIAL.id()
 
-    override val receiverMap: Map<FragmentScreenState, (Data) -> Unit> = emptyMap()
-
-    override val layoutResource = R.layout.fragment_second
+    override val observerMap: Map<FragmentScreenState, (Data) -> Unit> = emptyMap()
 
     override fun bindViewModel(viewModel: MainViewModel) {
         binding.viewModel = viewModel

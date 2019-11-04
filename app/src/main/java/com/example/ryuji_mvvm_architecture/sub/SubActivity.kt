@@ -11,21 +11,21 @@ import com.example.ryuji_mvvm_architecture.util.FragmentTransitionAnimation
 
 class SubActivity : BaseActivity<SubViewModel, ActivitySubBinding>(SubViewModel::class.java) {
 
-    override val receiverMap: Map<TransitionState, (TransitionState) -> Unit> = mapOf(
-        SubTransitionState.SUB to { transitionState -> updateToolbar(transitionState as SubTransitionState) }
-    )
-
-    override val viewModelProviderFactory: ViewModelProvider.Factory = SubViewModelFactory()
-
     override val layoutResource: Int = R.layout.activity_sub
 
     override val firstFragment: Fragment = SubTransitionState.SUB.fragment
 
+    override val transitionAnimation: FragmentTransitionAnimation? = null
+
+    override val viewModelProviderFactory: ViewModelProvider.Factory = SubViewModelFactory()
+
+    override val observerMap: Map<TransitionState, (TransitionState) -> Unit> = mapOf(
+        SubTransitionState.SUB to { transitionState -> updateToolbar(transitionState as SubTransitionState) }
+    )
+
     override fun bindViewModel(viewModel: SubViewModel) {
         binding.viewModel = viewModel
     }
-
-    override val transitionAnimation: FragmentTransitionAnimation? = null
 
     override fun initialize() {
         binding.apply {
@@ -37,8 +37,6 @@ class SubActivity : BaseActivity<SubViewModel, ActivitySubBinding>(SubViewModel:
     }
 
     private fun updateToolbar(subTransitionState: SubTransitionState) {
-        binding.apply {
-            toolbarBack.isVisible = !subTransitionState.isFirstFragment()
-        }
+        binding.toolbarBack.isVisible = !subTransitionState.isFirstFragment()
     }
 }

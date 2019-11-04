@@ -10,11 +10,11 @@ import com.example.ryuji_mvvm_architecture.main.MainViewModel
 
 class FirstFragment : BaseFragment<MainViewModel, FragmentFirstBinding>() {
 
+    override val layoutResource = R.layout.fragment_first
+
     override val propertyId: String = FirstScreenState.INITIAL.id()
 
-    override val receiverMap: Map<FragmentScreenState, (Data) -> Unit> = emptyMap()
-
-    override val layoutResource = R.layout.fragment_first
+    override val observerMap: Map<FragmentScreenState, (Data) -> Unit> = emptyMap()
 
     override fun bindViewModel(viewModel: MainViewModel) {
         binding.viewModel = viewModel

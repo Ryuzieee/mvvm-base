@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 
 abstract class BaseViewModel : ViewModel() {
 
-    private val log = mutableListOf<String>()
+    // region メンバ変数(初期化必須)
 
     abstract val transitionState: MutableLiveData<TransitionState>
 
@@ -15,6 +15,16 @@ abstract class BaseViewModel : ViewModel() {
     abstract val propertyMap: Map<String, MutableLiveData<out Property>>
 
     abstract val businessLogicMap: Map<ScreenState, ((Any?) -> Unit)?>
+
+    // endregion
+
+    // region メンバ変数
+
+    private val log = mutableListOf<String>()
+
+    // endregion
+
+    // region 公開するメンバ関数
 
     internal fun dispatch(screenState: ScreenState, any: Any? = null) {
 
@@ -68,4 +78,7 @@ abstract class BaseViewModel : ViewModel() {
         }
         return old > new
     }
+
+    // endregion
+
 }

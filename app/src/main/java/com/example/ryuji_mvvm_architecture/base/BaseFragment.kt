@@ -17,7 +17,7 @@ abstract class BaseFragment<T1 : BaseViewModel, T2 : ViewDataBinding> : Fragment
 
     abstract val propertyId: String
 
-    abstract val receiverMap: Map<FragmentScreenState, (Data) -> Unit>
+    abstract val observerMap: Map<FragmentScreenState, (Data) -> Unit>
 
     // endregion
 
@@ -46,7 +46,7 @@ abstract class BaseFragment<T1 : BaseViewModel, T2 : ViewDataBinding> : Fragment
         viewModel = (requireActivity() as BaseActivity<*, *>).viewModel as T1
         bindViewModel(viewModel)
         viewModel.propertyMap[propertyId]?.observe(this, Observer<Property> { property ->
-            receiverMap[property.screenState]?.let { it(property.data) }
+            observerMap[property.screenState]?.let { it(property.data) }
         })
         initialize()
         return binding.root

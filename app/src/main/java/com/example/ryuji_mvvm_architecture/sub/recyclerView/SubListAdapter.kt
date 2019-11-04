@@ -6,11 +6,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ryuji_mvvm_architecture.databinding.ItemCoupleCardBinding
 
-class CoupleListAdapter
+class SubListAdapter
 constructor(
     private val mContext: Context,
-    private val itemsList: List<String>
-) : RecyclerView.Adapter<CoupleListAdapter.BindingHolder>() {
+    private val mItemsList: List<String>
+) : RecyclerView.Adapter<SubListAdapter.BindingHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BindingHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -19,16 +19,16 @@ constructor(
     }
 
     override fun onBindViewHolder(holder: BindingHolder, position: Int) {
-        val urlModel = UrlModel(itemsList[position])
+        val urlModel = UrlModel(mItemsList[position])
         holder.binding.apply {
             model = urlModel
             originalLinearLayout.setOnClickListener {}
         }
     }
 
-    override fun getItemCount(): Int = itemsList.size
+    override fun getItemCount(): Int = mItemsList.size
 
     class BindingHolder(var binding: ItemCoupleCardBinding) : RecyclerView.ViewHolder(binding.root)
 }
 
-data class UrlModel(val name: String)
+data class UrlModel(val url: String)

@@ -8,9 +8,9 @@ import com.example.ryuji_mvvm_architecture.base.ScreenState
 import com.example.ryuji_mvvm_architecture.base.TransitionState
 import com.example.ryuji_mvvm_architecture.main.provider.MainProvider
 
-class MainViewModel(private val provider: MainProvider) : BaseViewModel() {
+class MainViewModel(private val mProvider: MainProvider) : BaseViewModel() {
 
-    // region LiveData
+    // region メンバ変数(初期化必須)
 
     override val transitionState: MutableLiveData<TransitionState> = MutableLiveData(MainTransitionState.FIRST)
 
@@ -18,32 +18,15 @@ class MainViewModel(private val provider: MainProvider) : BaseViewModel() {
 
     override val propertyMap: Map<String, MutableLiveData<out Property>> = mapOf(
         FirstScreenState.values().first().id() to MutableLiveData<FirstProperty>(
-            FirstProperty(
-                FirstScreenState.INITIAL,
-                FirstData()
-            )
+            FirstProperty(FirstScreenState.INITIAL, FirstData())
         ),
         SecondScreenState.values().first().id() to MutableLiveData<SecondProperty>(
-            SecondProperty(
-                SecondScreenState.INITIAL,
-                SecondData()
-            )
+            SecondProperty(SecondScreenState.INITIAL, SecondData())
         ),
         ThirdScreenState.values().first().id() to MutableLiveData<ThirdProperty>(
-            ThirdProperty(
-                ThirdScreenState.INITIAL,
-                ThirdData()
-            )
+            ThirdProperty(ThirdScreenState.INITIAL, ThirdData())
         )
     )
-
-    val firstProperty = propertyMap[FirstScreenState.values().first().id()] as MutableLiveData<FirstProperty>
-    val secondProperty = propertyMap[SecondScreenState.values().first().id()] as MutableLiveData<SecondProperty>
-    val thirdProperty = propertyMap[ThirdScreenState.values().first().id()] as MutableLiveData<ThirdProperty>
-
-    // endregion
-
-    // region Dispatch
 
     override val businessLogicMap: Map<ScreenState, ((Any?) -> Unit)?> = mapOf(
         FirstScreenState.INITIAL to { _ -> null },
@@ -56,13 +39,21 @@ class MainViewModel(private val provider: MainProvider) : BaseViewModel() {
         ThirdScreenState.START_NEXT_ACTIVITY to { _ -> null }
     )
 
+    // endregion
+
+    // region メンバ関数
+
+    val firstProperty = propertyMap[FirstScreenState.values().first().id()] as MutableLiveData<FirstProperty>
+    val secondProperty = propertyMap[SecondScreenState.values().first().id()] as MutableLiveData<SecondProperty>
+    val thirdProperty = propertyMap[ThirdScreenState.values().first().id()] as MutableLiveData<ThirdProperty>
+
     private fun firstScreenStateNext(any: Any?) {
         nextTransitionState()?.let { dispatch(it) }
     }
 
     private fun secondScreenStateFetchFromServer(any: Any?) {
         Handler().postDelayed({
-            dispatch(SecondScreenState.FETCHED, secondProperty.value?.data?.copy(text = provider.request()))
+            dispatch(SecondScreenState.FETCHED, secondProperty.value?.data?.copy(text = mProvider.request()))
         }, 3000)
     }
 

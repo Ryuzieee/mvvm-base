@@ -8,7 +8,7 @@ import com.example.ryuji_mvvm_architecture.base.TransitionState
 
 class SubViewModel : BaseViewModel() {
 
-    // region LiveData
+    // region メンバ変数(初期化必須)
 
     override val transitionState: MutableLiveData<TransitionState> = MutableLiveData(SubTransitionState.SUB)
 
@@ -16,18 +16,9 @@ class SubViewModel : BaseViewModel() {
 
     override val propertyMap: Map<String, MutableLiveData<out Property>> = mapOf(
         SubScreenState.values().first().id() to MutableLiveData<SubProperty>(
-            SubProperty(
-                SubScreenState.INITIAL,
-                SubData()
-            )
+            SubProperty(SubScreenState.INITIAL, SubData())
         )
     )
-
-    val subProperty = propertyMap[SubScreenState.values().first().id()] as MutableLiveData<SubProperty>
-
-    // endregion
-
-    // region Dispatch
 
     override val businessLogicMap: Map<ScreenState, ((Any?) -> Unit)?> = mapOf(
         SubScreenState.INITIAL to { _ -> null }

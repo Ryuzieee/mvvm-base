@@ -6,19 +6,20 @@ import com.example.ryuji_mvvm_architecture.base.BaseFragment
 import com.example.ryuji_mvvm_architecture.base.Data
 import com.example.ryuji_mvvm_architecture.base.FragmentScreenState
 import com.example.ryuji_mvvm_architecture.databinding.FragmentSubBinding
-import com.example.ryuji_mvvm_architecture.sub.recyclerView.CoupleListAdapter
+import com.example.ryuji_mvvm_architecture.sub.recyclerView.SubListAdapter
 
 
 class SubFragment : BaseFragment<SubViewModel, FragmentSubBinding>() {
 
+    override val layoutResource = R.layout.fragment_sub
+
     override val propertyId: String = SubScreenState.INITIAL.id()
 
-    private val coupleListAdapter: CoupleListAdapter by lazy {
-        CoupleListAdapter(requireContext(), listOf("", "", "", "", "", "", "", "", "", ""))
-    }
-    override val receiverMap: Map<FragmentScreenState, (Data) -> Unit> = emptyMap()
+    override val observerMap: Map<FragmentScreenState, (Data) -> Unit> = emptyMap()
 
-    override val layoutResource = R.layout.fragment_sub
+    private val subListAdapter: SubListAdapter by lazy {
+        SubListAdapter(requireContext(), listOf("", "", "", "", "", "", "", "", "", ""))
+    }
 
     override fun bindViewModel(viewModel: SubViewModel) {
         binding.viewModel = viewModel
@@ -29,7 +30,7 @@ class SubFragment : BaseFragment<SubViewModel, FragmentSubBinding>() {
         binding.recyclerView.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            adapter = coupleListAdapter
+            adapter = subListAdapter
         }
     }
 }
