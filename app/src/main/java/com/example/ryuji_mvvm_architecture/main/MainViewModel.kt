@@ -1,6 +1,7 @@
 package com.example.ryuji_mvvm_architecture.main
 
 import android.os.Handler
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MutableLiveData
 import com.example.ryuji_mvvm_architecture.base.BaseViewModel
 import com.example.ryuji_mvvm_architecture.base.Property
@@ -46,6 +47,35 @@ class MainViewModel(private val mProvider: MainProvider) : BaseViewModel() {
     val firstProperty = propertyMap[FirstScreenState.values().first().id()] as MutableLiveData<FirstProperty>
     val secondProperty = propertyMap[SecondScreenState.values().first().id()] as MutableLiveData<SecondProperty>
     val thirdProperty = propertyMap[ThirdScreenState.values().first().id()] as MutableLiveData<ThirdProperty>
+
+    // 1つ次のTransitionStateを返却する
+    internal fun nextTransitionState(): TransitionState? {
+        val current = transitionStateList.indexOf(transitionState.value)
+        return if (current < transitionStateList.lastIndex) {
+            transitionStateList[current + 1]
+        } else {
+            null
+        }
+    }
+
+    // 1つ前のTransitionStateを返却する
+    internal fun previousTransitionState(): TransitionState? {
+        val current = transitionStateList.indexOf(transitionState.value)
+        return if (current > 0) {
+            transitionStateList[current - 1]
+        } else {
+            null
+        }
+    }
+
+    // 1つ前のTransitionStateに戻れるか否かを返却する
+    internal fun isBack(supportFragmentManager: FragmentManager): Boolean {
+        val new = transitionStateList.indexOf(transitionState.value)
+        val old = transitionStateList.indexOfFirst {
+            it.fragment == supportFragmentManager.fragments.first()
+        }
+        return old > new
+    }
 
     private fun firstScreenStateNext(any: Any?) {
         nextTransitionState()?.let { dispatch(it) }

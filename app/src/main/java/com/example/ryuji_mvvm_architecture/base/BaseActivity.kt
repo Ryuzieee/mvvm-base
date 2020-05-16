@@ -47,32 +47,18 @@ abstract class BaseActivity<T1 : BaseViewModel, T2 : ViewDataBinding>(private va
         super.onCreate(savedInstanceState)
         bindViewModel(viewModel)
         viewModel.transitionState.observe(this, Observer<TransitionState> { transitionState ->
-            goBackOrForward(transitionState)
             observerMap[transitionState]?.let { it(transitionState) }
         })
         initialize()
         if (savedInstanceState == null) createOrReplaceFragment(firstFragment)
     }
 
-    override fun onBackPressed() {
-        viewModel.previousTransitionState()?.let { viewModel.dispatch(it) } ?: super.onBackPressed()
-    }
-
     // endregion
 
     // region フラグメント管理
 
-    private fun goBackOrForward(transitionState: TransitionState) {
-        // Back
-        if (viewModel.isBack(supportFragmentManager)) {
-            supportFragmentManager.popBackStack()
-            return
-        }
-        // Forward
-        createOrReplaceFragment(transitionState.fragment)
-    }
-
-    private fun createOrReplaceFragment(fragment: Fragment) {
+    // FIXME:本来はprivateにして子に晒したくない
+    protected fun createOrReplaceFragment(fragment: Fragment) {
         val isFirstFragment = fragment == firstFragment
         supportFragmentManager.beginTransaction().run {
             // 初期表示かつアニメーション不使用の場合はAnimationを無効にする

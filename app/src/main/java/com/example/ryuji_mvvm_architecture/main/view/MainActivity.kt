@@ -26,9 +26,9 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(MainViewMo
 
     override val observerMap: Map<TransitionState, (TransitionState) -> Unit> = mapOf(
         // TODO:なんか気持ち悪いから直す🤮
-        MainTransitionState.FIRST to { transitionState -> updateToolbar(transitionState as MainTransitionState) },
-        MainTransitionState.SECOND to { transitionState -> updateToolbar(transitionState as MainTransitionState) },
-        MainTransitionState.THIRD to { transitionState -> updateToolbar(transitionState as MainTransitionState) }
+        MainTransitionState.FIRST to { transitionState -> update(transitionState as MainTransitionState) },
+        MainTransitionState.SECOND to { transitionState -> update(transitionState as MainTransitionState) },
+        MainTransitionState.THIRD to { transitionState -> update(transitionState as MainTransitionState) }
     )
 
     override fun bindViewModel(viewModel: MainViewModel) {
@@ -41,6 +41,25 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(MainViewMo
             toolbarBack.setOnClickListener { onBackPressed() }
         }
         viewModel.dispatch(MainTransitionState.FIRST)
+    }
+
+    override fun onBackPressed() {
+        viewModel.previousTransitionState()?.let { viewModel.dispatch(it) } ?: super.onBackPressed()
+    }
+
+    private fun update(mainTransitionState: MainTransitionState) {
+        goBackOrForward(mainTransitionState)
+        updateToolbar(mainTransitionState)
+    }
+
+    private fun goBackOrForward(mainTransitionState: MainTransitionState) {
+        // Back
+        if (viewModel.isBack(supportFragmentManager)) {
+            supportFragmentManager.popBackStack()
+            return
+        }
+        // Forward
+        createOrReplaceFragment(mainTransitionState.fragment)
     }
 
     private fun updateToolbar(mainTransitionState: MainTransitionState) {
