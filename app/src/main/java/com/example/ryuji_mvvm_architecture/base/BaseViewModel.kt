@@ -1,5 +1,6 @@
 package com.example.ryuji_mvvm_architecture.base
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
@@ -13,57 +14,71 @@ abstract class BaseViewModel : ViewModel() {
 
     abstract val propertyMap: Map<String, MutableLiveData<out Property>>
 
-    abstract val businessLogicMap: Map<ScreenState, ((Any?) -> Unit)?>
+    abstract val actionMap: Map<ActionState, (() -> Unit)?>
 
-    // endregion
-
-    // region メンバ変数
-
-    private val log = mutableListOf<String>()
+    abstract val dispatchMap: Map<DispatchState, (() -> Unit)?>
 
     // endregion
 
     // region 公開するメンバ関数
 
-    /**
-     * FIXME:以下の3つに分ける
-     *  ①onAction(ユーザー操作の受付)
-     *  (ViewModel)actionMap: Map<ActionState, (() -> Unit)?>
-     *  ②onDispatch(ビジネスロジックの受付)
-     *  (ViewModel)dispatchMap: Map<dispatchState, (() -> Unit)?>
-     *  ③onChangeScreen(ユーザーへのフィードバック)
-     *  (View)screenMap: Map<ScreenState, (() -> Unit)?>
-     *  その際全てのタイミングでpropertyを更新する!!
-     *  ※懸念としては上記の3つのタイミングでdataを受け渡す際、
-     *  必ず最新のproperty(dataだけでいいか)をcopyして情報を上書きする形になる
-     *  そうなると、onAction,onDispatchで使用するdataは必ずしもscreenStateで使用するdataではなくなる
-     *  propertyの構造を以下のようにすればいいかも。
-     *  (現状)screenState: FragmentScreenState,data: Data
-     *  (改良)screenState: FragmentScreenState,actionData: Data, dispatchData: Data, screenData: Data
-     */
-    internal fun dispatch(screenState: ScreenState, any: Any? = null) {
+    internal fun onAction(actionState: ActionState, actionData: ActionData? = null) {
 
-        // ScreenStateのログを収集
-        log.add(screenState.javaClass.simpleName + "." + screenState)
+        val dispatchState = this.propertyMap[actionState.id()]?.value?.dispatchState ?: return
+        if (!dispatchState.isAcceptAction()) return
+
+        Log.d("LOG", actionState.javaClass.simpleName + "." + actionState)
+
+        // Propertyの更新
+        this.propertyMap[actionState.id()]?.value?.let { property ->
+            val newProperty = property.createNewProperty(state = actionState, data = actionData)
+            this.propertyMap[actionState.id()]?.value = newProperty
+        }
+
+        // Actionの実行
+        this.actionMap[actionState]?.let { it() }
+
+    }
+
+    // endregion
+
+    // region 公開しないメンバ関数
+
+    protected fun onDispatch(dispatchState: DispatchState, dispatchData: DispatchData? = null) {
+
+        Log.d("LOG", dispatchState.javaClass.simpleName + "." + dispatchState)
+
+        // Propertyの更新
+        this.propertyMap[dispatchState.id()]?.value?.let { property ->
+            val newProperty = property.createNewProperty(state = dispatchState, data = dispatchData)
+            this.propertyMap[dispatchState.id()]?.value = newProperty
+        }
+
+        // dispatchの実行
+        this.dispatchMap[dispatchState]?.let { it() }
+
+    }
+
+    protected fun onChangeScreen(screenState: ScreenState, screenData: ScreenData? = null) {
+
+        Log.d("LOG", screenState.javaClass.simpleName + "." + screenState)
 
         // TransitionStateを更新してリターン
         if (screenState is TransitionState) {
-            transitionState.value = screenState
+            this.transitionState.value = screenState
             return
         }
 
-        // Propertyを更新
+        // Propertyの更新
         val fragmentScreenState = screenState as FragmentScreenState
-        propertyMap[fragmentScreenState.id()]?.value?.let { property ->
-            val newProperty = property.createNewProperty(
-                screenState = fragmentScreenState,
-                data = if (any is Data) any else null
-            )
-            propertyMap[fragmentScreenState.id()]?.value = newProperty
-            businessLogicMap[fragmentScreenState]?.let { it(any) }
+        this.propertyMap[fragmentScreenState.id()]?.value?.let { property ->
+            val newProperty = property.createNewProperty(state = fragmentScreenState, data = screenData)
+            this.propertyMap[fragmentScreenState.id()]?.value = newProperty
         }
 
     }
+
+    protected fun <T> getProperty(id: String): MutableLiveData<T>? = propertyMap[id] as MutableLiveData<T>?
 
     // endregion
 

@@ -3,32 +3,17 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
-        <variable name="viewModel" type="com.example.ryuji_mvvm_architecture.main.MainViewModel"/>
-        <import type="android.view.View"/>
+        <variable name="viewModel" type="com.example.ryuji_mvvm_architecture.main.viewModel.MainViewModel"/>
 
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_height="match_parent"
-            android:layout_width="match_parent"
-            android:padding="20dp">
+            android:layout_width="match_parent">
 
         <Button
-                android:id="@+id/next_button"
+                android:id="@+id/back_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                android:text="@{viewModel.secondProperty.data.text}"
-                android:visibility="@{viewModel.secondProperty.isLoading ? View.GONE : View.VISIBLE}"/>
-
-        <include
-                android:id="@+id/progress_dialog"
-                android:visibility="@{viewModel.secondProperty.isLoading ? View.VISIBLE : View.GONE}"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                layout="@layout/layout_progress_bar_with_text"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"

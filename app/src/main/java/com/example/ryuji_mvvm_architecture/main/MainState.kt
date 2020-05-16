@@ -1,94 +1,142 @@
 package com.example.ryuji_mvvm_architecture.main
 
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
 import com.example.ryuji_mvvm_architecture.base.*
 import com.example.ryuji_mvvm_architecture.main.view.fragment.FirstFragment
 import com.example.ryuji_mvvm_architecture.main.view.fragment.SecondFragment
-import com.example.ryuji_mvvm_architecture.main.view.fragment.ThirdFragment
 
 // region MainTransitionState
-enum class MainTransitionState(override val fragment: Fragment, val title: String, val progress: Int) :
-    TransitionState {
-    FIRST(FirstFragment(), "1/3", 33),
-    SECOND(SecondFragment(), "2/3", 66),
-    THIRD(ThirdFragment(), "3/3", 100);
 
-    fun isFirstFragment() = fragment == FIRST.fragment
+enum class MainTransitionState(override val fragment: Fragment) :
+    TransitionState {
+    FIRST(FirstFragment()),
+    SECOND(SecondFragment()),
+    ;
 }
+
 // endregion
 
 // region First
-enum class FirstScreenState : FragmentScreenState {
-    INITIAL,
-    NEXT;
 
-    override fun id(): String = javaClass.simpleName
+internal const val PROPERTY_ID_FIRST = "property_id_first"
+
+enum class FirstActionState : ActionState {
+    ON_INITIALIZE,
+    ON_TAPPED_NEXT,
+    ;
+
+    override fun id(): String = PROPERTY_ID_FIRST
 }
 
-data class FirstData(val text: String = "DEFAULT") : Data
+enum class FirstDispatchState : DispatchState {
+    USER_ACTION_WAITING,
+    INITIALIZE,
+    NEXT,
+    ;
 
-data class FirstProperty(override val screenState: FirstScreenState, override val data: FirstData) : Property {
-    override fun createNewProperty(screenState: FragmentScreenState, data: Data?): Property {
-        return this.copy(
-            screenState = screenState as FirstScreenState,
-            data = data?.let { it as FirstData } ?: this.data)
+    override fun id(): String = PROPERTY_ID_FIRST
+    override fun isAcceptAction(): Boolean {
+        return this == USER_ACTION_WAITING
     }
 }
-// endregion
 
-// region Second
-enum class SecondScreenState : FragmentScreenState {
-    INITIAL,
-    LOADING,
-    FETCHED,
-    NEXT;
+enum class FirstFragmentScreenState : FragmentScreenState {
+    NONE,
+    INITIALIZED
+    ;
 
-    override fun id(): String = javaClass.simpleName
+    override fun id(): String = PROPERTY_ID_FIRST
 }
 
-data class SecondData(val text: String = "DEFAULT") : Data
+data class FirstActionData(val text: String = "") : ActionData
 
-data class SecondProperty(override val screenState: SecondScreenState, override val data: SecondData) :
-    Property {
-    override fun createNewProperty(screenState: FragmentScreenState, data: Data?): Property {
-        return this.copy(
-            screenState = screenState as SecondScreenState,
-            data = data?.let { it as SecondData } ?: this.data)
-    }
+data class FirstDispatchData(val text: String = "") : DispatchData
 
-    fun isLoading(): Boolean {
-        return when (screenState) {
-            SecondScreenState.INITIAL, SecondScreenState.LOADING -> true
-            SecondScreenState.FETCHED, SecondScreenState.NEXT -> false
+data class FirstScreenData(val text: String = "NEXT") : ScreenData
+
+data class FirstProperty(
+    override val actionData: FirstActionData,
+    override val dispatchData: FirstDispatchData,
+    override val screenData: FirstScreenData,
+    override val dispatchState: DispatchState,
+    override val fragmentScreenState: FirstFragmentScreenState
+) : Property {
+    override fun createNewProperty(state: State, data: Data?): Property {
+        return when (state) {
+            is FirstActionState -> data?.let { this.copy(actionData = it as FirstActionData) } ?: this
+            is FirstDispatchState -> this.copy(
+                dispatchState = state,
+                dispatchData = data?.let { it as FirstDispatchData } ?: this.dispatchData
+            )
+            is FirstFragmentScreenState -> this.copy(
+                fragmentScreenState = state,
+                screenData = data?.let { it as FirstScreenData } ?: this.screenData
+            )
+            else -> this.copy()
         }
     }
 }
+
 // endregion
 
-// region Third
-enum class ThirdScreenState : ScreenState, FragmentScreenState {
-    INITIAL,
-    START_NEXT_ACTIVITY;
+// region Second
 
-    override fun id(): String = javaClass.simpleName
+internal const val PROPERTY_ID_SECOND = "property_id_second"
+
+enum class SecondActionState : ActionState {
+    ON_INITIALIZE,
+    ON_TAPPED_BACK
+    ;
+
+    override fun id(): String = PROPERTY_ID_SECOND
 }
 
-data class ThirdData(
-    val username: MutableLiveData<String> = MutableLiveData(),
-    val password: MutableLiveData<String> = MutableLiveData(),
-    val termOfUse: MutableLiveData<Boolean> = MutableLiveData(),
-    val canSubmit: MediatorLiveData<Boolean> = MediatorLiveData()
-) : Data {
-    fun isValid() = !username.value.isNullOrBlank() && !password.value.isNullOrBlank() && termOfUse.value == true
+enum class SecondDispatchState : DispatchState {
+    USER_ACTION_WAITING,
+    INITIALIZE,
+    BACK,
+    ;
+
+    override fun id(): String = PROPERTY_ID_SECOND
+    override fun isAcceptAction(): Boolean {
+        return this == USER_ACTION_WAITING
+    }
 }
 
-data class ThirdProperty(override val screenState: ThirdScreenState, override val data: ThirdData) : Property {
-    override fun createNewProperty(screenState: FragmentScreenState, data: Data?): Property {
-        return this.copy(
-            screenState = screenState as ThirdScreenState,
-            data = data?.let { it as ThirdData } ?: this.data)
+enum class SecondFragmentScreenState : FragmentScreenState {
+    NONE,
+    INITIALIZED
+    ;
+
+    override fun id(): String = PROPERTY_ID_SECOND
+}
+
+data class SecondActionData(val text: String = "") : ActionData
+
+data class SecondDispatchData(val text: String = "") : DispatchData
+
+data class SecondScreenData(val text: String = "BACK") : ScreenData
+
+data class SecondProperty(
+    override val actionData: SecondActionData,
+    override val dispatchData: SecondDispatchData,
+    override val screenData: SecondScreenData,
+    override val dispatchState: DispatchState,
+    override val fragmentScreenState: SecondFragmentScreenState
+) : Property {
+    override fun createNewProperty(state: State, data: Data?): Property {
+        return when (state) {
+            is SecondActionState -> data?.let { this.copy(actionData = it as SecondActionData) } ?: this
+            is SecondDispatchState -> this.copy(
+                dispatchState = state,
+                dispatchData = data?.let { it as SecondDispatchData } ?: this.dispatchData
+            )
+            is SecondFragmentScreenState -> this.copy(
+                fragmentScreenState = state,
+                screenData = data?.let { it as SecondScreenData } ?: this.screenData
+            )
+            else -> this.copy()
+        }
     }
 }
 

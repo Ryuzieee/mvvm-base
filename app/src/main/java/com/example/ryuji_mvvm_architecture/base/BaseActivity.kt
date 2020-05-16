@@ -57,7 +57,6 @@ abstract class BaseActivity<T1 : BaseViewModel, T2 : ViewDataBinding>(private va
 
     // region フラグメント管理
 
-    // FIXME:本来はprivateにして子に晒したくない
     protected fun createOrReplaceFragment(fragment: Fragment) {
         val isFirstFragment = fragment == firstFragment
         supportFragmentManager.beginTransaction().run {
@@ -77,6 +76,8 @@ abstract class BaseActivity<T1 : BaseViewModel, T2 : ViewDataBinding>(private va
             commit()
         }
     }
+
+    protected fun removeFragment() = supportFragmentManager.popBackStack()
 
     // endregion
 

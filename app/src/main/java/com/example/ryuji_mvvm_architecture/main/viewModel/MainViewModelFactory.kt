@@ -1,4 +1,4 @@
-package com.example.ryuji_mvvm_architecture.main
+package com.example.ryuji_mvvm_architecture.main.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

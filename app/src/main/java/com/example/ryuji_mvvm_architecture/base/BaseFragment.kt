@@ -17,7 +17,7 @@ abstract class BaseFragment<T1 : BaseViewModel, T2 : ViewDataBinding> : Fragment
 
     abstract val propertyId: String
 
-    abstract val observerMap: Map<FragmentScreenState, (Data) -> Unit>
+    abstract val observerMap: Map<FragmentScreenState, (ScreenData) -> Unit>
 
     // endregion
 
@@ -41,15 +41,15 @@ abstract class BaseFragment<T1 : BaseViewModel, T2 : ViewDataBinding> : Fragment
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(inflater, layoutResource, container, false)
-        binding.lifecycleOwner = viewLifecycleOwner
-        viewModel = (requireActivity() as BaseActivity<*, *>).viewModel as T1
-        bindViewModel(viewModel)
-        viewModel.propertyMap[propertyId]?.observe(this, Observer<Property> { property ->
-            observerMap[property.screenState]?.let { it(property.data) }
+        this.binding = DataBindingUtil.inflate(inflater, layoutResource, container, false)
+        this.binding.lifecycleOwner = viewLifecycleOwner
+        this.viewModel = (requireActivity() as BaseActivity<*, *>).viewModel as T1
+        this.bindViewModel(this.viewModel)
+        this.viewModel.propertyMap[propertyId]?.observe(this, Observer<Property> { property ->
+            this.observerMap[property.fragmentScreenState]?.let { it(property.screenData) }
         })
-        initialize()
-        return binding.root
+        this.initialize()
+        return this.binding.root
     }
 
     // endregion
@@ -57,6 +57,10 @@ abstract class BaseFragment<T1 : BaseViewModel, T2 : ViewDataBinding> : Fragment
     // region メンバ関数
 
     open fun initialize() {}
+
+    protected fun onAction(actionState: ActionState, actionData: ActionData? = null) {
+        this.viewModel.onAction(actionState, actionData)
+    }
 
     // endregion
 

@@ -1,20 +1,19 @@
 package com.example.ryuji_mvvm_architecture.main.view
 
-import android.animation.ObjectAnimator
-import android.view.animation.DecelerateInterpolator
-import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import com.example.ryuji_mvvm_architecture.R
 import com.example.ryuji_mvvm_architecture.base.BaseActivity
 import com.example.ryuji_mvvm_architecture.base.TransitionState
 import com.example.ryuji_mvvm_architecture.databinding.ActivityMainBinding
 import com.example.ryuji_mvvm_architecture.main.MainTransitionState
-import com.example.ryuji_mvvm_architecture.main.MainViewModel
-import com.example.ryuji_mvvm_architecture.main.MainViewModelFactory
 import com.example.ryuji_mvvm_architecture.main.provider.MainProviderImpl
+import com.example.ryuji_mvvm_architecture.main.viewModel.MainViewModel
+import com.example.ryuji_mvvm_architecture.main.viewModel.MainViewModelFactory
 import com.example.ryuji_mvvm_architecture.util.FragmentTransitionAnimation
 
-class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(MainViewModel::class.java) {
+class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(
+    MainViewModel::class.java
+) {
 
     override val layoutResource = R.layout.activity_main
 
@@ -22,55 +21,42 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(MainViewMo
 
     override val transitionAnimation = FragmentTransitionAnimation().rightToLeft()
 
-    override val viewModelProviderFactory: ViewModelProvider.Factory = MainViewModelFactory(MainProviderImpl())
+    override val viewModelProviderFactory: ViewModelProvider.Factory =
+        MainViewModelFactory(MainProviderImpl())
 
     override val observerMap: Map<TransitionState, (TransitionState) -> Unit> = mapOf(
-        // TODO:なんか気持ち悪いから直す🤮
-        MainTransitionState.FIRST to { transitionState -> update(transitionState as MainTransitionState) },
-        MainTransitionState.SECOND to { transitionState -> update(transitionState as MainTransitionState) },
-        MainTransitionState.THIRD to { transitionState -> update(transitionState as MainTransitionState) }
+        MainTransitionState.FIRST to ::transitionToFirst,
+        MainTransitionState.SECOND to ::transitionToSecond
     )
 
     override fun bindViewModel(viewModel: MainViewModel) {
-        binding.viewModel = viewModel
+        this.binding.viewModel = viewModel
     }
 
     override fun initialize() {
-        binding.apply {
+        this.binding.apply {
             setSupportActionBar(toolbar)
-            toolbarBack.setOnClickListener { onBackPressed() }
+            this.toolbarBack.setOnClickListener { onBackPressed() }
         }
-        viewModel.dispatch(MainTransitionState.FIRST)
     }
 
     override fun onBackPressed() {
-        viewModel.previousTransitionState()?.let { viewModel.dispatch(it) } ?: super.onBackPressed()
+        // バックキー無効化
     }
 
-    private fun update(mainTransitionState: MainTransitionState) {
-        goBackOrForward(mainTransitionState)
-        updateToolbar(mainTransitionState)
+    /**
+     * TODO:これらを整理する
+     *  ・TransitionStateの責務を明確にする
+     *  ・TransitionStateはFragmentを持つべきなのか検討する
+     *  ・画面要件によっては「戻る＝前画面」ではなかったりする
+     *  ・BaseActivityに持たせるのは今くらいで良いかも
+     */
+    private fun transitionToFirst(transitionState: TransitionState) {
+        this.removeFragment()
     }
 
-    private fun goBackOrForward(mainTransitionState: MainTransitionState) {
-        // Back
-        if (viewModel.isBack(supportFragmentManager)) {
-            supportFragmentManager.popBackStack()
-            return
-        }
-        // Forward
-        createOrReplaceFragment(mainTransitionState.fragment)
+    private fun transitionToSecond(transitionState: TransitionState) {
+        this.createOrReplaceFragment(transitionState.fragment)
     }
 
-    private fun updateToolbar(mainTransitionState: MainTransitionState) {
-        binding.apply {
-            toolbarBack.isVisible = !mainTransitionState.isFirstFragment()
-            toolbarTitle.text = mainTransitionState.title
-            ObjectAnimator.ofInt(toolbarProgress, "progress", mainTransitionState.progress).run {
-                duration = 500
-                interpolator = DecelerateInterpolator()
-                start()
-            }
-        }
-    }
 }
